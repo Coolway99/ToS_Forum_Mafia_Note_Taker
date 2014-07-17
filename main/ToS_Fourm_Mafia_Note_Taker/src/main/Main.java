@@ -62,10 +62,6 @@ public class Main {
 			}
 		};
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(keyEventA);
-		while(true){
-			frame.repaint();
-			Thread.sleep(10);
-		}
 	}
 	private static void keyPressed(KeyEvent key){
 		keys[key.getKeyCode()] = true;
