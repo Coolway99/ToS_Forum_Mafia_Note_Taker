@@ -13,10 +13,14 @@ public class ButtonMouseListener extends MouseInputAdapter{
 		if(e.getButton() == e.BUTTON1){
 			Buttons1 button = (Buttons1)e.getSource();
 			button.pressed(1);
-		} else if (e.getButton() == e.BUTTON2){
+		} else if(e.getButton() == e.BUTTON2){
 			Buttons1 button = (Buttons1)e.getSource();
 			button.pressed(2);
+		} else if(e.getButton() == e.BUTTON3){
+			Buttons1 button = (Buttons1)e.getSource();
+			button.pressed(3);
 		}
+		
 	}
 
 	@SuppressWarnings("static-access")
@@ -25,9 +29,12 @@ public class ButtonMouseListener extends MouseInputAdapter{
 		if(e.getButton() == e.BUTTON1){
 			Buttons1 button = (Buttons1)e.getSource();
 			button.released(1);
-		} else if (e.getButton() == e.BUTTON2){
+		} else if(e.getButton() == e.BUTTON2){
 			Buttons1 button = (Buttons1)e.getSource();
 			button.released(2);
+		} else if(e.getButton() == e.BUTTON3){
+			Buttons1 button = (Buttons1)e.getSource();
+			button.released(3);
 		}
 	}
 }
