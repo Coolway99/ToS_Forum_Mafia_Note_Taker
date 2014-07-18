@@ -1,4 +1,4 @@
-package assets.actionListeners;
+package assets.listeners;
 
 import java.awt.event.MouseEvent;
 
