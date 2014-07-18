@@ -7,24 +7,20 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-
-import main.Main;
+import javax.swing.JTextArea;
 
 
 @SuppressWarnings("serial")
 public class MainRightClickMenu extends JPopupMenu{
 	protected static JPopupMenu pop;
 	private static PersonalActionListener listener = new PersonalActionListener();
-	private static PersonalMouseListener mouse = new PersonalMouseListener();
+	public static PersonalMouseListener mouse = new PersonalMouseListener();
+	protected static MouseEvent e;
 	public static void initPopup(){
 		pop = new JPopupMenu();
-		MenuInterface menuItem = new MenuInterface("A popup menu item");
+		MenuInterface menuItem = new MenuInterface("Edit");
 	    menuItem.addActionListener(listener);
 	    pop.add(menuItem);
-	    menuItem = new MenuInterface("Another popup menu item");
-	    menuItem.addActionListener(listener);
-	    pop.add(menuItem);
-	    Main.textField1.addMouseListener(mouse);
 	}
 }
 class PersonalMouseListener extends MouseAdapter{
@@ -38,6 +34,7 @@ class PersonalMouseListener extends MouseAdapter{
 		if(e.getButton() == e.BUTTON3){
 			if(e.isPopupTrigger()){
 				MainRightClickMenu.pop.show(e.getComponent(), e.getX(), e.getY());
+				MainRightClickMenu.e = e;
 			}
 		}
 	}
@@ -47,7 +44,7 @@ class PersonalActionListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		MenuInterface menu = (MenuInterface)e.getSource();
-		menu.doAction();
+		menu.doAction(e);
 	}
 	
 }
@@ -55,5 +52,7 @@ class PersonalActionListener implements ActionListener{
 class MenuInterface extends JMenuItem{
 	public MenuInterface(String string) {super(string);}
 
-	public void doAction(){}
+	public void doAction(ActionEvent e){
+		((JTextArea)MainRightClickMenu.e.getSource()).setEditable(true);
+	}
 }
