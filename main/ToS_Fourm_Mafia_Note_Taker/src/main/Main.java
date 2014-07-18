@@ -17,6 +17,7 @@ public class Main {
 	public static JFrame frame;
 	public static JTextField textField1 = new JTextField();
 	public static JTextField textField2 = new JTextField();
+	public static JTextField textFieldNotes = new JTextField();
 	public static JTextArea textArea1A = new JTextArea();
 	public static JTextArea textArea1B = new JTextArea();
 	public static JTextArea textArea2 = new JTextArea();
@@ -45,6 +46,8 @@ public class Main {
 		textArea2.setEditable(false);
 		textArea1B.addMouseListener(MainRightClickMenu.mouse);
 		textArea2.addMouseListener(MainRightClickMenu.mouse);
+		textFieldNotes.setEditable(false);
+		textFieldNotes.setText("Notes");
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
 		
@@ -58,27 +61,27 @@ public class Main {
 								.addComponent(textArea1A, 320, 320, 320)
 								.addComponent(textArea1B, 320, 320, 320)
 								.addComponent(textArea2, 320, 320, 320)))
-				.addComponent(textAreaMain, 515, 515, 515))
+				.addComponent(textAreaMain, 340, 340, 340))
 		.addGap(250);
 
 		hGroup.addGap(10)
 		.addGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
-						.addGap(50)
-						.addComponent(textField1, 50, 50, 50)
-						.addGap(50))
+						.addGap(53)
+						.addComponent(textField1, 45, 45, 45)
+						.addGap(52))
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(textArea1A, 15, 15, 15)
 						.addComponent(textArea1B, 135, 135, 135)))
 		.addGap(5)
 		.addGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
-						.addGap(23)
+						.addGap(6)
 						.addComponent(textField2, 54, 54, 54)
-						.addGap(23))
-				.addComponent(textArea2, 100, 100, 100))
+						.addGap(6))
+				.addComponent(textArea2, 66, 66, 66))
 		.addGap(10)
-		.addComponent(textAreaMain, 515, 515, 515)
+		.addComponent(textAreaMain, 549, 549, 549)
 		.addGap(10)
 		;
 		
