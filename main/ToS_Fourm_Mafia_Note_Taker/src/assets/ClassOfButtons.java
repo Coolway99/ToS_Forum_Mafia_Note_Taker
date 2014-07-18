@@ -1,7 +1,7 @@
 package assets;
 
 import main.Main;
-import assets.actionListeners.ButtonMouseListener;
+import assets.listeners.ButtonMouseListener;
 
 
 public class ClassOfButtons {
