@@ -54,5 +54,6 @@ class MenuInterface extends JMenuItem{
 
 	public void doAction(ActionEvent e){
 		((JTextArea)MainRightClickMenu.e.getSource()).setEditable(true);
+		((JTextArea)MainRightClickMenu.e.getSource()).requestFocus();
 	}
 }
