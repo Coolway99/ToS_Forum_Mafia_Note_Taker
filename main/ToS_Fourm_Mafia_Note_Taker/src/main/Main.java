@@ -5,16 +5,23 @@ import java.awt.Point;
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import assets.ClassOfButtons;
 import assets.MainRightClickMenu;
+import assets.listeners.FocusListener1;
 
 public class Main {
 	private static JPanel mainPanel = new MainPanel();
-	private static JFrame frame;
+	public static JFrame frame;
 	public static JTextField textField1 = new JTextField();
 	public static JTextField textField2 = new JTextField();
+	public static JTextArea textArea1A = new JTextArea();
+	public static JTextArea textArea1B = new JTextArea();
+	public static JTextArea textArea2 = new JTextArea();
+	public static JTextArea textAreaMain = new JTextArea();
+	private static FocusListener1 focusListener = new FocusListener1();
 	public static Mouse mouse = new Mouse();
 	private static GroupLayout layout = new GroupLayout(mainPanel);
 	
@@ -28,22 +35,64 @@ public class Main {
 		mainPanel.setLayout(layout);
 		layout.setAutoCreateContainerGaps(false);
 		layout.setAutoCreateGaps(false);
+		textArea1A.setEditable(false);
+		textArea1A.setText("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20");
+		textArea1B.setLineWrap(true);
+		textArea1B.setEditable(false);
+		textArea1B.addFocusListener(focusListener);
+		textArea2.setLineWrap(true);
+		textArea2.addFocusListener(focusListener);
+		textArea2.setEditable(false);
+		textArea1B.addMouseListener(MainRightClickMenu.mouse);
+		textArea2.addMouseListener(MainRightClickMenu.mouse);
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-		vGroup.addGap(200).addGroup(layout.createParallelGroup().addComponent(ClassOfButtons.
-				testbutton1, 25, 25, 25).addComponent(textField1, 25, 25, 25).addComponent(ClassOfButtons.
-						testbutton2, 25, 25, 25)).addComponent(textField2, 25, 25, 25).addGap(350);
-		hGroup.addGap(200).addComponent(ClassOfButtons.testbutton1, 25, 25, 25).addGap(75)
-		.addGroup(layout.createParallelGroup().addComponent(textField1, 200, 200, 200).
-				addComponent(textField2, 200, 200, 200)).addGap(75).addComponent(ClassOfButtons.
-						testbutton2, 25, 25, 25).addGap(200);
+		
+		vGroup.addGap(10)
+		.addGroup(layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup()
+								.addComponent(textField1, 20, 20, 20)
+								.addComponent(textField2, 20, 20, 20))
+						.addGroup(layout.createParallelGroup()
+								.addComponent(textArea1A, 320, 320, 320)
+								.addComponent(textArea1B, 320, 320, 320)
+								.addComponent(textArea2, 320, 320, 320)))
+				.addComponent(textAreaMain, 515, 515, 515))
+		.addGap(250);
+
+		hGroup.addGap(10)
+		.addGroup(layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup()
+						.addGap(50)
+						.addComponent(textField1, 50, 50, 50)
+						.addGap(50))
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(textArea1A, 15, 15, 15)
+						.addComponent(textArea1B, 135, 135, 135)))
+		.addGap(5)
+		.addGroup(layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup()
+						.addGap(23)
+						.addComponent(textField2, 54, 54, 54)
+						.addGap(23))
+				.addComponent(textArea2, 100, 100, 100))
+		.addGap(10)
+		.addComponent(textAreaMain, 515, 515, 515)
+		.addGap(10)
+		;
+		
 		layout.setVerticalGroup(vGroup);
 		layout.setHorizontalGroup(hGroup);
 		frame.add(mainPanel);
-		frame.pack();
 		frame.setResizable(false);
 		frame.setVisible(true);
-		textField1.setText("I am a simple uneditable testbox");
+		textField1.setText("Players");
+		textField1.setEditable(false);
+		textField2.setText("Role List");
+		textField2.setEditable(false);
+		frame.setAlwaysOnTop(false); //Here for testing purposes only
+		frame.pack();
 	}
 	public static boolean isMouseOver(Point xy, Point end){
 		Point a = mouse.getPoint();
