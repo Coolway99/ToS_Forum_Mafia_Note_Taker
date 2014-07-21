@@ -58,8 +58,6 @@ public class Main {
 		FontMetrics metrics = frame.getGraphics().getFontMetrics();
 		int fontHight = metrics.getHeight();
 		int longestRole = metrics.stringWidth("Town Investigative");
-		int players = metrics.stringWidth("Players")+(fontHight/4);
-		int roleList = metrics.stringWidth("Role List")+(fontHight/4);
 		int playerListHight = fontHight * 20;
 		int playerListAWidth = metrics.stringWidth("20");
 		int playerListBWidth = metrics.stringWidth("ABCDEFGHIJKLMNP");
@@ -84,18 +82,18 @@ public class Main {
 		hGroup.addGap(fontHight/4)
 		.addGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
-						.addGap(((playerListAWidth + playerListBWidth) - players)/2)
-						.addComponent(textField1, players, players, players)
-						.addGap(((playerListAWidth + playerListBWidth) - players)/2))
+						//.addGap(((playerListAWidth + playerListBWidth) - players)/2)
+						.addComponent(textField1, playerListBWidth+playerListAWidth, playerListBWidth+playerListAWidth, playerListBWidth+playerListAWidth)
+						/*.addGap(((playerListAWidth + playerListBWidth) - players)/2)*/)
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(textArea1A, playerListAWidth, playerListAWidth, playerListAWidth)
 						.addComponent(textArea1B, playerListBWidth, playerListBWidth, playerListBWidth)))
 		.addGap(fontHight/8)
 		.addGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
-						.addGap((longestRole - roleList)/2)
-						.addComponent(textField2, roleList, roleList, roleList)
-						.addGap((longestRole - roleList)/2))
+						//.addGap((longestRole - roleList)/2)
+						.addComponent(textField2, longestRole, longestRole, longestRole)
+						/*.addGap((longestRole - roleList)/2)*/)
 				.addComponent(textArea2, longestRole, longestRole, longestRole))
 		.addGap(fontHight/4)
 		.addComponent(textAreaMain, mainBoxWidth, mainBoxWidth, mainBoxWidth)
@@ -108,8 +106,10 @@ public class Main {
 		frame.setResizable(false);
 		textField1.setText("Players");
 		textField1.setEditable(false);
+		textField1.setHorizontalAlignment(JTextField.CENTER);
 		textField2.setText("Role List");
 		textField2.setEditable(false);
+		textField2.setHorizontalAlignment(JTextField.CENTER);
 		frame.setAlwaysOnTop(false); //Here for testing purposes only
 		frame.pack();
 	}
