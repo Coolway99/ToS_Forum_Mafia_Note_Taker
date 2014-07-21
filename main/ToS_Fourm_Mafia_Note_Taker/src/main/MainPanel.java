@@ -8,8 +8,12 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel{
-	public MainPanel(){
+	private int Width;
+	private int Hight;
+	public MainPanel(int Width, int Hight){
 		super();
+		this.Width = Width;
+		this.Hight = Hight;
 	}
 	public void update(){
 		
@@ -17,14 +21,14 @@ public class MainPanel extends JPanel{
 	@Override
 	public void paintComponent(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
-		g2.fillRect(0, 0, 800, 600);
+		g2.fillRect(0, 0, Width, Hight);
 	}
 	@Override
 	public Dimension getPreferredSize(){
-		return new Dimension(800, 600);	
+		return new Dimension(Width, Hight);	
 	}
 	@Override
 	public Dimension getMaximumSize(){
-		return new Dimension(800, 600);
+		return new Dimension(Width, Hight);
 	}
 }
