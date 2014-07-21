@@ -56,14 +56,14 @@ public class Main {
 		/*Math and Layout below this line, pass at your own risk
 		----------------------------------------------------------*/
 		FontMetrics metrics = frame.getGraphics().getFontMetrics();
-		int longestRole = metrics.stringWidth("Town Investigative");
-		int players = metrics.stringWidth("Playersi");
-		int roleList = metrics.stringWidth("RolesList");
 		int fontHight = metrics.getHeight();
+		int longestRole = metrics.stringWidth("Town Investigative");
+		int players = metrics.stringWidth("Players")+(fontHight/4);
+		int roleList = metrics.stringWidth("Role List")+(fontHight/4);
 		int playerListHight = fontHight * 20;
 		int playerListAWidth = metrics.stringWidth("20");
 		int playerListBWidth = metrics.stringWidth("ABCDEFGHIJKLMNP");
-		int mainBoxWidth = (Width - ((fontHight/4)+(playerListAWidth + playerListBWidth) + (fontHight/2) + longestRole));
+		int mainBoxWidth = (Width - ((fontHight/4)+(playerListAWidth + playerListBWidth) + (fontHight/2) + (fontHight/8) + longestRole));
 		
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
