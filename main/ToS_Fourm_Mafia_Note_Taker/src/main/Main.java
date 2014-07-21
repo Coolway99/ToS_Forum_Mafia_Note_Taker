@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.FontMetrics;
 import java.awt.Point;
 
 import javax.swing.GroupLayout;
@@ -13,7 +14,9 @@ import assets.MainRightClickMenu;
 import assets.listeners.FocusListener1;
 
 public class Main {
-	private static JPanel mainPanel = new MainPanel();
+	private static int Width = 800;
+	private static int Hight = 600;
+	private static JPanel mainPanel = new MainPanel(Width, Hight);
 	public static JFrame frame;
 	public static JTextField textField1 = new JTextField();
 	public static JTextField textField2 = new JTextField();
@@ -46,50 +49,63 @@ public class Main {
 		textArea2.setEditable(false);
 		textArea1B.addMouseListener(MainRightClickMenu.mouse);
 		textArea2.addMouseListener(MainRightClickMenu.mouse);
+		textAreaMain.setLineWrap(true);
 		textFieldNotes.setEditable(false);
 		textFieldNotes.setText("Notes");
+		frame.setVisible(true);
+		/*Math and Layout below this line, pass at your own risk
+		----------------------------------------------------------*/
+		FontMetrics metrics = frame.getGraphics().getFontMetrics();
+		int longestRole = metrics.stringWidth("Town Investigative");
+		int players = metrics.stringWidth("Playersi");
+		int roleList = metrics.stringWidth("RolesList");
+		int fontHight = metrics.getHeight();
+		int playerListHight = fontHight * 20;
+		int playerListAWidth = metrics.stringWidth("20");
+		int playerListBWidth = metrics.stringWidth("ABCDEFGHIJKLMNP");
+		int mainBoxWidth = (Width - ((fontHight/4)+(playerListAWidth + playerListBWidth) + (fontHight/2) + longestRole));
+		
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
 		
-		vGroup.addGap(10)
+		vGroup.addGap(fontHight/4)
 		.addGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
 						.addGroup(layout.createParallelGroup()
-								.addComponent(textField1, 20, 20, 20)
-								.addComponent(textField2, 20, 20, 20))
+								.addComponent(textField1, fontHight, fontHight, fontHight)
+								.addComponent(textField2, fontHight, fontHight, fontHight))
 						.addGroup(layout.createParallelGroup()
-								.addComponent(textArea1A, 320, 320, 320)
-								.addComponent(textArea1B, 320, 320, 320)
-								.addComponent(textArea2, 320, 320, 320)))
-				.addComponent(textAreaMain, 340, 340, 340))
+								.addComponent(textArea1A, playerListHight, playerListHight, playerListHight)
+								.addComponent(textArea1B, playerListHight, playerListHight, playerListHight)
+								.addComponent(textArea2, playerListHight, playerListHight, playerListHight)))
+				.addComponent(textAreaMain, playerListHight+fontHight, playerListHight+fontHight, playerListHight+fontHight))
 		.addGap(250);
 
-		hGroup.addGap(10)
+		hGroup.addGap(fontHight/4)
 		.addGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
-						.addGap(53)
-						.addComponent(textField1, 45, 45, 45)
-						.addGap(52))
+						.addGap(((playerListAWidth + playerListBWidth) - players)/2)
+						.addComponent(textField1, players, players, players)
+						.addGap(((playerListAWidth + playerListBWidth) - players)/2))
 				.addGroup(layout.createSequentialGroup()
-						.addComponent(textArea1A, 15, 15, 15)
-						.addComponent(textArea1B, 135, 135, 135)))
-		.addGap(5)
+						.addComponent(textArea1A, playerListAWidth, playerListAWidth, playerListAWidth)
+						.addComponent(textArea1B, playerListBWidth, playerListBWidth, playerListBWidth)))
+		.addGap(fontHight/8)
 		.addGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
-						.addGap(23)
-						.addComponent(textField2, 54, 54, 54)
-						.addGap(23))
-				.addComponent(textArea2, 100, 100, 100))
-		.addGap(10)
-		.addComponent(textAreaMain, 515, 515, 515)
-		.addGap(10)
+						.addGap((longestRole - roleList)/2)
+						.addComponent(textField2, roleList, roleList, roleList)
+						.addGap((longestRole - roleList)/2))
+				.addComponent(textArea2, longestRole, longestRole, longestRole))
+		.addGap(fontHight/4)
+		.addComponent(textAreaMain, mainBoxWidth, mainBoxWidth, mainBoxWidth)
+		.addGap(fontHight/4)
 		;
 		
 		layout.setVerticalGroup(vGroup);
 		layout.setHorizontalGroup(hGroup);
 		frame.add(mainPanel);
 		frame.setResizable(false);
-		frame.setVisible(true);
 		textField1.setText("Players");
 		textField1.setEditable(false);
 		textField2.setText("Role List");
