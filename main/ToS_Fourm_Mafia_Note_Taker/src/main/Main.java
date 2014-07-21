@@ -76,12 +76,12 @@ public class Main {
 		.addGap(5)
 		.addGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
-						.addGap(6)
+						.addGap(23)
 						.addComponent(textField2, 54, 54, 54)
-						.addGap(6))
-				.addComponent(textArea2, 66, 66, 66))
+						.addGap(23))
+				.addComponent(textArea2, 100, 100, 100))
 		.addGap(10)
-		.addComponent(textAreaMain, 549, 549, 549)
+		.addComponent(textAreaMain, 515, 515, 515)
 		.addGap(10)
 		;
 		
