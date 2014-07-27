@@ -12,14 +12,14 @@ public class ClassOfButtons {
 		testbutton1 = new Buttons1(){
 			@Override 
 			public void pressed(int button){
-				Main.textField1.setText("("+Integer.toString(button)+")Button1 Has been pressed");
+				Main.playersLabel.setText("("+Integer.toString(button)+")Button1 Has been pressed");
 				Main.frame.pack();
 			}
 		};
 		testbutton2 = new Buttons1(){
 			@Override 
 			public void pressed(int button){
-				Main.textField1.setText("("+Integer.toString(button)+")Button2 Has been pressed");
+				Main.playersLabel.setText("("+Integer.toString(button)+")Button2 Has been pressed");
 				Main.frame.repaint();
 			}
 		};
