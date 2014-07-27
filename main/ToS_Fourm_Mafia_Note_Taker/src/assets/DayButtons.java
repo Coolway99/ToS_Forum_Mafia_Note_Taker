@@ -1,5 +1,7 @@
 package assets;
 
+import interfaces.SaveLoadListener;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +26,17 @@ public class DayButtons extends Component{
 		this.setNightActionListener(new PrivateRemoveDayActionListener(), 0);
 		timer.setRepeats(false);
 		timer.start();
+	}
+	public int getDay(){
+		return buttonArray.size()-1;
+	}
+	public void setDay(int day){
+		for(int x = 0; x < day+1; x++){
+			while(timer.isRunning()){} //This will delay the call until timer has ran out
+			if(!buttonArray.containsKey(x)){
+				this.createNewDay();
+			}
+		}
 	}
 	public void setDayActionListener(ActionListener L, int day){
 		buttonArray.get(day).setDayActionListener(L);
@@ -121,6 +134,16 @@ class Buttons {
 			nightButton.setText("Night "+this.getDayNumber());
 		}
 		return this.setVerticalLocation(group, size);
+	}
+}
+class SaveLoadHandler implements SaveLoadListener<Integer>{
+	@Override
+	public Integer gatherSaveData() {
+		return Main.dayButtons.getDay();
+	}
+	@Override
+	public void inputLoadData(Integer input) {
+		Main.dayButtons.setDay(input);
 	}
 }
 class PrivateTimerListener implements ActionListener{
