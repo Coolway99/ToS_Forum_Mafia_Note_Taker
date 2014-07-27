@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import assets.ClassOfButtons;
 import assets.DayButtons;
 import assets.MainRightClickMenu;
 import assets.listeners.FocusListener1;
@@ -29,15 +28,16 @@ public class Main {
 	public static JTextArea graveyard = new JTextArea();
 	public static JTextArea roleList = new JTextArea();
 	public static JTextArea notes = new JTextArea();
-	public static DayButtons dayButton1 = new DayButtons(1);
+	public static DayButtons dayButtons = new DayButtons();
 	private static FocusListener1 focusListener = new FocusListener1();
+	private static FontMetrics metrics;
 	public static Mouse mouse = new Mouse();
 	private static GroupLayout layout;
 	
 	public static void main(String[] Args){
 		frame = new JFrame("Test Window");
 		frame.setVisible(true);
-		FontMetrics metrics = frame.getGraphics().getFontMetrics();
+		metrics = frame.getGraphics().getFontMetrics();
 		int screenWidth;
 		int screenHight;
 		{
@@ -52,7 +52,7 @@ public class Main {
 		notes.setText(Integer.toString(metrics.getFont().getSize()));
 		
 		MainRightClickMenu.initPopup();
-		ClassOfButtons.init();
+		dayButtons.init();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addMouseListener(mouse);
 		frame.addMouseMotionListener(mouse);
@@ -70,6 +70,24 @@ public class Main {
 		players.addMouseListener(MainRightClickMenu.mouse);
 		roleList.addMouseListener(MainRightClickMenu.mouse);
 		notes.setLineWrap(true);
+		
+		initLayout();
+		
+		frame.add(mainPanel);
+		frame.setResizable(false);
+		playersLabel.setText("Players");
+		playersLabel.setEditable(false);
+		playersLabel.setHorizontalAlignment(JTextField.CENTER);
+		roleListLabel.setText("Role List");
+		roleListLabel.setEditable(false);
+		roleListLabel.setHorizontalAlignment(JTextField.CENTER);
+		graveyardLabel.setText("Graveyard");
+		graveyardLabel.setEditable(false);
+		graveyardLabel.setHorizontalAlignment(JTextField.CENTER);
+		frame.setAlwaysOnTop(false); //Here for testing purposes only
+		frame.pack();
+	}
+	public static void initLayout(){
 		/*Math and Layout below this line, pass at your own risk
 		----------------------------------------------------------*/
 		int fontHeight = metrics.getHeight() + metrics.getDescent();
@@ -79,7 +97,8 @@ public class Main {
 		int playerListAWidth = metrics.stringWidth("20");
 		int playerListBWidth = metrics.stringWidth("ABCDEFGHIJKLMNP");
 		int graveyardWidth = playerListBWidth + longestConfirmedRole;
-		int dayButtonWidth = playerListAWidth + playerListBWidth + graveyardWidth + longestRole + (fontHeight/4) + (fontHeight/8);
+		int dayButtonAWidth = playerListAWidth + playerListBWidth + graveyardWidth + (fontHeight/8);
+		int dayButtonBWidth = longestRole + (fontHeight/4);
 		int mainBoxWidth = ((Width - ((fontHeight/4)+(playerListAWidth + playerListBWidth) + (fontHeight/2) + (fontHeight/8) + longestRole + graveyardWidth - (fontHeight/16))))/2;
 		
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
@@ -99,7 +118,7 @@ public class Main {
 								.addComponent(roleList, playerListHeight, playerListHeight, playerListHeight)))
 				.addComponent(notes, playerListHeight+fontHeight, playerListHeight+fontHeight, playerListHeight+fontHeight))
 		.addGap(fontHeight/4)
-		.addGroup(dayButton1.setVerticalLocation(layout.createSequentialGroup(), 10*fontHeight))
+		.addGroup(dayButtons.setVerticalLocation(layout, 10*fontHeight))
 		;
 
 		hGroup.addGap(fontHeight/4)
@@ -119,7 +138,7 @@ public class Main {
 						.addGroup(layout.createParallelGroup()
 								.addComponent(roleListLabel, longestRole, longestRole, longestRole)
 								.addComponent(roleList, longestRole, longestRole, longestRole)))
-		.addGroup(dayButton1.setHorizontalLocation(layout.createSequentialGroup(), layout.createParallelGroup(), dayButtonWidth)))
+		.addGroup(dayButtons.setHorizontalLocation(layout, dayButtonAWidth, dayButtonBWidth)))
 		.addGap(fontHeight/4)
 		.addGap(mainBoxWidth)
 		.addComponent(notes, mainBoxWidth, mainBoxWidth, mainBoxWidth)
@@ -128,19 +147,6 @@ public class Main {
 		
 		layout.setVerticalGroup(vGroup);
 		layout.setHorizontalGroup(hGroup);
-		frame.add(mainPanel);
-		frame.setResizable(false);
-		playersLabel.setText("Players");
-		playersLabel.setEditable(false);
-		playersLabel.setHorizontalAlignment(JTextField.CENTER);
-		roleListLabel.setText("Role List");
-		roleListLabel.setEditable(false);
-		roleListLabel.setHorizontalAlignment(JTextField.CENTER);
-		graveyardLabel.setText("Graveyard");
-		graveyardLabel.setEditable(false);
-		graveyardLabel.setHorizontalAlignment(JTextField.CENTER);
-		frame.setAlwaysOnTop(false); //Here for testing purposes only
-		frame.pack();
 	}
 	public static boolean isMouseOver(Point xy, Point end){
 		Point a = mouse.getPoint();
