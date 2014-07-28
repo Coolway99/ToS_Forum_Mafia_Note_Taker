@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-import assets.interfaces.SaveLoadListener;
 import main.Main;
 
 @SuppressWarnings("serial")
@@ -146,16 +145,6 @@ class Buttons {
 			nightButton.setText("Night "+this.getDayNumber());
 		}
 		return this.setVerticalLocation(group, size);
-	}
-}
-class SaveLoadHandler implements SaveLoadListener<Integer>{
-	@Override
-	public Integer gatherSaveData() {
-		return Main.dayButtons.getDay();
-	}
-	@Override
-	public void inputLoadData(Integer input) {
-		Main.dayButtons.setDay(input);
 	}
 }
 class PrivateTimerListener implements ActionListener{
