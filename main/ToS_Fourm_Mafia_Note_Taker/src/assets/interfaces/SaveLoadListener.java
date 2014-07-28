@@ -1,4 +1,4 @@
-package interfaces;
+package assets.interfaces;
 
 /**
  * @param <V> The Value, commonly meant to be a List<V>
