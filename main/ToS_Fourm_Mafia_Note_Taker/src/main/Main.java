@@ -49,7 +49,6 @@ public class Main {
 		Hight = screenHight/2;
 		mainPanel = new MainPanel(Width, Hight);
 		layout = new GroupLayout(mainPanel);
-		notes.setText(Integer.toString(metrics.getFont().getSize()));
 		
 		MainRightClickMenu.initPopup();
 		dayButtons.init();
@@ -140,8 +139,8 @@ public class Main {
 										.addComponent(roleList, longestRole, longestRole, longestRole)))
 				.addGroup(dayButtons.setHorizontalLocation(layout, dayButtonAWidth, dayButtonBWidth)))
 				.addGap(fontHeight/4)
-				.addGap(mainBoxWidth)
-				.addComponent(notes, mainBoxWidth, mainBoxWidth, mainBoxWidth)
+				.addGap(mainBoxWidth/2)
+				.addComponent(notes, mainBoxWidth+(mainBoxWidth/2), mainBoxWidth+(mainBoxWidth/2), mainBoxWidth+(mainBoxWidth/2))
 				.addGap(fontHeight/4)
 		;
 		
