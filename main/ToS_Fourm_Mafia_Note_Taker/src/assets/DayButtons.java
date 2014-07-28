@@ -1,18 +1,21 @@
 package assets;
 
-import interfaces.SaveLoadListener;
-
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
+import assets.interfaces.SaveLoadListener;
 import main.Main;
 
 @SuppressWarnings("serial")
@@ -90,6 +93,15 @@ class Buttons {
 		dayNumber = DayNumber;
 		dayButton = new JButton("Day "+Integer.toString(dayNumber));
 		nightButton = new JButton("Night "+Integer.toString(dayNumber));
+		try {
+			dayButton.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("\\images\\dayButton.png"))));
+			nightButton.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("\\images\\nightButton.png"))));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		dayButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		nightButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		
 	}
 	public Buttons(){
 		dayNumber = 0;
