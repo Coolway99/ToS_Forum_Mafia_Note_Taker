@@ -103,12 +103,12 @@ class Buttons {
 		dayString = new String();
 		nightButton = new JButton("Night "+Integer.toString(dayNumber));
 		nightString = new String();
-		try {
+		/*try {
 			dayButton.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("\\images\\dayButton.png"))));
 			nightButton.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("\\images\\nightButton.png"))));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		dayButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		nightButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		
