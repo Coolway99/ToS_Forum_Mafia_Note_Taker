@@ -1,6 +1,6 @@
 ToS_Forum_Mafia_Note_Taker
 ==========================
-VERSION:[1][0.1 Alpha]
+VERSION:[0.1 Alpha][1]
 
 A note taker for forum mafia, nothing more, alot less
 
