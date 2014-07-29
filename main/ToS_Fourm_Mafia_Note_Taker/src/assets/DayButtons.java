@@ -1,6 +1,8 @@
 package assets;
 
 import java.awt.Component;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -103,12 +105,21 @@ class Buttons {
 		dayString = new String();
 		nightButton = new JButton("Night "+Integer.toString(dayNumber));
 		nightString = new String();
-		/*try {
-			dayButton.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("\\images\\dayButton.png"))));
-			nightButton.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("\\images\\nightButton.png"))));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
+		
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		try {
+			Image dayImage = tk.createImage(Main.class.getResource("/assets/images/dayButton.png"));
+			Image nightImage = tk.createImage(Main.class.getResource("/assets/images/nightButton.png"));
+			tk.prepareImage(dayImage, -1, -1, null);
+			tk.prepareImage(nightImage, -1, -1, null);
+			ImageIcon dayIcon = new ImageIcon(dayImage);
+			ImageIcon nightIcon = new ImageIcon(nightImage);
+			dayButton.setIcon(dayIcon);
+			nightButton.setIcon(nightIcon);
+		} catch (IllegalArgumentException e1){
+			e1.printStackTrace();
+		}
+		
 		dayButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		nightButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		
