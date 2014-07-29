@@ -3,21 +3,26 @@ package assets;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 import main.Main;
 
 @SuppressWarnings("serial")
 public class DayButtons extends Component{
-	private HashMap<Integer, Buttons> buttonArray = new HashMap<Integer, Buttons>();
-	private Timer timer = new Timer(100, null);
+	private HashMap<Integer, Buttons> buttonArray;
+	private Timer timer = new Timer(50, null);
 	public void init(){
+		buttonArray = new HashMap<Integer, Buttons>();
 		buttonArray.put(0, new Buttons());
 		buttonArray.put(1, new Buttons(1));
 		this.setDayActionListener(new PrivateAddDayActionListener(), 0);
@@ -25,6 +30,23 @@ public class DayButtons extends Component{
 		timer.setRepeats(false);
 		timer.start();
 	}
+	public int getDay(){
+		return buttonArray.size()-1;
+	}
+	public void setDay(int day){
+		for(int x = 0; x < day+1; x++){
+			while(timer.isRunning()){} //This will delay the method until timer has ran out
+			if(!buttonArray.containsKey(x)){
+				this.createNewDay();
+			}
+		}
+	}
+	
+	public String getDayString(int day){return buttonArray.get(day).getDayString();}
+	public String getNightString(int day){return buttonArray.get(day).getNightString();}
+	public void setDayString(String s, int day){buttonArray.get(day).setDayString(s);}
+	public void setNightString(String s, int day){buttonArray.get(day).setNightString(s);}
+	
 	public void setDayActionListener(ActionListener L, int day){
 		buttonArray.get(day).setDayActionListener(L);
 	}
@@ -71,12 +93,38 @@ public class DayButtons extends Component{
 
 class Buttons {
 	private JButton dayButton;
+	private String dayString;
 	private JButton nightButton;
+	private String nightString;
 	private int dayNumber;
 	public Buttons(int DayNumber){
 		dayNumber = DayNumber;
 		dayButton = new JButton("Day "+Integer.toString(dayNumber));
+		dayString = new String();
 		nightButton = new JButton("Night "+Integer.toString(dayNumber));
+		nightString = new String();
+		/*try {
+			dayButton.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("\\images\\dayButton.png"))));
+			nightButton.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResource("\\images\\nightButton.png"))));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+		dayButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		nightButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		
+		this.setDayActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.saveNoteString();
+				Main.setNoteString(dayNumber, true, dayString);
+			}});
+		this.setNightActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.saveNoteString();
+				Main.setNoteString(dayNumber, false, nightString);
+			}});
+		
 	}
 	public Buttons(){
 		dayNumber = 0;
@@ -86,6 +134,12 @@ class Buttons {
 	public int getDayNumber(){
 		return dayNumber;
 	}
+	
+	public String getDayString(){return dayString;}
+	public String getNightString(){return nightString;}
+	public void setDayString(String s){dayString = s;}
+	public void setNightString(String s){nightString = s;}
+	
 	public void setDayActionListener(ActionListener L){
 		dayButton.addActionListener(L);
 	}
