@@ -40,6 +40,7 @@ public class Main {
 	private static JPanel mainPanel;
 	public static JFrame frame;
 	public static final JButton save = new JButton("Save");
+	public static final JButton saveAs = new JButton("<html>Save<br />&nbsp;&nbsp;&nbsp;&nbsp;As...</html>");
 	public static final JButton load = new JButton("Load");
 	private static final JTextField dayLabel = new JTextField();
 	public static final JTextField playersLabel = new JTextField();
@@ -58,6 +59,7 @@ public class Main {
 	private static GroupLayout layout;
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
+	public static boolean fileSelected = false;
 	public static final String title = "Forum Mafia Note Taker Alpha V0.1";
 	
 	public static void main(String[] Args){
@@ -78,6 +80,7 @@ public class Main {
 		{
 			SaveLoadButtonActionListener listener = new SaveLoadButtonActionListener();
 			save.addActionListener(listener);
+			saveAs.addActionListener(listener);
 			load.addActionListener(listener);
 			fc.setFileFilter(new FileFilter() {
 				
@@ -106,14 +109,14 @@ public class Main {
 		layout.setAutoCreateGaps(false);
 		playerNumbers.setEditable(false);
 		playerNumbers.setText("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20");
-		players.setLineWrap(true);
-		players.setEditable(false);
-		players.addFocusListener(focusListener);
 		roleList.setLineWrap(true);
 		roleList.addFocusListener(focusListener);
 		roleList.setEditable(false);
-		players.addMouseListener(MainRightClickMenu.mouse);
+		graveyard.setLineWrap(true);
+		graveyard.addFocusListener(focusListener);
+		graveyard.setEditable(false);
 		roleList.addMouseListener(MainRightClickMenu.mouse);
+		graveyard.addMouseListener(MainRightClickMenu.mouse);
 		notes.setLineWrap(true);
 		
 		initLayout();
@@ -173,8 +176,11 @@ public class Main {
 						.addGroup(dayButtons.setVerticalLocation(layout, 10*fontHeight))
 						.addGroup(layout.createSequentialGroup()
 								.addGroup(layout.createParallelGroup()
-						.addComponent(save, additionalButtonHeight, additionalButtonHeight, additionalButtonHeight)
-						.addComponent(load, additionalButtonHeight, additionalButtonHeight, additionalButtonHeight))))
+										.addComponent(save, additionalButtonHeight, additionalButtonHeight, additionalButtonHeight)
+										.addComponent(load, additionalButtonHeight, additionalButtonHeight, additionalButtonHeight))
+								.addGap(fontHeight/2)
+								.addGroup(layout.createParallelGroup()
+										.addComponent(saveAs, additionalButtonHeight, additionalButtonHeight, additionalButtonHeight))))
 		;
 
 		hGroup.addGap(fontHeight/4)
@@ -205,11 +211,12 @@ public class Main {
 						.addComponent(notesPane, mainBoxWidth+(mainBoxWidth/2), mainBoxWidth+(mainBoxWidth/2), mainBoxWidth+(mainBoxWidth/2))
 						.addGroup(layout.createSequentialGroup()
 								.addGap(fontHeight/4)
-								.addComponent(save, additionalButtonWidth, additionalButtonWidth, additionalButtonWidth)
+								.addGroup(layout.createParallelGroup()
+										.addComponent(saveAs, additionalButtonWidth, additionalButtonWidth, additionalButtonWidth)
+										.addComponent(save, additionalButtonWidth, additionalButtonWidth, additionalButtonWidth))
 								.addGap(fontHeight/2)
 								.addComponent(load, additionalButtonWidth, additionalButtonWidth, additionalButtonWidth)
 								.addGap(fontHeight/2)))
-								
 				.addGap(fontHeight/4)
 		;
 		
@@ -253,14 +260,16 @@ class SaveLoadButtonActionListener implements ActionListener {
 	@SuppressWarnings("static-access")
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == Main.save){
-			int value = Main.fc.showSaveDialog(Main.fc);
+		if(e.getSource() == Main.saveAs || e.getSource() == Main.save){
+			int value;
+			if(!(e.getSource() == Main.save && Main.fileSelected)) {value = Main.fc.showSaveDialog(Main.fc);}else{value = Main.fc.APPROVE_OPTION;}
 			if(value == Main.fc.APPROVE_OPTION){
 				File file = Main.fc.getSelectedFile();
 				if(!file.getName().endsWith(".FMNT")){
 					file = new File(file.toString()+".FMNT");
 				}
 				SavingHandler.save(file);
+				Main.fileSelected = true;
 			}
 		}
 		if(e.getSource() == Main.load){
