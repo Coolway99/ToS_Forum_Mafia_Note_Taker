@@ -17,6 +17,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
@@ -49,6 +50,7 @@ public class Main {
 	public static JTextArea graveyard = new JTextArea();
 	public static JTextArea roleList = new JTextArea();
 	public static JTextArea notes = new JTextArea();
+	public static JScrollPane notesPane = new JScrollPane(notes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	public static DayButtons dayButtons = new DayButtons();
 	private static FocusListener1 focusListener = new FocusListener1();
 	private static FontMetrics metrics;
@@ -165,7 +167,7 @@ public class Main {
 										.addComponent(players, playerListHeight, playerListHeight, playerListHeight)
 										.addComponent(graveyard, playerListHeight, playerListHeight, playerListHeight)
 										.addComponent(roleList, playerListHeight, playerListHeight, playerListHeight)))
-						.addComponent(notes, playerListHeight+fontHeight, playerListHeight+fontHeight, playerListHeight+fontHeight))
+						.addComponent(notesPane, playerListHeight+fontHeight, playerListHeight+fontHeight, playerListHeight+fontHeight))
 				.addGap(fontHeight/4)
 				.addGroup(layout.createParallelGroup()
 						.addGroup(dayButtons.setVerticalLocation(layout, 10*fontHeight))
@@ -200,7 +202,7 @@ public class Main {
 								.addGap(fontHeight/4)
 						.addGap(mainBoxWidth/2))
 				.addGroup(layout.createParallelGroup()
-						.addComponent(notes, mainBoxWidth+(mainBoxWidth/2), mainBoxWidth+(mainBoxWidth/2), mainBoxWidth+(mainBoxWidth/2))
+						.addComponent(notesPane, mainBoxWidth+(mainBoxWidth/2), mainBoxWidth+(mainBoxWidth/2), mainBoxWidth+(mainBoxWidth/2))
 						.addGroup(layout.createSequentialGroup()
 								.addGap(fontHeight/4)
 								.addComponent(save, additionalButtonWidth, additionalButtonWidth, additionalButtonWidth)
