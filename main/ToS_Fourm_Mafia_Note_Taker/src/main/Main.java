@@ -60,7 +60,7 @@ public class Main {
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
-	public static final String title = "Forum Mafia Note Taker Alpha V0.1";
+	public static final String title = "Forum Mafia Note Taker Alpha V-In Dev-";
 	
 	public static void main(String[] Args){
 		frame = new JFrame(title + " - new");
