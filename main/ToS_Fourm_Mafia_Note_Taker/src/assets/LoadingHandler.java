@@ -13,6 +13,7 @@ public class LoadingHandler implements ContentHandler{
 	private HashMap<String, Boolean> tags = new HashMap<>();
 	private String saveV;
 	private String patch;
+	private String Version;
 	private int day;
 	@Override
 	public void startDocument() throws SAXException {
@@ -30,6 +31,10 @@ public class LoadingHandler implements ContentHandler{
 			if(qName.equals("beginSave")){
 				saveV = atts.getValue("version");
 				patch = atts.getValue("patch");
+				Version = saveV+"."+patch;
+				if(VersionParsingHandler.isVersionLessThan(Version, "0.0.1.0")){
+					
+				}
 			} else if(qName.equals("number")){
 				day = Integer.parseInt(atts.getValue("day"));
 			}
@@ -172,5 +177,78 @@ public class LoadingHandler implements ContentHandler{
 			}
 			return B;
 		}
+	}
+}
+class VersionParsingHandler{
+	public static boolean isVersionLessThan(String isThis, String lessThanThis){
+		int A[] = parseVersion(isThis);
+		int B[] = parseVersion(lessThanThis);
+		if(A[0] <= B[0]){
+			if(A[1] <= B[1]){
+				if(A[2] <= B[2]){
+					if(A[3] < B[3]){
+						return true;
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+	public static boolean isVersionEqualToo(String isThis, String equalToThis){
+		int A[] = parseVersion(isThis);
+		int B[] = parseVersion(equalToThis);
+		if(A[0] == B[0]){
+			if(A[1] == B[1]){
+				if(A[2] == B[2]){
+					if(A[3] == B[3]){
+						return true;
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+	public static boolean isVersionGreaterThan(String isThis, String greaterThanThis){
+		int A[] = parseVersion(isThis);
+		int B[] = parseVersion(greaterThanThis);
+		if(A[0] >= B[0]){
+			if(A[1] >= B[1]){
+				if(A[2] >= B[2]){
+					if(A[3] > B[3]){
+						return true;
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+	private static int[] parseVersion(String Version){
+		String unParsed[] = Version.split(".");
+		int version[] = new int[unParsed.length];
+		for(int x = 0; x < version.length; x++){
+			version[x] = Integer.parseInt(unParsed[x]);
+		}
+		return version;
 	}
 }
