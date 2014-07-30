@@ -18,11 +18,11 @@ public class SavingHandler{
 	 * <b>Mini</b> Added/renamed/removed some tags, shouldn't make saving/loading harder<br />
 	 * <b>Patch</b> Minor fixes/Changes
 	 */
-	private static String saveV = "0.0.0";
+	private static String saveV = "0.0.1";
 	/**
 	 * @see {@link assets.SavingHandler.saveV}
 	 */
-	private static String patch = "1";
+	private static String patch = "0";
 	@SuppressWarnings("serial")
 	public static boolean save(File filepath){
 		try{
@@ -30,7 +30,7 @@ public class SavingHandler{
 				if(!Main.notifyOverwrite(filepath.getName())){
 					throw new UserException(){};
 					} else {
-						filepath.delete();
+						filepath.renameTo(new File(filepath.toString() + "_OLD"));
 						filepath.createNewFile();
 					}
 				} else {filepath.createNewFile();}
@@ -65,9 +65,12 @@ public class SavingHandler{
 			output.write("</beginSave>");
 			output.close();
 			Main.frame.setTitle(Main.title + " - " + Main.fc.getSelectedFile().getName().split(".FMNT")[0]);
+			if(new File(filepath.toString() + "_OLD").exists()){new File(filepath.toString() + "_OLD").delete();}
 			return true;
 		} catch (IOException e){
 			Main.writeError();
+			if(filepath.exists()){filepath.delete();}
+			new File(filepath.toString() + "_OLD").renameTo(filepath);
 			return false;
 		} catch (UserException e){
 			return false;
