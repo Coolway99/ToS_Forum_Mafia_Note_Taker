@@ -16,7 +16,7 @@ public class LoadingHandler implements ContentHandler{
 	private int day;
 	@Override
 	public void startDocument() throws SAXException {
-		String theTagList[] = {"beginSave", "data", "totalDays", "players", "graveyard"
+		String theTagList[] = {"beginSave", "data", "totalDays", "players", "allignment", "graveyard"
 				, "roles", "number", "day", "notes", "night"};
 		for(int x = 0; x < theTagList.length; x++){
 			tags.put(theTagList[x], false);
@@ -78,6 +78,7 @@ public class LoadingHandler implements ContentHandler{
 	@Override
 	public void endDocument() throws SAXException {
 		Main.frame.setTitle(Main.title + " - " + Main.fc.getSelectedFile().getName().split(".FMNT")[0]);
+		Main.fileSelected = true;
 	}
 	@Override
 	public void endPrefixMapping(String prefix) throws SAXException {
