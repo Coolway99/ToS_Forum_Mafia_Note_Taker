@@ -16,7 +16,14 @@ public class SavingHandler{
 	 * <b>Major</b> This is like a complete re-make of the file system<br />
 	 * <b>Minor</b> Some tags might mean different things than before<br />
 	 * <b>Mini</b> Added/renamed/removed some tags, shouldn't make saving/loading harder<br />
-	 * <b>Patch</b> Minor fixes/Changes
+	 * <b>Patch</b> Minor fixes/Changes<br />
+	 * <br />
+	 * The change sets all the numbers lower than it to 0<br />
+	 * <br />
+	 * <b>EXAMPLES:</b> If its version 1.2.3.4 and Major goes up by 1, then it becomes 2.0.0.0<br />
+	 * If it is 1.2.3.4 and Patch goes up by 1, then it is 1.2.3.5<br />
+	 * If it is 1.2.3.4 and Minor goes up by 1, then it becomes 1.3.0.0<br />
+	 * ect.
 	 */
 	private static String saveV = "0.0.1";
 	/**
