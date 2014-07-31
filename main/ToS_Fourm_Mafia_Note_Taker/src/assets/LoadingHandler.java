@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 
 import main.Main;
 
+import org.omg.CORBA.UserException;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -35,14 +36,21 @@ public class LoadingHandler implements ContentHandler{
 				patch = atts.getValue("patch");
 				Version = saveV+"."+patch;
 				if(VersionParsingHandler.isVersionLessThan(Version, "0.0.1.0")){
-					JOptionPane.showConfirmDialog(Main.frame, "WARNING! The save you are"
-							+ "loading is from a previous version, between then and now the"
+					int value = JOptionPane.showConfirmDialog(Main.frame, "WARNING! The save you are"
+							+ "loading is from a previous version, between then and now the "
 							+ "playerlist and graveyard have merged.\n\n"
 							+ "If you want to keep the graveyard and scrap the playerlist, push yes.\n"
 							+ "If you want to keep the playerlist and scrap the graveyard, push no\n"
 							+ "If you want to cancel the operation, please press \"Cancel\"","WARNING!", 
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.WARNING_MESSAGE);
+					if(value == JOptionPane.YES_OPTION){
+						
+					} else if(value == JOptionPane.NO_OPTION){
+						
+					} else {
+						throw new SAXException(){};
+					}
 				}
 			} else if(qName.equals("number")){
 				day = Integer.parseInt(atts.getValue("day"));
