@@ -3,7 +3,7 @@ package assets.listeners;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 
 public class FocusListener1 implements FocusListener{
 
@@ -14,7 +14,7 @@ public class FocusListener1 implements FocusListener{
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		((JTextArea) arg0.getSource()).setEditable(false);
+		((JTextPane) arg0.getSource()).setEditable(false);
 	}
 	
 }

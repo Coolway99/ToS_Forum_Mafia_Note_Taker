@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 
 
 @SuppressWarnings("serial")
@@ -53,7 +54,7 @@ class MenuInterface extends JMenuItem{
 	public MenuInterface(String string) {super(string);}
 
 	public void doAction(ActionEvent e){
-		((JTextArea)MainRightClickMenu.e.getSource()).setEditable(true);
-		((JTextArea)MainRightClickMenu.e.getSource()).requestFocus();
+		((JTextPane)MainRightClickMenu.e.getSource()).setEditable(true);
+		((JTextPane)MainRightClickMenu.e.getSource()).requestFocus();
 	}
 }
