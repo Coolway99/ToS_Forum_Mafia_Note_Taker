@@ -18,6 +18,7 @@ public class LoadingHandler implements ContentHandler{
 	private String patch;
 	private String Version;
 	private int day;
+	private boolean usePlayers;
 	@Override
 	public void startDocument() throws SAXException {
 		String theTagList[] = {"beginSave", "data", "totalDays", "players", "allignment", "graveyard"
@@ -45,12 +46,14 @@ public class LoadingHandler implements ContentHandler{
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.WARNING_MESSAGE);
 					if(value == JOptionPane.YES_OPTION){
-						
+						usePlayers = false;
 					} else if(value == JOptionPane.NO_OPTION){
-						
+						usePlayers = true;
 					} else {
 						throw new SAXException(){};
 					}
+				} else {
+					usePlayers = true;
 				}
 			} else if(qName.equals("number")){
 				day = Integer.parseInt(atts.getValue("day"));
@@ -67,25 +70,29 @@ public class LoadingHandler implements ContentHandler{
 		if(tags.get("totalDays")){
 			Main.dayButtons.setDay(Integer.parseInt(string));
 		} else if(tags.get("players")){
-			Main.players.setText(unParse(string));
+			if(usePlayers){
+				Main.graveyard.setText(unParse(string));
+			}
 		} else if(tags.get("roles")){
 			Main.roleList.setText(unParse(string));
 		} else if(tags.get("graveyard")){
-			Main.graveyard.setText(unParse(string));
+			if(!usePlayers){
+				Main.graveyard.setText(unParse(string));
+			}
 		} else if(tags.get("day")){
 			if(tags.get("notes")){
 				if(day == Main.selectedDay && Main.isDay){
-					Main.setNoteString(day, true, string);
+					Main.setNoteString(day, true, unParse(string));
 				} else {
-					Main.dayButtons.setDayString(string, day);
+					Main.dayButtons.setDayString(unParse(string), day);
 				}
 			}
 		} else if(tags.get("night")){
 			if(tags.get("notes")){
 				if(day == Main.selectedDay && !Main.isDay){
-					Main.setNoteString(day, false, string);
+					Main.setNoteString(day, false, unParse(string));
 				} else {
-					Main.dayButtons.setNightString(string, day);
+					Main.dayButtons.setNightString(unParse(string), day);
 				}
 			}
 		}
