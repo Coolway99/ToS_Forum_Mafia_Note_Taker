@@ -1,7 +1,9 @@
 package main;
 
 import java.awt.Dimension;
-import java.awt.FontMetrics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -11,7 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.filechooser.FileFilter;
 
 import org.xml.sax.InputSource;
@@ -35,9 +37,9 @@ import assets.listeners.FocusListener1;
 
 public class Main {
 	private static int Width;
-	private static int Hight;
+	private static int Height;
 	public static final JFileChooser fc = new JFileChooser();
-	private static JPanel mainPanel;
+	public static JPanel mainPanel;
 	public static JFrame frame;
 	public static final JButton save = new JButton("Save");
 	public static final JButton saveAs = new JButton("<html>Save<br />&nbsp;&nbsp;&nbsp;&nbsp;As...</html>");
@@ -50,13 +52,14 @@ public class Main {
 	public static JTextArea players = new JTextArea();
 	public static JTextArea graveyard = new JTextArea();
 	public static JTextArea roleList = new JTextArea();
+	public static JTextPane roleListPane = new JTextPane();
 	public static JTextArea notes = new JTextArea();
 	public static JScrollPane notesPane = new JScrollPane(notes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	public static DayButtons dayButtons = new DayButtons();
 	private static FocusListener1 focusListener = new FocusListener1();
-	private static FontMetrics metrics;
 	public static Mouse mouse = new Mouse();
-	private static GroupLayout layout;
+	private static GridBagLayout layout;
+	private static GridBagConstraints c;
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
@@ -65,18 +68,20 @@ public class Main {
 	public static void main(String[] Args){
 		frame = new JFrame(title + " - new");
 		frame.setVisible(true);
-		metrics = frame.getGraphics().getFontMetrics();
+		roleListPane.add(roleList);
 		int screenWidth;
-		int screenHight;
+		int screenHeight;
 		{
 			Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 			screenWidth = screen.width;
-			screenHight = screen.height;
+			screenHeight = screen.height;
 		}
-		Width = screenWidth/2;
-		Hight = screenHight/2;
-		mainPanel = new MainPanel(Width, Hight);
-		layout = new GroupLayout(mainPanel);
+		Width = screenWidth;
+		Height = screenHeight;
+		mainPanel = new MainPanel(Width, Height);
+		layout = new GridBagLayout();
+		//frame.setFont(frame.getFont().deriveFont(((Width/Height)*8)));
+		//mainPanel.setFont(mainPanel.getFont().deriveFont(((Width/Height)*8)));
 		{
 			SaveLoadButtonActionListener listener = new SaveLoadButtonActionListener();
 			save.addActionListener(listener);
@@ -104,124 +109,154 @@ public class Main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addMouseListener(mouse);
 		frame.addMouseMotionListener(mouse);
-		mainPanel.setLayout(layout);
-		layout.setAutoCreateContainerGaps(false);
-		layout.setAutoCreateGaps(false);
 		playerNumbers.setEditable(false);
-		playerNumbers.setText("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20");
-		roleList.setLineWrap(true);
-		roleList.addFocusListener(focusListener);
-		roleList.setEditable(false);
-		graveyard.setLineWrap(true);
-		graveyard.addFocusListener(focusListener);
-		graveyard.setEditable(false);
-		roleList.addMouseListener(MainRightClickMenu.mouse);
-		graveyard.addMouseListener(MainRightClickMenu.mouse);
+		playerNumbers.setText("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n");
+		roleListPane.addFocusListener(focusListener);
+		roleListPane.setEditable(false);
+		//graveyardPane.addFocusListener(focusListener);
+		//graveyardPane.setEditable(false);
+		roleListPane.addMouseListener(MainRightClickMenu.mouse);
+		//graveyardPane.addMouseListener(MainRightClickMenu.mouse);
 		notes.setLineWrap(true);
+		mainPanel.setLayout(layout);
 		
 		initLayout();
 		
+
+		
 		frame.add(mainPanel);
-		frame.setResizable(false);
+		//frame.setResizable(false);
 		playersLabel.setText("Players");
 		playersLabel.setEditable(false);
 		playersLabel.setHorizontalAlignment(JTextField.CENTER);
 		roleListLabel.setText("Role List");
 		roleListLabel.setEditable(false);
 		roleListLabel.setHorizontalAlignment(JTextField.CENTER);
-		graveyardLabel.setText("Graveyard");
+		graveyardLabel.setText("Players \\ Graveyard");
 		graveyardLabel.setEditable(false);
 		graveyardLabel.setHorizontalAlignment(JTextField.CENTER);
 		dayLabel.setText("Day 1");
 		dayLabel.setEditable(false);
 		dayLabel.setHorizontalAlignment(JTextField.CENTER);
 		frame.setAlwaysOnTop(false); //Here for testing purposes only
-		frame.pack();
+		frame.setSize(screenWidth/2, screenHeight/2);
 	}
 	public static void initLayout(){
 		/*Math and Layout below this line, pass at your own risk
 		----------------------------------------------------------*/
-		int fontHeight = metrics.getHeight() + metrics.getDescent();
-		int longestRole = metrics.stringWidth("Town Investigative");
-		int longestConfirmedRole = metrics.stringWidth("(Executioner)");
-		int playerListHeight = (fontHeight * 20) - (metrics.getDescent() * 20);
-		int playerListAWidth = metrics.stringWidth("20");
-		int playerListBWidth = metrics.stringWidth("ABCDEFGHIJKLMNP")-1;
-		int graveyardWidth = playerListBWidth + longestConfirmedRole;
-		int dayButtonAWidth = playerListAWidth + playerListBWidth + graveyardWidth + (fontHeight/8);
-		int dayButtonBWidth = longestRole + (fontHeight/4);
-		int mainBoxWidth = ((Width - ((fontHeight/4)+(playerListAWidth + playerListBWidth) + (fontHeight/2) + (fontHeight/8) + longestRole + graveyardWidth - (fontHeight/16))))/2;
-		int additionalButtonWidth = (mainBoxWidth/3)-(fontHeight/2);
-		int additionalButtonHeight = (5*fontHeight) - (fontHeight/2);
-		
-		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
-		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-		
-		vGroup.addGap(fontHeight/4)
-				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup()
-										.addComponent(playersLabel, fontHeight, fontHeight, fontHeight)
-										.addComponent(graveyardLabel, fontHeight, fontHeight, fontHeight)
-										.addComponent(roleListLabel, fontHeight, fontHeight, fontHeight)
-										.addComponent(dayLabel, fontHeight, fontHeight, fontHeight))
-								.addGroup(layout.createParallelGroup()
-										.addComponent(playerNumbers, playerListHeight, playerListHeight, playerListHeight)
-										.addComponent(players, playerListHeight, playerListHeight, playerListHeight)
-										.addComponent(graveyard, playerListHeight, playerListHeight, playerListHeight)
-										.addComponent(roleList, playerListHeight, playerListHeight, playerListHeight)))
-						.addComponent(notesPane, playerListHeight+fontHeight, playerListHeight+fontHeight, playerListHeight+fontHeight))
-				.addGap(fontHeight/4)
-				.addGroup(layout.createParallelGroup()
-						.addGroup(dayButtons.setVerticalLocation(layout, 10*fontHeight))
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup()
-										.addComponent(save, additionalButtonHeight, additionalButtonHeight, additionalButtonHeight)
-										.addComponent(load, additionalButtonHeight, additionalButtonHeight, additionalButtonHeight))
-								.addGap(fontHeight/2)
-								.addGroup(layout.createParallelGroup()
-										.addComponent(saveAs, additionalButtonHeight, additionalButtonHeight, additionalButtonHeight))))
-		;
-
-		hGroup.addGap(fontHeight/4)
-				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup()
-										.addComponent(graveyardLabel, graveyardWidth, graveyardWidth, graveyardWidth)
-										.addComponent(graveyard, graveyardWidth, graveyardWidth, graveyardWidth))
-								.addGap(fontHeight/16)
-								.addGroup(layout.createParallelGroup()
-										.addComponent(playersLabel, playerListBWidth+playerListAWidth+1, playerListBWidth+playerListAWidth+1, playerListBWidth+playerListAWidth+1)
-										.addGroup(layout.createSequentialGroup()
-												.addComponent(playerNumbers, playerListAWidth, playerListAWidth, playerListAWidth)
-												.addGap(1)
-												.addComponent(players, playerListBWidth, playerListBWidth, playerListBWidth)))
-						
-								.addGap(fontHeight/8)
-								.addGroup(layout.createParallelGroup()
-										.addComponent(roleListLabel, longestRole, longestRole, longestRole)
-										.addComponent(roleList, longestRole, longestRole, longestRole)))
-						.addGroup(dayButtons.setHorizontalLocation(layout, dayButtonAWidth, dayButtonBWidth)))
-				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(dayLabel, (mainBoxWidth/2)-(fontHeight/4), (mainBoxWidth/2)-(fontHeight/4), (mainBoxWidth/2)-(fontHeight/4)))
-								.addGap(fontHeight/4)
-						.addGap(mainBoxWidth/2))
-				.addGroup(layout.createParallelGroup()
-						.addComponent(notesPane, mainBoxWidth+(mainBoxWidth/2), mainBoxWidth+(mainBoxWidth/2), mainBoxWidth+(mainBoxWidth/2))
-						.addGroup(layout.createSequentialGroup()
-								.addGap(fontHeight/4)
-								.addGroup(layout.createParallelGroup()
-										.addComponent(saveAs, additionalButtonWidth, additionalButtonWidth, additionalButtonWidth)
-										.addComponent(save, additionalButtonWidth, additionalButtonWidth, additionalButtonWidth))
-								.addGap(fontHeight/2)
-								.addComponent(load, additionalButtonWidth, additionalButtonWidth, additionalButtonWidth)
-								.addGap(fontHeight/2)))
-				.addGap(fontHeight/4)
-		;
-		
-		layout.setVerticalGroup(vGroup);
-		layout.setHorizontalGroup(hGroup);
+		{
+			int rows[] = new int[34];
+			for(int x = 0; x < rows.length; x++){
+				rows[x] = (int) ((Height/rows.length)/2);
+			}
+			int columns[] = new int[60];
+			for(int x = 0; x < columns.length; x++){
+				columns[x] = (int) ((Width/columns.length)/2);
+			}
+			layout.rowHeights = rows;
+			layout.columnWidths = columns;
+		}
+		resetConstraints();
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		c.gridheight = 20;
+		c.insets  = new Insets(0, 0, 0, 1);
+		mainPanel.add(playerNumbers, c);
+		resetConstraints();
+		c.gridx = 1;
+		c.gridy = 2;
+		c.gridheight = 20;
+		c.gridwidth = 17;
+		c.insets  = new Insets(0, 0, 0, 1);
+		mainPanel.add(graveyard, c);
+		resetConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridheight = 2;
+		c.gridwidth = 18;
+		c.insets  = new Insets(0, 0, 0, 1);
+		mainPanel.add(graveyardLabel, c);
+		resetConstraints();
+		dayButtons.setLocation(c, 0, 22, 20, 12, 20, 22, 7, 12);
+		resetConstraints();
+		c.gridwidth = 9;
+		c.gridheight = 20;
+		c.gridy = 2;
+		c.gridx = 18;
+		mainPanel.add(roleListPane, c);
+		resetConstraints();
+		c.gridheight = 2;
+		c.gridwidth = 9;
+		c.gridx = 18;
+		c.gridy = 0;
+		mainPanel.add(roleListLabel, c);
+		resetConstraints();
+		c.gridwidth = 8;
+		c.gridheight = 2;
+		c.gridx = 27;
+		c.gridy = 0;
+		mainPanel.add(dayLabel, c);
+		resetConstraints();
+		c.gridwidth = 25;
+		c.gridheight = 22;
+		c.gridx = 35;
+		c.gridy = 0;
+		mainPanel.add(notesPane, c);
+		resetConstraints();
+		c.gridwidth = 5;
+		c.gridheight = 5;
+		c.gridx = 36;
+		c.gridy = 22;
+		mainPanel.add(save, c);
+		resetConstraints();
+		c.gridwidth = 5;
+		c.gridheight = 5;
+		c.gridx = 42;
+		c.gridy = 22;
+		mainPanel.add(load, c);
+		/*resetConstraints();
+		c.gridwidth = 5;
+		c.gridheight = 5;
+		c.gridx = 48;
+		c.gridy = 22;
+		mainPanel.add(, c);*/
+		/*resetConstraints();
+		c.gridwidth = 5;
+		c.gridheight = 5;
+		c.gridx = 54;
+		c.gridy = 22;
+		mainPanel.add(, c);*/
+		resetConstraints();
+		c.gridwidth = 5;
+		c.gridheight = 5;
+		c.gridx = 36;
+		c.gridy = 28;
+		mainPanel.add(saveAs, c);
+		/*resetConstraints();
+		c.gridwidth = 5;
+		c.gridheight = 5;
+		c.gridx = 42;
+		c.gridy = 28;
+		mainPanel.add(, c);*/
+		/*resetConstraints();
+		c.gridwidth = 5;
+		c.gridheight = 5;
+		c.gridx = 48;
+		c.gridy = 28;
+		mainPanel.add(, c);*/
+		/*resetConstraints();
+		c.gridwidth = 5;
+		c.gridheight = 5;
+		c.gridx = 54;
+		c.gridy = 28;
+		mainPanel.add(, c);*/
+	}
+	public static void resetConstraints(){
+		c = new GridBagConstraints();
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.fill = c.BOTH;
 	}
 	public static void writeError(){
 		JOptionPane.showMessageDialog(frame, "There was an error writing to the file!", "Write Error", JOptionPane.ERROR_MESSAGE);

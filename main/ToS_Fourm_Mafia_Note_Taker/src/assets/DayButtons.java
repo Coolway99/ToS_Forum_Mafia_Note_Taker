@@ -1,6 +1,8 @@
 package assets;
 
 import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -12,6 +14,7 @@ import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
@@ -34,10 +37,19 @@ public class DayButtons extends Component{
 		return buttonArray.size()-1;
 	}
 	public void setDay(int day){
-		for(int x = 0; x < day+1; x++){
-			while(timer.isRunning()){} //This will delay the method until timer has ran out
-			if(!buttonArray.containsKey(x)){
-				this.createNewDay();
+		if(buttonArray.size()-1 < day){
+			for(int x = 0; x < day+1; x++){
+				while(timer.isRunning()){} //This will delay the method until timer has ran out
+				if(!buttonArray.containsKey(x)){
+					this.createNewDay();
+				}
+			}
+		} else if(buttonArray.size()-1 > day){
+			for(int x = buttonArray.size(); x > day+1; x--){
+				while(timer.isRunning()){} //This will delay the method until timer has ran out
+				if(!buttonArray.containsKey(x)){
+					this.removeDays();
+				}
 			}
 		}
 	}
@@ -55,39 +67,51 @@ public class DayButtons extends Component{
 	}
 	public void createNewDay(){
 		if(!timer.isRunning()){
-			buttonArray.put(buttonArray.size(), new Buttons(buttonArray.size()));
-			Main.initLayout();
-			Main.frame.repaint();
-			timer.restart();
+			if(buttonArray.size()-1 != 20){
+				buttonArray.put(buttonArray.size(), new Buttons(buttonArray.size()));
+				Main.initLayout();
+				Main.frame.repaint();
+				timer.restart();
+			} else {
+				JOptionPane.showMessageDialog(Main.mainPanel, "You cannot have more than 20 days");
+			}
 		}
 	}
 	public void removeADay(){
 		if(!timer.isRunning()){
 			if(buttonArray.size() > 2){
-				buttonArray.remove(buttonArray.size()-1);
-				Main.initLayout();
-				Main.frame.repaint();
-				timer.restart();
+				if(JOptionPane.showConfirmDialog(Main.mainPanel, "Do you want to remove a day?", "Remove a day", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION){
+					Main.mainPanel.remove(buttonArray.get(buttonArray.size()-1).getDay());
+					Main.mainPanel.remove(buttonArray.get(buttonArray.size()-1).getNight());
+					buttonArray.remove(buttonArray.size()-1);
+					Main.initLayout();
+					Main.mainPanel.revalidate();
+					Main.frame.repaint();
+					timer.restart();
+				}
+			} else {
+				JOptionPane.showMessageDialog(Main.mainPanel, "You cannot have less than 1 day");
 			}
 		}
 	}
-	public SequentialGroup setVerticalLocation(GroupLayout layout, int size){
-		SequentialGroup group = layout.createSequentialGroup();
-		ParallelGroup pGroup = layout.createParallelGroup();
-		for(int x = 1; x < buttonArray.size(); x++){
-			pGroup.addGroup(buttonArray.get(x).setVerticalLocation(layout.createSequentialGroup(), size, buttonArray.size()-1));
+	private void removeDays(){
+		if(buttonArray.size() > 2){
+			Main.mainPanel.remove(buttonArray.get(buttonArray.size()-1).getDay());
+			Main.mainPanel.remove(buttonArray.get(buttonArray.size()-1).getNight());
+			buttonArray.remove(buttonArray.size()-1);
+			Main.initLayout();
+			Main.mainPanel.revalidate();
+			Main.frame.repaint();
 		}
-		pGroup.addGroup(buttonArray.get(0).setVerticalLocation(layout.createSequentialGroup(), size));
-		return group.addGroup(pGroup);
 	}
-	public SequentialGroup setHorizontalLocation(GroupLayout layout, int sizeA, int sizeB){
-		SequentialGroup group = layout.createSequentialGroup();
+	public void setLocation(GridBagConstraints c, int startX, int startY, int dayButtonsWidth, int dayButtonsHeight, int AddRemoveStartX, int AddRemoveStartY,  int AddRemoveWidth, int AddRemoveButtonHeight){
 		for(int x = 1; x < buttonArray.size(); x++){
-			group.addGroup(layout.createParallelGroup()
-					.addGroup(buttonArray.get(x).setHorizontalLocation(layout.createSequentialGroup(), layout.createParallelGroup(), (sizeA/(buttonArray.size()-1)))));
+			Main.resetConstraints();
+			buttonArray.get(x).setLocation(c, (startX + ((x-1)*(dayButtonsWidth/(buttonArray.size()-1)))), startY, dayButtonsWidth/(buttonArray.size()-1), dayButtonsHeight);
+			buttonArray.get(x).initIcons(dayButtonsWidth/(buttonArray.size()-1), dayButtonsHeight);
 		}
-		group.addGroup(buttonArray.get(0).setHorizontalLocation(layout.createSequentialGroup(), layout.createParallelGroup(), sizeB));
-		return group;
+		buttonArray.get(0).setLocation(c, AddRemoveStartX, AddRemoveStartY, AddRemoveWidth, AddRemoveButtonHeight);
+		Main.mainPanel.revalidate();
 	}
 }
 
@@ -103,20 +127,6 @@ class Buttons {
 		dayString = new String();
 		nightButton = new JButton("Night "+Integer.toString(dayNumber));
 		nightString = new String();
-		
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		try {
-			Image dayImage = tk.createImage(Main.class.getResource("/assets/images/dayButton.png"));
-			Image nightImage = tk.createImage(Main.class.getResource("/assets/images/nightButton.png"));
-			tk.prepareImage(dayImage, -1, -1, null);
-			tk.prepareImage(nightImage, -1, -1, null);
-			ImageIcon dayIcon = new ImageIcon(dayImage);
-			ImageIcon nightIcon = new ImageIcon(nightImage);
-			dayButton.setIcon(dayIcon);
-			nightButton.setIcon(nightIcon);
-		} catch (IllegalArgumentException e1){
-			e1.printStackTrace();
-		}
 		
 		dayButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		nightButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -143,6 +153,28 @@ class Buttons {
 	public int getDayNumber(){
 		return dayNumber;
 	}
+	public JButton getDay(){
+		return dayButton;
+	}
+	public JButton getNight(){
+		return nightButton;
+	}
+	public void initIcons(int width, int height){
+		/*Toolkit tk = Toolkit.getDefaultToolkit();
+		try {
+			Image dayImage = tk.createImage(Main.class.getResource("/assets/images/dayButton.png"));
+			Image nightImage = tk.createImage(Main.class.getResource("/assets/images/nightButton.png"));
+			tk.prepareImage(dayImage, width, height/2, null);
+			tk.prepareImage(nightImage, width, height/2, null);
+			ImageIcon dayIcon = new ImageIcon(dayImage);
+			ImageIcon nightIcon = new ImageIcon(nightImage);
+			
+			dayButton.setIcon(dayIcon);
+			nightButton.setIcon(nightIcon);
+		} catch (IllegalArgumentException e1){
+			e1.printStackTrace();
+		}*/
+	}
 	
 	public String getDayString(){return dayString;}
 	public String getNightString(){return nightString;}
@@ -155,35 +187,19 @@ class Buttons {
 	public void setNightActionListener(ActionListener L){
 		nightButton.addActionListener(L);
 	}
-	public SequentialGroup setVerticalLocation(SequentialGroup group, int size){
-		group.addComponent(dayButton, size/2, size/2, size/2)
-		.addComponent(nightButton, size/2, size/2, size/2);
-		return group;
-	}
-	public SequentialGroup setHorizontalLocation(SequentialGroup group, ParallelGroup pGroup, int size){
-		group.addGroup(pGroup
-				.addComponent(dayButton, size, size, size)
-				.addComponent(nightButton, size, size, size));
-		return group;
-	}
-	public SequentialGroup setVerticalLocation(SequentialGroup group, int size, int Amount){
-		if(Amount > 4){
-			if(Amount > 6){
-				dayButton.setText(Integer.toString(this.getDayNumber()));
-				dayButton.setFont(dayButton.getFont().deriveFont(8F));
-				nightButton.setText(Integer.toString(this.getDayNumber()));
-				nightButton.setFont(nightButton.getFont().deriveFont(8F));
-			} else {
-				dayButton.setText("D-"+this.getDayNumber());
-				nightButton.setText("N-"+this.getDayNumber());
-				dayButton.setFont(dayButton.getFont().deriveFont(12F));
-				nightButton.setFont(nightButton.getFont().deriveFont(12F));
-			}
-		} else {
-			dayButton.setText("Day "+this.getDayNumber());
-			nightButton.setText("Night "+this.getDayNumber());
-		}
-		return this.setVerticalLocation(group, size);
+	public void setLocation(GridBagConstraints c, int startX, int startY, int width, int height){
+		Main.resetConstraints();
+		c.gridx = startX;
+		c.gridy = startY;
+		c.gridheight = height/2;
+		c.gridwidth = width;
+		Main.mainPanel.add(dayButton, c);
+		Main.resetConstraints();
+		c.gridx = startX;
+		c.gridy = startY+(height/2);
+		c.gridheight = height/2;
+		c.gridwidth = width;
+		Main.mainPanel.add(nightButton, c);
 	}
 }
 class PrivateTimerListener implements ActionListener{
