@@ -4,7 +4,7 @@ import javax.swing.JTextPane;
 
 @SuppressWarnings("serial")
 public class MainTextPane extends JTextPane{
-	private String origString;
+	public String origString;
 	public MainTextPane(){
 		origString = null;
 	}
