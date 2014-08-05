@@ -6,7 +6,6 @@ import javax.swing.JOptionPane;
 
 import main.Main;
 
-import org.omg.CORBA.UserException;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -27,6 +26,7 @@ public class LoadingHandler implements ContentHandler{
 			tags.put(theTagList[x], false);
 		}
 	}
+	@SuppressWarnings("serial")
 	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
@@ -71,13 +71,19 @@ public class LoadingHandler implements ContentHandler{
 			Main.dayButtons.setDay(Integer.parseInt(string));
 		} else if(tags.get("players")){
 			if(usePlayers){
-				Main.graveyard.setText(unParse(string));
+				Main.playerArea.setContentType("text/html");
+				Main.playerArea.setText(MainRightClickMenu.focus.unParse(unParse(string)));
+				Main.playerArea.origString = unParse(string);
 			}
 		} else if(tags.get("roles")){
-			Main.roleList.setText(unParse(string));
+			Main.roleList.setContentType("text/html");
+			Main.roleList.setText(MainRightClickMenu.focus.unParse(unParse(string)));
+			Main.roleList.origString = unParse(string);
 		} else if(tags.get("graveyard")){
 			if(!usePlayers){
-				Main.graveyard.setText(unParse(string));
+				Main.playerArea.setContentType("text/html");
+				Main.playerArea.setText(MainRightClickMenu.focus.unParse(unParse(string)));
+				Main.playerArea.origString = unParse(string);
 			}
 		} else if(tags.get("day")){
 			if(tags.get("notes")){
@@ -143,64 +149,15 @@ public class LoadingHandler implements ContentHandler{
 		
 	}
 	private String unParse(String in){
-		{
-			String A[] = in.split("!NL!");
-			String B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "\n";
-				B += A[x];
-			}
-			A = null;
-			A = B.split("!S!");
+		String B = in;
+		for(int y = 0; y < Main.parseList.length; y++){
+			String A[] = B.split(Main.unParseList[y]);
 			B = A[0];
 			for(int x = 1; x < A.length; x++){
-				B += " ";
+				B += Main.parseList[y];
 				B += A[x];
 			}
-			A = null;
-			A = B.split("!lfBrkt!");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "<";
-				B += A[x];
-			}
-			A = null;
-			A = B.split("!rtBrkt!");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += ">";
-				B += A[x];
-			}
-			A = null;
-			A = B.split("!ampt!");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "&";
-				B += A[x];
-			}
-			A = null;
-			A = B.split("!dbQuote!");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "\"";
-				B += A[x];
-			}
-			A = null;
-			A = B.split("!snQuote!");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "'";
-				B += A[x];
-			}
-			A = null;
-			A = B.split("!tab!");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "\t";
-				B += A[x];
-			}
-			return B;
-		}
+		} return B;
 	}
 }
 class VersionParsingHandler{
