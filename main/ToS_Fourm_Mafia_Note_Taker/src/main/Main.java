@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.filechooser.FileFilter;
 
 import org.xml.sax.InputSource;
@@ -32,10 +31,18 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import assets.DayButtons;
 import assets.LoadingHandler;
 import assets.MainRightClickMenu;
+import assets.MainTextPane;
 import assets.SavingHandler;
-import assets.listeners.FocusListener1;
 
 public class Main {
+	/**
+	 * For saving/loading. Saving uses parseList to unParseList, loading unParseList to parseList.
+	 * <br /> Must always be the same size as unParseList
+	 */
+	public static String[] parseList  = {"\n", " ", "<", ">", "&", "\"", "'", "\t"};
+	/**@see Main.parseList */
+	public static String[] unParseList = {"!NL!","!S!", "!lfBrkt!", "!rtBrkt!", "!ampt!",
+		"!dbQuote!", "!snQuote!", "!tab!"};
 	private static int Width;
 	private static int Height;
 	public static final JFileChooser fc = new JFileChooser();
@@ -49,14 +56,11 @@ public class Main {
 	public static final JTextField graveyardLabel = new JTextField();
 	public static final JTextField roleListLabel = new JTextField();
 	public static JTextArea playerNumbers = new JTextArea();
-	public static JTextArea players = new JTextArea();
-	public static JTextArea graveyard = new JTextArea();
-	public static JTextArea roleList = new JTextArea();
-	public static JTextPane roleListPane = new JTextPane();
+	public static MainTextPane playerArea = new MainTextPane();
+	public static MainTextPane roleList = new MainTextPane();
 	public static JTextArea notes = new JTextArea();
 	public static JScrollPane notesPane = new JScrollPane(notes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	public static DayButtons dayButtons = new DayButtons();
-	private static FocusListener1 focusListener = new FocusListener1();
 	public static Mouse mouse = new Mouse();
 	private static GridBagLayout layout;
 	private static GridBagConstraints c;
@@ -68,7 +72,7 @@ public class Main {
 	public static void main(String[] Args){
 		frame = new JFrame(title + " - new");
 		frame.setVisible(true);
-		roleListPane.add(roleList);
+		roleList.setContentType("text/html");
 		int screenWidth;
 		int screenHeight;
 		{
@@ -80,8 +84,6 @@ public class Main {
 		Height = screenHeight;
 		mainPanel = new MainPanel(Width, Height);
 		layout = new GridBagLayout();
-		//frame.setFont(frame.getFont().deriveFont(((Width/Height)*8)));
-		//mainPanel.setFont(mainPanel.getFont().deriveFont(((Width/Height)*8)));
 		{
 			SaveLoadButtonActionListener listener = new SaveLoadButtonActionListener();
 			save.addActionListener(listener);
@@ -111,18 +113,16 @@ public class Main {
 		frame.addMouseMotionListener(mouse);
 		playerNumbers.setEditable(false);
 		playerNumbers.setText("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n");
-		roleListPane.addFocusListener(focusListener);
-		roleListPane.setEditable(false);
-		//graveyardPane.addFocusListener(focusListener);
-		//graveyardPane.setEditable(false);
-		roleListPane.addMouseListener(MainRightClickMenu.mouse);
-		//graveyardPane.addMouseListener(MainRightClickMenu.mouse);
+		roleList.addFocusListener(MainRightClickMenu.focus);
+		roleList.setEditable(false);
+		playerArea.addFocusListener(MainRightClickMenu.focus);
+		playerArea.setEditable(false);
+		roleList.addMouseListener(MainRightClickMenu.mouse);
+		playerArea.addMouseListener(MainRightClickMenu.mouse);
 		notes.setLineWrap(true);
 		mainPanel.setLayout(layout);
 		
 		initLayout();
-		
-
 		
 		frame.add(mainPanel);
 		//frame.setResizable(false);
@@ -169,7 +169,7 @@ public class Main {
 		c.gridheight = 20;
 		c.gridwidth = 17;
 		c.insets  = new Insets(0, 0, 0, 1);
-		mainPanel.add(graveyard, c);
+		mainPanel.add(playerArea, c);
 		resetConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -184,7 +184,7 @@ public class Main {
 		c.gridheight = 20;
 		c.gridy = 2;
 		c.gridx = 18;
-		mainPanel.add(roleListPane, c);
+		mainPanel.add(roleList, c);
 		resetConstraints();
 		c.gridheight = 2;
 		c.gridwidth = 9;
@@ -252,6 +252,7 @@ public class Main {
 		c.gridy = 28;
 		mainPanel.add(, c);*/
 	}
+	@SuppressWarnings("static-access")
 	public static void resetConstraints(){
 		c = new GridBagConstraints();
 		c.weightx = 1.0;
@@ -316,13 +317,10 @@ class SaveLoadButtonActionListener implements ActionListener {
 					xr.setContentHandler(handler);
 					xr.parse(new InputSource(new FileReader(Main.fc.getSelectedFile())));
 				} catch (SAXException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
