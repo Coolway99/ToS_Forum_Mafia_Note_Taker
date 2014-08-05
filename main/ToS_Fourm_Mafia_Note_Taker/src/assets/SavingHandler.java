@@ -50,13 +50,10 @@ public class SavingHandler{
 				output.write("<data>");
 					output.write("<totalDays>"+Main.dayButtons.getDay()+"</totalDays>");
 					output.write("<players>");
-						output.write(parse(Main.players.getText()));
+						output.write(parse(Main.playerArea.origString));
 					output.write("</players>");
-					output.write("<graveyard>");
-						output.write(parse(Main.graveyard.getText()));
-					output.write("</graveyard>");
 					output.write("<roles>");
-						output.write(parse(Main.roleList.getText()));
+						output.write(parse(Main.roleList.origString));
 					output.write("</roles>");
 				output.write("</data>");
 				for(int x = 1; x <= Main.dayButtons.getDay(); x++){
@@ -84,63 +81,14 @@ public class SavingHandler{
 		}
 	}
 	public static String parse(String in){
-		{
-			String A[] = in.split("\n");
-			String B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "!NL!";
-				B += A[x];
-			}
-			A = null;
-			A = B.split(" ");
+		String B = in;
+		for(int y = 0; y < Main.parseList.length; y++){
+			String A[] = B.split(Main.parseList[y]);
 			B = A[0];
 			for(int x = 1; x < A.length; x++){
-				B += "!S!";
+				B += Main.unParseList[y];
 				B += A[x];
 			}
-			A = null;
-			A = B.split("<");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "!lfBrkt!";
-				B += A[x];
-			}
-			A = null;
-			A = B.split(">");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "!rtBrkt!";
-				B += A[x];
-			}
-			A = null;
-			A = B.split("&");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "!ampt!";
-				B += A[x];
-			}
-			A = null;
-			A = B.split("\"");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "!dbQuote!";
-				B += A[x];
-			}
-			A = null;
-			A = B.split("'");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "!snQuote!";
-				B += A[x];
-			}
-			A = null;
-			A = B.split("\t");
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += "!tab!";
-				B += A[x];
-			}
-			return B;
-		}
+		} return B;
 	}
 }
