@@ -67,12 +67,12 @@ public class Main {
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
-	public static final String title = "Forum Mafia Note Taker V1.0";
+	public static final String title = "Forum Mafia Note Taker V1.0-Hotfix A";
 	
 	public static void main(String[] Args){
 		frame = new JFrame(title + " - new");
 		frame.setVisible(true);
-		roleList.setContentType("text/html");
+		//roleList.setContentType("text/html");
 		int screenWidth;
 		int screenHeight;
 		{
@@ -113,12 +113,12 @@ public class Main {
 		frame.addMouseMotionListener(mouse);
 		playerNumbers.setEditable(false);
 		playerNumbers.setText("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n");
-		roleList.addFocusListener(MainRightClickMenu.focus);
+		/*roleList.addFocusListener(MainRightClickMenu.focus);
 		roleList.setEditable(false);
 		playerArea.addFocusListener(MainRightClickMenu.focus);
 		playerArea.setEditable(false);
 		roleList.addMouseListener(MainRightClickMenu.mouse);
-		playerArea.addMouseListener(MainRightClickMenu.mouse);
+		playerArea.addMouseListener(MainRightClickMenu.mouse);*/
 		notes.setLineWrap(true);
 		mainPanel.setLayout(layout);
 		
