@@ -52,6 +52,7 @@ public class Main {
 	public static final JButton save = new JButton("Save");
 	public static final JButton saveAs = new JButton("<html>Save<br />&nbsp;&nbsp;&nbsp;&nbsp;As...</html>");
 	public static final JButton load = new JButton("Load");
+	public static final JButton info = new JButton("Info");
 	private static final JTextField dayLabel = new JTextField();
 	public static final JTextField playersLabel = new JTextField();
 	public static final JTextField graveyardLabel = new JTextField();
@@ -68,7 +69,7 @@ public class Main {
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
-	public static final String title = "Forum Mafia Note Taker V1.0-Hotfix B";
+	public static final String title = "Forum Mafia Note Taker V1.1";
 	
 	public static void main(String[] Args){
 		frame = new JFrame(title + " - new");
@@ -93,6 +94,18 @@ public class Main {
 			save.addActionListener(listener);
 			saveAs.addActionListener(listener);
 			load.addActionListener(listener);
+			info.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showConfirmDialog(frame, "Report issues to http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/issues\n"
+							+ "Newest version can be found at http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases\n"
+							+ "Email:xxcoolwayxx@gmail.com\n\n"
+							+ "Copy-whatever 2014 Coolway99\n"
+							+ "Licenced under the GNU v2", "Contact Info", JOptionPane.DEFAULT_OPTION,
+							JOptionPane.INFORMATION_MESSAGE);
+					
+				}
+			});
 			fc.setFileFilter(new FileFilter() {
 				
 				@Override
@@ -247,12 +260,12 @@ public class Main {
 		c.gridx = 48;
 		c.gridy = 28;
 		mainPanel.add(, c);*/
-		/*resetConstraints();
+		resetConstraints();
 		c.gridwidth = 5;
 		c.gridheight = 5;
 		c.gridx = 54;
 		c.gridy = 28;
-		mainPanel.add(, c);*/
+		mainPanel.add(info, c);
 	}
 	@SuppressWarnings("static-access")
 	public static void resetConstraints(){
