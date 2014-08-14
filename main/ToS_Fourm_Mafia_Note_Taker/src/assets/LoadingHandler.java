@@ -71,22 +71,18 @@ public class LoadingHandler implements ContentHandler{
 			Main.dayButtons.setDay(Integer.parseInt(string));
 		} else if(tags.get("players")){
 			if(usePlayers){
-				/*Main.playerArea.setContentType("text/html");
-				Main.playerArea.setText(MainRightClickMenu.focus.unParse(unParse(string)));
-				Main.playerArea.origString = unParse(string);*/
+				Main.playerArea.setText(MainRightClickMenu.unParse(unParse(string)));
+				Main.playerArea.origString = unParse(string);
 				Main.playerArea.setText(unParse(string));
 			}
 		} else if(tags.get("roles")){
-			/*Main.roleList.setContentType("text/html");
-			Main.roleList.setText(MainRightClickMenu.focus.unParse(unParse(string)));
-			Main.roleList.origString = unParse(string);*/
+			Main.roleList.setText(MainRightClickMenu.unParse(unParse(string)));
+			Main.roleList.origString = unParse(string);
 			Main.roleList.setText(unParse(string));
 		} else if(tags.get("graveyard")){
 			if(!usePlayers){
-				/*Main.playerArea.setContentType("text/html");
-				Main.playerArea.setText(MainRightClickMenu.focus.unParse(unParse(string)));
-				Main.playerArea.origString = unParse(string);*/
-				Main.playerArea.setText(unParse(string));
+				Main.playerArea.setText(MainRightClickMenu.unParse(unParse(string)));
+				Main.playerArea.origString = unParse(string);
 			}
 		} else if(tags.get("day")){
 			if(tags.get("notes")){

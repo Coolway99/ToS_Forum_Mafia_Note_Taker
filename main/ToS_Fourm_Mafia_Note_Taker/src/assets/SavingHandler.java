@@ -50,10 +50,10 @@ public class SavingHandler{
 				output.write("<data>");
 					output.write("<totalDays>"+Main.dayButtons.getDay()+"</totalDays>");
 					output.write("<players>");
-						output.write(parse(Main.playerArea.getText()));
+						output.write(parse(Main.playerArea.origString));
 					output.write("</players>");
 					output.write("<roles>");
-						output.write(parse(Main.roleList.getText()));
+						output.write(parse(Main.roleList.origString));
 					output.write("</roles>");
 				output.write("</data>");
 				for(int x = 1; x <= Main.dayButtons.getDay(); x++){

@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.filechooser.FileFilter;
 
 import org.xml.sax.InputSource;
@@ -55,7 +56,7 @@ public class Main {
 	public static final JTextField playersLabel = new JTextField();
 	public static final JTextField graveyardLabel = new JTextField();
 	public static final JTextField roleListLabel = new JTextField();
-	public static JTextArea playerNumbers = new JTextArea();
+	public static JTextPane playerNumbers = new JTextPane();
 	public static MainTextPane playerArea = new MainTextPane();
 	public static MainTextPane roleList = new MainTextPane();
 	public static JTextArea notes = new JTextArea();
@@ -72,7 +73,10 @@ public class Main {
 	public static void main(String[] Args){
 		frame = new JFrame(title + " - new");
 		frame.setVisible(true);
-		//roleList.setContentType("text/html");
+		playerArea.setContentType("text/html");
+		playerArea.fieldName = "Player \\ Graveyard";
+		roleList.setContentType("text/html");
+		roleList.fieldName = "Role List";
 		int screenWidth;
 		int screenHeight;
 		{
@@ -112,20 +116,18 @@ public class Main {
 		frame.addMouseListener(mouse);
 		frame.addMouseMotionListener(mouse);
 		playerNumbers.setEditable(false);
-		playerNumbers.setText("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n");
-		/*roleList.addFocusListener(MainRightClickMenu.focus);
+		playerNumbers.setContentType("text/html");
+		playerNumbers.setText("<font face=\"arial\">1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />18<br />19<br />20<br /></font>");
 		roleList.setEditable(false);
-		playerArea.addFocusListener(MainRightClickMenu.focus);
 		playerArea.setEditable(false);
 		roleList.addMouseListener(MainRightClickMenu.mouse);
-		playerArea.addMouseListener(MainRightClickMenu.mouse);*/
+		playerArea.addMouseListener(MainRightClickMenu.mouse);
 		notes.setLineWrap(true);
 		mainPanel.setLayout(layout);
 		
 		initLayout();
 		
 		frame.add(mainPanel);
-		//frame.setResizable(false);
 		playersLabel.setText("Players");
 		playersLabel.setEditable(false);
 		playersLabel.setHorizontalAlignment(JTextField.CENTER);
@@ -139,7 +141,7 @@ public class Main {
 		dayLabel.setEditable(false);
 		dayLabel.setHorizontalAlignment(JTextField.CENTER);
 		frame.setAlwaysOnTop(false); //Here for testing purposes only
-		frame.setSize(screenWidth/2, screenHeight/2);
+		frame.setSize((screenWidth/2)+10, (screenHeight/2)+10);
 	}
 	public static void initLayout(){
 		/*Math and Layout below this line, pass at your own risk
