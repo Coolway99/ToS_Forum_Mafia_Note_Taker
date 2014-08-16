@@ -40,10 +40,10 @@ public class Main {
 	 * For saving/loading. Saving uses parseList to unParseList, loading unParseList to parseList.
 	 * <br /> Must always be the same size as unParseList
 	 */
-	public static String[] parseList  = {"\n", " ", "<", ">", "&", "\"", "'", "\t"};
+	public static String[] parseList  = {"\n", " ", "<", ">", "&", "\"", "'", "\t", "#", "[", "]"};
 	/**@see Main.parseList */
 	public static String[] unParseList = {"!NL!","!S!", "!lfBrkt!", "!rtBrkt!", "!ampt!",
-		"!dbQuote!", "!snQuote!", "!tab!"};
+		"!dbQuote!", "!snQuote!", "!tab!", "!numb!", "!leftsqrt!", "!rightsqrt!"};
 	private static int Width;
 	private static int Height;
 	public static final JFileChooser fc = new JFileChooser();
