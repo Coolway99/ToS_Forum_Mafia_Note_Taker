@@ -110,7 +110,6 @@ class PersonalMouseListener extends MouseAdapter{
 	@Override
 	public void mouseReleased(MouseEvent e){popup(e);}
 	
-	@SuppressWarnings("static-access")
 	public void popup(MouseEvent e){
 		if(e.isPopupTrigger()){
 			if(e.isPopupTrigger()){
