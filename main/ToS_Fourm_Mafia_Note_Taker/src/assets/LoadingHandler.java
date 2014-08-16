@@ -12,7 +12,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 public class LoadingHandler implements ContentHandler{
-	private HashMap<String, Boolean> tags = new HashMap<>();
+	private HashMap<String, Boolean> tags = new HashMap<String, Boolean>();
 	private String saveV;
 	private String patch;
 	private String Version;
