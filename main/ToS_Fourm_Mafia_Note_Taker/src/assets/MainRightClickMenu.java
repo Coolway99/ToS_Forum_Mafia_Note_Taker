@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import main.Main;
@@ -56,7 +57,7 @@ public class MainRightClickMenu extends JPopupMenu{
 		c.gridy = 0;
 		c.gridwidth = 2;
 		c.gridheight = 9;
-		editFrame.add(editArea, c);
+		editFrame.add(new JScrollPane(editArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), c);
 		c = new GridBagConstraints();
 		c.weightx = 1.0;
 		c.weighty = 1.0;
