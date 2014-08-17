@@ -1,6 +1,8 @@
 package main;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -12,16 +14,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.xml.sax.InputSource;
@@ -94,18 +101,47 @@ public class Main {
 			save.addActionListener(listener);
 			saveAs.addActionListener(listener);
 			load.addActionListener(listener);
-			info.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showConfirmDialog(frame, "Report issues to http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/issues\n"
-							+ "Newest version can be found at http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases\n"
-							+ "Email:xxcoolwayxx@gmail.com\n\n"
-							+ "Copy-whatever 2014 Coolway99\n"
-							+ "Licenced under the GNU v2", "Contact Info", JOptionPane.DEFAULT_OPTION,
-							JOptionPane.INFORMATION_MESSAGE);
-					
-				}
-			});
+			{
+			    // for copying style
+			    JLabel label = new JLabel();
+			    Font font = label.getFont();
+
+			    // create some css from the label's font
+			    StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
+			    style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
+			    style.append("font-size:" + font.getSize() + "pt;");
+			    
+				final JEditorPane ep = new JEditorPane("text/html", "<html><body style=\"" + style + "\">" //
+						+ "Report issues <a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/issues\">here</a><br />"
+						+ "<br />Newest version can be found manually <a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases\">here</a><br />"
+						+ "Email:<a href=\"mailto:xxcoolwayxx@gmail.com\" >xxcoolwayxx@gmail.com</a><br /><br />"
+						+ "Copy-whatever 2014 Coolway99<br />"
+						+ "Licenced under the GNU v2" //
+						+ "</body></html>");
+				ep.addHyperlinkListener(new HyperlinkListener()
+				{
+					@Override
+					public void hyperlinkUpdate(HyperlinkEvent e)
+					{
+						if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED))
+							try {
+								Desktop.getDesktop().browse(e.getURL().toURI());
+							} catch (IOException | URISyntaxException e1) {
+								e1.printStackTrace();
+							}
+					}
+				});
+				ep.setEditable(false);
+				ep.setBackground(label.getBackground());
+				info.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						JOptionPane.showConfirmDialog(frame, ep, "Contact Info", JOptionPane.DEFAULT_OPTION,
+								JOptionPane.INFORMATION_MESSAGE);
+						
+					}
+				});
+			}
 			fc.setFileFilter(new FileFilter() {
 				
 				@Override
