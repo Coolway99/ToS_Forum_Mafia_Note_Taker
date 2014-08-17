@@ -73,12 +73,10 @@ public class LoadingHandler implements ContentHandler{
 			if(usePlayers){
 				Main.playerArea.setText(MainRightClickMenu.unParse(unParse(string)));
 				Main.playerArea.origString = unParse(string);
-				Main.playerArea.setText(unParse(string));
 			}
 		} else if(tags.get("roles")){
 			Main.roleList.setText(MainRightClickMenu.unParse(unParse(string)));
 			Main.roleList.origString = unParse(string);
-			Main.roleList.setText(unParse(string));
 		} else if(tags.get("graveyard")){
 			if(!usePlayers){
 				Main.playerArea.setText(MainRightClickMenu.unParse(unParse(string)));
