@@ -64,6 +64,9 @@ public class SavingHandler{
 						output.write("<night>");
 							output.write("<notes>"+parse(Main.dayButtons.getNightString(x))+"</notes>");
 						output.write("</night>");
+						output.write("<whispers>");
+							output.write(parse(Main.dayButtons.getWhisperString(x)));
+						output.write("</whispers>");
 					output.write("</number>");
 				}
 			output.write("</beginSave>");

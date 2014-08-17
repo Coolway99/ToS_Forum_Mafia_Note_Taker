@@ -99,7 +99,11 @@ public class LoadingHandler implements ContentHandler{
 				}
 			}
 		} else if(tags.get("whispers")){
-			Main.secondaryListener.whisperArea.setText(unParse(string));
+			if(day == Main.selectedDay){
+				Main.secondaryListener.whisperArea.setText(unParse(string));
+			} else {
+				Main.dayButtons.setWhisperString(unParse(string), day);
+			}
 		}
 	}
 	@Override
