@@ -49,8 +49,10 @@ public class DayButtons extends Component{
 	
 	public String getDayString(int day){return buttonArray.get(day).getDayString();}
 	public String getNightString(int day){return buttonArray.get(day).getNightString();}
+	public String getWhisperString(int day){return buttonArray.get(day).getWhisperString();}
 	public void setDayString(String s, int day){buttonArray.get(day).setDayString(s);}
 	public void setNightString(String s, int day){buttonArray.get(day).setNightString(s);}
+	public void setWhisperString(String s, int day){buttonArray.get(day).setWhisperString(s);}
 	
 	public void setDayActionListener(ActionListener L, int day){
 		buttonArray.get(day).setDayActionListener(L);
@@ -113,6 +115,7 @@ class Buttons {
 	private String dayString;
 	private JButton nightButton;
 	private String nightString;
+	private String whisperString;
 	private int dayNumber;
 	public Buttons(int DayNumber){
 		dayNumber = DayNumber;
@@ -120,6 +123,7 @@ class Buttons {
 		dayString = new String();
 		nightButton = new JButton("Night "+Integer.toString(dayNumber));
 		nightString = new String();
+		whisperString = new String();
 		
 		dayButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		nightButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -129,12 +133,14 @@ class Buttons {
 			public void actionPerformed(ActionEvent e) {
 				Main.saveNoteString();
 				Main.setNoteString(dayNumber, true, dayString);
+				Main.secondaryListener.whisperArea.setText(whisperString);
 			}});
 		this.setNightActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Main.saveNoteString();
 				Main.setNoteString(dayNumber, false, nightString);
+				Main.secondaryListener.whisperArea.setText(whisperString);
 			}});
 		
 	}
@@ -171,8 +177,10 @@ class Buttons {
 	
 	public String getDayString(){return dayString;}
 	public String getNightString(){return nightString;}
+	public String getWhisperString(){return whisperString;}
 	public void setDayString(String s){dayString = s;}
 	public void setNightString(String s){nightString = s;}
+	public void setWhisperString(String s){whisperString = s;}
 	
 	public void setDayActionListener(ActionListener L){
 		dayButton.addActionListener(L);

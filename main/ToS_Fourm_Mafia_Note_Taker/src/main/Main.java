@@ -278,6 +278,7 @@ public class Main {
 		} else {
 			dayButtons.setNightString(notes.getText(), selectedDay);
 		}
+		dayButtons.setWhisperString(secondaryListener.whisperArea.getText(), selectedDay);
 	}
 	public static void setNoteString(int day, boolean isDay, String s){
 		notes.setText(s);
