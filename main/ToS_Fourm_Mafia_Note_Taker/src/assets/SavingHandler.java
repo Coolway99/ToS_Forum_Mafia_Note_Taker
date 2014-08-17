@@ -29,7 +29,7 @@ public class SavingHandler{
 	/**
 	 * @see {@link assets.SavingHandler.saveV}
 	 */
-	private static String patch = "0";
+	private static String patch = "1";
 	@SuppressWarnings("serial")
 	public static boolean save(File filepath){
 		try{
@@ -84,13 +84,23 @@ public class SavingHandler{
 		String B = in;
 		for(int y = 0; y < Main.parseList.length; y++){
 			try{
-				String A[] = B.split(Main.parseList[y]);
-				B = A[0];
-				for(int x = 1; x < A.length; x++){
-					B += Main.unParseList[y];
-					B += A[x];
+				if(Main.parseList[y] != "[" && Main.parseList[y] != "]"){
+					String A[] = B.split(Main.parseList[y]);
+					B = A[0];
+					for(int x = 1; x < A.length; x++){
+						B += Main.unParseList[y];
+						B += A[x];
+					}
+				} else {
+					String A[] = B.split("\\"+Main.parseList[y]);
+					B = A[0];
+					for(int x = 1; x < A.length; x++){
+						B += Main.unParseList[y];
+						B += A[x];
+					}
 				}
-			} catch (NullPointerException e){}
+
+			} catch (NullPointerException e){System.out.print("Found no data");}
 		} return B;
 	}
 }
