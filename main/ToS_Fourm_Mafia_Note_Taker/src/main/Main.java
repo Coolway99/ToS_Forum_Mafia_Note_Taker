@@ -57,8 +57,12 @@ public class Main {
 	public static JPanel mainPanel;
 	public static JFrame frame;
 	public static final JButton save = new JButton("Save");
-	public static final JButton saveAs = new JButton("<html>Save<br />&nbsp;&nbsp;&nbsp;&nbsp;As...</html>");
 	public static final JButton load = new JButton("Load");
+	//public static final JButton = new JButton;
+	//public static final JButton = new JButton;
+	public static final JButton saveAs = new JButton("<html>Save<br />&nbsp;&nbsp;&nbsp;&nbsp;As...</html>");
+	//public static final JButton = new JButton;
+	//public static final JButton = new JButton;
 	public static final JButton info = new JButton("Info");
 	private static final JTextField dayLabel = new JTextField();
 	public static final JTextField playersLabel = new JTextField();
