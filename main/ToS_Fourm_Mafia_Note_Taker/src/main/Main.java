@@ -1,45 +1,28 @@
 package main;
 
-import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import javax.swing.filechooser.FileFilter;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
 import assets.DayButtons;
-import assets.LoadingHandler;
 import assets.MainRightClickMenu;
 import assets.MainTextPane;
-import assets.SavingHandler;
+import assets.listeners.SaveLoadButtonListener;
+import assets.listeners.SecondaryButtonListener;
 
 public class Main {
 	/**
@@ -50,6 +33,13 @@ public class Main {
 	/**@see Main.parseList */
 	public static String[] unParseList = {"!NL!","!S!", "!lfBrkt!", "!rtBrkt!", "!ampt!",
 		"!dbQuote!", "!snQuote!", "!tab!", "!numb!", "!leftsqrt!", "!rightsqrt!"};
+	/**
+	 * Will check this against https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/master/version.txt
+	 * First line: version
+	 * Optional Second Line: Hotfix letter
+	 */
+	public static final String progVers = "1.1\n"
+										+ "B";
 	private static int Width;
 	private static int Height;
 	public static final JFileChooser fc = new JFileChooser();
@@ -58,12 +48,12 @@ public class Main {
 	public static final JButton save = new JButton("Save");
 	public static final JButton load = new JButton("Load");
 	public static final JButton whisper = new JButton("Whisper");
-	public static final JButton votes = new JButton("Votes");
+	public static final JButton update = new JButton("<html>&nbsp;Check<br />&nbsp;&nbsp;&nbsp;&nbsp;for<br />updates</html>");
 	public static final JButton saveAs = new JButton("<html>Save<br />&nbsp;&nbsp;&nbsp;&nbsp;As...</html>");
 	//public static final JButton = new JButton();
-	public static final JButton update = new JButton("<html>&nbsp;Check<br />&nbsp;&nbsp;&nbsp;&nbsp;for<br />updates</html>");
+	//public static final JButton = new JButton();
 	public static final JButton info = new JButton("Info");
-	private static final JTextField dayLabel = new JTextField();
+	public static final JTextField dayLabel = new JTextField();
 	public static final JTextField playersLabel = new JTextField();
 	public static final JTextField graveyardLabel = new JTextField();
 	public static final JTextField roleListLabel = new JTextField();
@@ -73,9 +63,10 @@ public class Main {
 	public static JTextArea notes = new JTextArea();
 	public static JScrollPane notesPane = new JScrollPane(notes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	public static DayButtons dayButtons = new DayButtons();
-	public static Mouse mouse = new Mouse();
 	private static GridBagLayout layout;
 	private static GridBagConstraints c;
+	public static final SaveLoadButtonListener listener = new SaveLoadButtonListener();
+	public static final SecondaryButtonListener secondaryListener = new SecondaryButtonListener();
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
@@ -100,13 +91,10 @@ public class Main {
 		mainPanel = new MainPanel(Width, Height);
 		layout = new GridBagLayout();
 		{
-			SaveLoadButtonActionListener listener = new SaveLoadButtonActionListener();
-			SecondaryActionListener secondaryListener = new SecondaryActionListener();
 			save.addActionListener(listener);
 			saveAs.addActionListener(listener);
 			load.addActionListener(listener);
 			whisper.addActionListener(secondaryListener);
-			votes.addActionListener(secondaryListener);
 			update.addActionListener(secondaryListener);
 			info.addActionListener(secondaryListener);
 			fc.setFileFilter(new FileFilter() {
@@ -129,8 +117,6 @@ public class Main {
 		MainRightClickMenu.initPopup();
 		dayButtons.init();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.addMouseListener(mouse);
-		frame.addMouseMotionListener(mouse);
 		playerNumbers.setEditable(false);
 		playerNumbers.setContentType("text/html");
 		playerNumbers.setText("<font face=\"arial\">1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />18<br />19<br />20<br /></font>");
@@ -244,7 +230,7 @@ public class Main {
 		c.gridheight = 5;
 		c.gridx = 54;
 		c.gridy = 22;
-		mainPanel.add(votes, c);
+		mainPanel.add(update, c);
 		resetConstraints();
 		c.gridwidth = 5;
 		c.gridheight = 5;
@@ -257,12 +243,12 @@ public class Main {
 		c.gridx = 42;
 		c.gridy = 28;
 		mainPanel.add(, c);*/
-		resetConstraints();
+		/*resetConstraints();
 		c.gridwidth = 5;
 		c.gridheight = 5;
 		c.gridx = 48;
 		c.gridy = 28;
-		mainPanel.add(update, c);
+		mainPanel.add(, c);*/
 		resetConstraints();
 		c.gridwidth = 5;
 		c.gridheight = 5;
@@ -299,133 +285,6 @@ public class Main {
 			dayLabel.setText("Day "+Integer.toString(day));
 		} else {
 			dayLabel.setText("Night "+Integer.toString(day));
-		}
-	}
-	public static boolean isMouseOver(Point xy, Point end){
-		Point a = mouse.getPoint();
-		if((a.x > xy.x && a.y > xy.y) && (a.x < end.x && a.y < end.y)){
-			return true;
-		} else {
-			return false;
-		}
-	}
-}
-class SaveLoadButtonActionListener implements ActionListener {
-	@SuppressWarnings("static-access")
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == Main.saveAs || e.getSource() == Main.save){
-			int value;
-			if(!(e.getSource() == Main.save && Main.fileSelected)) {value = Main.fc.showSaveDialog(Main.fc);}else{value = Main.fc.APPROVE_OPTION;}
-			if(value == Main.fc.APPROVE_OPTION){
-				File file = Main.fc.getSelectedFile();
-				if(!file.getName().endsWith(".FMNT")){
-					file = new File(file.toString()+".FMNT");
-				}
-				SavingHandler.save(file);
-				Main.fileSelected = true;
-			}
-		}
-		if(e.getSource() == Main.load){
-			int value = Main.fc.showOpenDialog(Main.fc);
-			if(value == Main.fc.APPROVE_OPTION){
-				try {
-					XMLReader xr = XMLReaderFactory.createXMLReader();
-					LoadingHandler handler = new LoadingHandler();
-					xr.setContentHandler(handler);
-					xr.parse(new InputSource(new FileReader(Main.fc.getSelectedFile())));
-				} catch (SAXException | IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
-	}
-}
-class SecondaryActionListener implements ActionListener{
-	JFrame voteFrame;
-	JFrame whisperFrame;
-	public SecondaryActionListener() {
-		super();
-		{
-			voteFrame = new JFrame("Votes");
-			voteFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-			voteFrame.setSize(400, 400);
-			GridBagLayout layout = new GridBagLayout();
-			int rows[] = new int[20];
-			for(int x = 0; x < rows.length; x++){
-				rows[x] = (int) ((400/rows.length)/2);
-			}
-			int columns[] = new int[6];
-			for(int x = 0; x < columns.length; x++){
-				columns[x] = (int) ((400/columns.length)/2);
-			}
-			layout.rowHeights = rows;
-			layout.columnWidths = columns;
-			voteFrame.setLayout(layout);
-		}
-		{
-			whisperFrame = new JFrame("Whispers");
-			whisperFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-			whisperFrame.setSize(400, 400);
-			GridBagLayout layout = new GridBagLayout();
-			int rows[] = new int[20];
-			for(int x = 0; x < rows.length; x++){
-				rows[x] = (int) ((400/rows.length)/2);
-			}
-			int columns[] = new int[6];
-			for(int x = 0; x < columns.length; x++){
-				columns[x] = (int) ((400/columns.length)/2);
-			}
-			layout.rowHeights = rows;
-			layout.columnWidths = columns;
-			whisperFrame.setLayout(layout);
-			
-		}
-	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == Main.votes){
-			voteFrame.setLocationRelativeTo(null);
-			voteFrame.setVisible(true);
-		} else if(e.getSource() == Main.whisper){
-			whisperFrame.setLocationRelativeTo(null);
-			whisperFrame.setVisible(true);
-		} else if(e.getSource() == Main.update){
-			
-		} else if(e.getSource() == Main.info){
-			// for copying style
-			JLabel label = new JLabel();
-			Font font = label.getFont();
-			
-			// create some css from the label's font
-			StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
-			style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
-			style.append("font-size:" + font.getSize() + "pt;");
-			
-			final JEditorPane ep = new JEditorPane("text/html", "<html><body style=\"" + style + "\">" //
-					+ "Report issues <a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/issues\">here</a><br />"
-					+ "<br />Newest version can be found manually <a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases\">here</a><br />"
-					+ "Email:<a href=\"mailto:xxcoolwayxx@gmail.com\" >xxcoolwayxx@gmail.com</a><br /><br />"
-					+ "Copy-whatever 2014 Coolway99<br />"
-					+ "Licenced under the GNU v2" //
-					+ "</body></html>");
-			ep.addHyperlinkListener(new HyperlinkListener()
-			{
-				@Override
-				public void hyperlinkUpdate(HyperlinkEvent e){
-					if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)){
-						try {
-							Desktop.getDesktop().browse(e.getURL().toURI());
-						} catch (IOException | URISyntaxException e1) {
-							e1.printStackTrace();
-						}
-					}
-				}
-			});
-			ep.setEditable(false);
-			ep.setBackground(label.getBackground());
-			JOptionPane.showConfirmDialog(Main.frame, ep, "Contact Info", JOptionPane.DEFAULT_OPTION,
-					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }
