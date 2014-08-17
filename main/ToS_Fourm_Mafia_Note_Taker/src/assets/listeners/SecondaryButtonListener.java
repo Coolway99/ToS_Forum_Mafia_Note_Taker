@@ -18,6 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import assets.UpdateHandler;
 import main.Main;
 
 public class SecondaryButtonListener implements ActionListener{
@@ -61,7 +62,7 @@ public class SecondaryButtonListener implements ActionListener{
 			whisperFrame.setLocationRelativeTo(null);
 			whisperFrame.setVisible(true);
 		} else if(e.getSource() == Main.update){
-			
+			UpdateHandler.check(Main.progVers, false);
 		} else if(e.getSource() == Main.info){
 			// for copying style
 			JLabel label = new JLabel();
@@ -72,12 +73,12 @@ public class SecondaryButtonListener implements ActionListener{
 			style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
 			style.append("font-size:" + font.getSize() + "pt;");
 			
-			final JEditorPane ep = new JEditorPane("text/html", "<html><body style=\"" + style + "\">" //
-					+ "Report issues <a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/issues\">here</a><br />"
-					+ "<br />Newest version can be found manually <a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases\">here</a><br />"
+			final JEditorPane ep = new JEditorPane("text/html", "<html><body style=\"" + style + "\">"
+					+ "Report issues <a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/issues\">here</a><br /><br />"
+					+ "Newest version can be found manually <a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases\">here</a><br />"
 					+ "Email:<a href=\"mailto:xxcoolwayxx@gmail.com\" >xxcoolwayxx@gmail.com</a><br /><br />"
 					+ "Copy-whatever 2014 Coolway99<br />"
-					+ "Licenced under the GNU v2" //
+					+ "Licenced under the GNU v2"
 					+ "</body></html>");
 			ep.addHyperlinkListener(new HyperlinkListener()
 			{

@@ -21,6 +21,7 @@ import javax.swing.filechooser.FileFilter;
 import assets.DayButtons;
 import assets.MainRightClickMenu;
 import assets.MainTextPane;
+import assets.UpdateHandler;
 import assets.listeners.SaveLoadButtonListener;
 import assets.listeners.SecondaryButtonListener;
 
@@ -38,8 +39,8 @@ public class Main {
 	 * First line: version
 	 * Optional Second Line: Hotfix letter
 	 */
-	public static final String progVers = "1.1\n"
-										+ "B";
+	public static final String progVers = "1.2\n"
+										+ "";
 	private static int Width;
 	private static int Height;
 	public static final JFileChooser fc = new JFileChooser();
@@ -70,7 +71,7 @@ public class Main {
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
-	public static final String title = "Forum Mafia Note Taker V1.1-Hotfix B";
+	public static final String title = "Forum Mafia Note Taker V1.2";
 	
 	public static void main(String[] Args){
 		frame = new JFrame(title + " - new");
@@ -144,6 +145,7 @@ public class Main {
 		dayLabel.setHorizontalAlignment(JTextField.CENTER);
 		frame.setAlwaysOnTop(false); //Here for testing purposes only
 		frame.setSize((screenWidth/2)+10, (screenHeight/2)+10);
+		UpdateHandler.check(progVers, true);
 	}
 	public static void initLayout(){
 		/*Math and Layout below this line, pass at your own risk
