@@ -44,7 +44,7 @@ public class UpdateHandler {
 		ep.setBackground(label.getBackground());
 		ep.setEditable(false);
 		try {
-			URL url = new URL("https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/more-buttons/version.txt");
+			URL url = new URL("https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/master/version.txt");
 			BufferedReader in = new BufferedReader(
 					new InputStreamReader(url.openStream()));
 			String newVer = in.readLine();
