@@ -90,6 +90,8 @@ public class UpdateHandler {
 								oldVer.split("\n")[0]+"-Hotfix-"+newVer+"\">here</a>"
 								+ "</body></html>");
 						JOptionPane.showConfirmDialog(Main.frame, ep);
+					} else if(!silent){
+						JOptionPane.showConfirmDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.DEFAULT_OPTION);
 					}
 				}
 			} else {
