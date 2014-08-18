@@ -1,11 +1,14 @@
 package main;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -13,9 +16,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.filechooser.FileFilter;
 
 import assets.DayButtons;
@@ -39,7 +43,7 @@ public class Main {
 	 * First line: version
 	 * Optional Second Line: Hotfix letter
 	 */
-	public static final String progVers = "1.2\n"
+	public static final String progVers = "1.3\n"
 										+ "";
 	private static int Width;
 	private static int Height;
@@ -52,7 +56,7 @@ public class Main {
 	public static final JButton update = new JButton("<html>&nbsp;Check<br />&nbsp;&nbsp;&nbsp;&nbsp;for<br />updates</html>");
 	public static final JButton saveAs = new JButton("<html>Save<br />&nbsp;&nbsp;&nbsp;&nbsp;As...</html>");
 	//public static final JButton = new JButton();
-	//public static final JButton = new JButton();
+	public static final JButton help = new JButton("Help");
 	public static final JButton info = new JButton("Info");
 	public static final JTextField dayLabel = new JTextField();
 	public static final JTextField playersLabel = new JTextField();
@@ -61,8 +65,8 @@ public class Main {
 	public static JTextPane playerNumbers = new JTextPane();
 	public static MainTextPane playerArea = new MainTextPane();
 	public static MainTextPane roleList = new MainTextPane();
-	public static JTextArea notes = new JTextArea();
-	public static JScrollPane notesPane = new JScrollPane(notes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	public static MainTextPane notes = new MainTextPane();
+	public static JScrollPane notesPane = new JScrollPane(notes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	public static DayButtons dayButtons = new DayButtons();
 	private static GridBagLayout layout;
 	private static GridBagConstraints c;
@@ -71,7 +75,7 @@ public class Main {
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
-	public static final String title = "Forum Mafia Note Taker V1.2";
+	public static final String title = "Forum Mafia Note Taker V1.3";
 	
 	public static void main(String[] Args){
 		frame = new JFrame(title + " - new");
@@ -80,6 +84,20 @@ public class Main {
 		playerArea.fieldName = "Player \\ Graveyard";
 		roleList.setContentType("text/html");
 		roleList.fieldName = "Role List";
+		notes.fieldName = "Notes";
+		notes.setContentType("text/html");
+		notes.addHyperlinkListener(new HyperlinkListener() {
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+				if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)){
+					try {
+						Desktop.getDesktop().browse(e.getURL().toURI());
+					} catch (IOException | URISyntaxException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 		int screenWidth;
 		int screenHeight;
 		{
@@ -98,6 +116,7 @@ public class Main {
 			whisper.addActionListener(secondaryListener);
 			update.addActionListener(secondaryListener);
 			info.addActionListener(secondaryListener);
+			help.addActionListener(secondaryListener);
 			fc.setFileFilter(new FileFilter() {
 				
 				@Override
@@ -123,9 +142,10 @@ public class Main {
 		playerNumbers.setText("<font face=\"arial\">1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />18<br />19<br />20<br /></font>");
 		roleList.setEditable(false);
 		playerArea.setEditable(false);
+		notes.setEditable(false);
 		roleList.addMouseListener(MainRightClickMenu.mouse);
 		playerArea.addMouseListener(MainRightClickMenu.mouse);
-		notes.setLineWrap(true);
+		notes.addMouseListener(MainRightClickMenu.mouse);
 		mainPanel.setLayout(layout);
 		
 		initLayout();
@@ -245,12 +265,12 @@ public class Main {
 		c.gridx = 42;
 		c.gridy = 28;
 		mainPanel.add(, c);*/
-		/*resetConstraints();
+		resetConstraints();
 		c.gridwidth = 5;
 		c.gridheight = 5;
 		c.gridx = 48;
 		c.gridy = 28;
-		mainPanel.add(, c);*/
+		mainPanel.add(help, c);
 		resetConstraints();
 		c.gridwidth = 5;
 		c.gridheight = 5;
@@ -274,14 +294,15 @@ public class Main {
 	}
 	public static void saveNoteString(){
 		if(isDay){
-			dayButtons.setDayString(notes.getText(), selectedDay);
+			dayButtons.setDayString(notes.origString, selectedDay);
 		} else {
-			dayButtons.setNightString(notes.getText(), selectedDay);
+			dayButtons.setNightString(notes.origString, selectedDay);
 		}
 		dayButtons.setWhisperString(secondaryListener.whisperArea.getText(), selectedDay);
 	}
 	public static void setNoteString(int day, boolean isDay, String s){
-		notes.setText(s);
+		notes.setText(MainRightClickMenu.unParse(s));
+		notes.origString = s;
 		Main.isDay = isDay;
 		selectedDay = day;
 		if(isDay){

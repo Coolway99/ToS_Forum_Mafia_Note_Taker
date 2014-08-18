@@ -97,6 +97,9 @@ public class SecondaryButtonListener implements ActionListener{
 			ep.setBackground(label.getBackground());
 			JOptionPane.showConfirmDialog(Main.frame, ep, "Contact Info", JOptionPane.DEFAULT_OPTION,
 					JOptionPane.INFORMATION_MESSAGE);
+		} else if(e.getSource() == Main.help){
+			JOptionPane.showConfirmDialog(Main.frame, "Make sure to RIGHT CLICK the notes/playerlist/rolelist\n"
+					+ "Also remember to resize the window if it is too small", "Help", JOptionPane.DEFAULT_OPTION);
 		}
 	}
 }
