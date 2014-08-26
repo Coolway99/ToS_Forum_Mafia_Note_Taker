@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,8 +30,18 @@ public class MainRightClickMenu extends JPopupMenu{
 	protected static MouseEvent eBox;
 	private static GridBagLayout layout;
 	private static GridBagConstraints c;
+	private static HashMap<Integer, HashMap<Boolean, String>> CodeList = new HashMap<Integer, HashMap<Boolean, String>>();
 	@SuppressWarnings("static-access")
 	public static void initPopup(){
+		String[] FromList  = {"\\[color=", "\\[/color\\]", "\\[size=", "\\[/size\\]", "\n", "\\[b\\]",
+				"\\[i\\]", "\\[/i\\]", "\\[u\\]", "\\[/u\\]", "\\[s\\]", "\\[/s\\]"};
+		String[] ToList = {"<font color=", "</font>", "<font size=", "</font>", "<br />", "<b>", "</b>",
+				"<i>", "</i>", "<u>", "</u>", "<s>", "</s>"};
+		for(int x = 0; x < FromList.length; x++){
+			CodeList.put(x, new HashMap<Boolean, String>());
+			CodeList.get(x).put(true, FromList[x]);
+			CodeList.get(x).put(false, ToList[x]);
+		}
 		layout = new GridBagLayout();
 		pop = new JPopupMenu();
 		MenuInterface menuItem = new MenuInterface("Edit");
@@ -91,14 +102,12 @@ public class MainRightClickMenu extends JPopupMenu{
 		});
 	}
 	public static String unParse(String in){
-		String[] BBCodeList  = {"\\[", "\\]", "color=", "/color", "size=", "/size", "\n"};
-		String[] HTMLCodeList = {"<", ">", "font color=", "/font", "font size=", "/font", "<br />"};
 		String B = in;
-		for(int y = 0; y < BBCodeList.length; y++){
-			String A[] = B.split(BBCodeList[y]);
+		for(int y = 0; y < CodeList.size(); y++){
+			String A[] = B.split(CodeList.get(y).get(true));
 			B = A[0];
 			for(int x = 1; x < A.length; x++){
-				B += HTMLCodeList[y];
+				B += CodeList.get(y).get(false);
 				B += A[x];
 			}
 		}
