@@ -3,8 +3,11 @@ package assets.listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
+import javax.swing.JOptionPane;
 
 import main.Main;
 
@@ -43,6 +46,20 @@ public class SaveLoadButtonListener implements ActionListener {
 					e1.printStackTrace();
 				}
 			}
+		}
+	}
+	public void load(File filepath){
+		try {
+			XMLReader xr = XMLReaderFactory.createXMLReader();
+			LoadingHandler handler = new LoadingHandler();
+			xr.setContentHandler(handler);
+			xr.parse(new InputSource(new FileReader(filepath)));
+		} catch (FileNotFoundException e1) {
+			System.out.println("ERROR: "+e1.getMessage());
+			JOptionPane.showMessageDialog(Main.frame, "ERROR: Could not find the path specified", "ERROR", JOptionPane.ERROR_MESSAGE);
+		} catch (SAXException | IOException e1){
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(Main.frame, "ERROR WHILE LOADING", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

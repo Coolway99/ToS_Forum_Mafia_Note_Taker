@@ -89,17 +89,18 @@ public class SecondaryButtonListener implements ActionListener{
 							Desktop.getDesktop().browse(e.getURL().toURI());
 						} catch (IOException | URISyntaxException e1) {
 							e1.printStackTrace();
+							JOptionPane.showMessageDialog(Main.frame, "Error opening link", "ERROR", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}
 			});
 			ep.setEditable(false);
 			ep.setBackground(label.getBackground());
-			JOptionPane.showConfirmDialog(Main.frame, ep, "Contact Info", JOptionPane.DEFAULT_OPTION,
+			JOptionPane.showMessageDialog(Main.frame, ep, "Contact Info",
 					JOptionPane.INFORMATION_MESSAGE);
 		} else if(e.getSource() == Main.help){
-			JOptionPane.showConfirmDialog(Main.frame, "Make sure to RIGHT CLICK the notes/playerlist/rolelist\n"
-					+ "Also remember to resize the window if it is too small", "Help", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showMessageDialog(Main.frame, "Make sure to RIGHT CLICK the notes/playerlist/rolelist\n"
+					+ "Also remember to resize the window if it is too small", "Help", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }
