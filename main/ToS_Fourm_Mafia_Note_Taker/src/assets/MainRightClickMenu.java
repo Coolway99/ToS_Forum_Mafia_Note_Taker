@@ -108,7 +108,7 @@ public class MainRightClickMenu extends JPopupMenu{
 			B = A[0];
 			for(int x = 1; x < A.length; x++){
 				B += CodeList.get(y).get(false);
-				B += A[x];
+				B += (CodeList.get(y).get(true).endsWith("]")) ? A[x] : A[x].replaceFirst("\\]", ">");
 			}
 		}
 		return "<font face=\"arial\">"+B+"</font>";
