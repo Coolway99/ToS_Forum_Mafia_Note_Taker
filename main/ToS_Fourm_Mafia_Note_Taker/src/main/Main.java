@@ -78,8 +78,17 @@ public class Main {
 	public static final String title = "Forum Mafia Note Taker V1.3";
 	
 	public static void main(String[] Args){
+		if(Args.length > 0){
+			System.out.println("Has Args:");
+			for(int x = 0; x < Args.length; x++){
+				System.out.println(Args[x]);
+			}
+		} else {
+			System.out.println("No Args");
+		}
 		frame = new JFrame(title + " - new");
 		frame.setVisible(true);
+		frame.setEnabled(false);
 		playerArea.setContentType("text/html");
 		playerArea.fieldName = "Player \\ Graveyard";
 		roleList.setContentType("text/html");
@@ -164,8 +173,12 @@ public class Main {
 		dayLabel.setEditable(false);
 		dayLabel.setHorizontalAlignment(JTextField.CENTER);
 		frame.setAlwaysOnTop(false); //Here for testing purposes only
-		frame.setSize((screenWidth/2)+10, (screenHeight/2)+10);
+		frame.setSize((screenWidth/2)+20, (screenHeight/2)+20);
+		frame.setEnabled(true);
 		UpdateHandler.check(progVers, true);
+		if(Args.length == 1){
+			listener.load(new File(Args[0]));
+		}
 	}
 	public static void initLayout(){
 		/*Math and Layout below this line, pass at your own risk
@@ -285,12 +298,12 @@ public class Main {
 		c.weighty = 1.0;
 		c.fill = c.BOTH;
 	}
-	public static void writeError(){
-		JOptionPane.showMessageDialog(frame, "There was an error writing to the file!", "Write Error", JOptionPane.ERROR_MESSAGE);
+	public static void writeError(String error){
+		JOptionPane.showMessageDialog(frame, "There was an error writing to the file!\nError:"+error, "Write Error", JOptionPane.ERROR_MESSAGE);
 	}
 	public static boolean notifyOverwrite(String filename){
-		JOptionPane.showConfirmDialog(frame, "There is already a file here, do you wish to overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
-		return true;
+		int value = JOptionPane.showConfirmDialog(frame, "There is already a file here, do you wish to overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
+		return (value == JOptionPane.OK_OPTION);
 	}
 	public static void saveNoteString(){
 		if(isDay){
