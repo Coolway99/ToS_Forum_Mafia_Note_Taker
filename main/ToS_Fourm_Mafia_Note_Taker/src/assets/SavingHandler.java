@@ -35,14 +35,14 @@ public class SavingHandler{
 		try{
 			if(filepath.exists()){
 				if(!Main.notifyOverwrite(filepath.getName())){
-					throw new UserException(){};
+					throw new UserException("User canceled overwrite"){};
 					} else {
 						filepath.renameTo(new File(filepath.toString() + "_OLD"));
 						filepath.createNewFile();
 					}
 				} else {filepath.createNewFile();}
 			
-			if(!filepath.canWrite()){Main.writeError(); throw new UserException() {};}
+			if(!filepath.canWrite()){Main.writeError("No write permissions"); throw new UserException("Unable to write"){};}
 			FileWriter output = new FileWriter(filepath);
 			Main.saveNoteString();
 			output.write("<?xml version=\""+"1.0"+"\" "+"encoding=\""+output.getEncoding()+"\"?>");
@@ -75,11 +75,12 @@ public class SavingHandler{
 			if(new File(filepath.toString() + "_OLD").exists()){new File(filepath.toString() + "_OLD").delete();}
 			return true;
 		} catch (IOException e){
-			Main.writeError();
+			Main.writeError("IOException");
 			if(filepath.exists()){filepath.delete();}
 			new File(filepath.toString() + "_OLD").renameTo(filepath);
 			return false;
 		} catch (UserException e){
+			System.out.println(e.getMessage());
 			return false;
 		}
 	}
