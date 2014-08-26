@@ -37,6 +37,7 @@ public class UpdateHandler {
 						Desktop.getDesktop().browse(e.getURL().toURI());
 					} catch (IOException | URISyntaxException e1) {
 						e1.printStackTrace();
+						JOptionPane.showMessageDialog(Main.frame, "Error opening link", "ERROR", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -57,14 +58,14 @@ public class UpdateHandler {
 							+ "<a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases/V"+
 							ver+"\">here</a>"
 							+ "</body></html>");
-					JOptionPane.showConfirmDialog(Main.frame, ep, "Update Found", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(Main.frame, ep, "Update Found", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					ep.setText("<html><body style=\"" + style + "\">"
 							+ "New Version found, it is strongly recommended that you download it "
 							+ "<a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases/V"+
 							ver+"-Hotfix-"+newVer+"\">here</a>"
 							+ "</body></html>");
-					JOptionPane.showConfirmDialog(Main.frame, ep, "Update Found", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(Main.frame, ep, "Update Found", JOptionPane.INFORMATION_MESSAGE);
 				}
 			} else if(VersionParsingHandler.isVersionEqualToo(newVer+".0.0", oldVer.split("\n")[0]+".0.0")){
 				if(oldVer.split("\n").length > 1){
@@ -76,9 +77,9 @@ public class UpdateHandler {
 									+ "<a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases/V"+
 									oldVer.split("\n")[0]+"-Hotfix-"+newVer+"\">here</a>"
 									+ "</body></html>");
-							JOptionPane.showConfirmDialog(Main.frame, ep, "New Hotfix Found", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(Main.frame, ep, "New Hotfix Found", JOptionPane.INFORMATION_MESSAGE);
 						} else if((oldVer.split("\n")[1].toCharArray()[0] == newVer.toCharArray()[0]) && !silent){
-							JOptionPane.showConfirmDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.DEFAULT_OPTION);
+							JOptionPane.showMessageDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
 				} else {
@@ -89,14 +90,14 @@ public class UpdateHandler {
 								+ "<a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases/V"+
 								oldVer.split("\n")[0]+"-Hotfix-"+newVer+"\">here</a>"
 								+ "</body></html>");
-						JOptionPane.showConfirmDialog(Main.frame, ep);
+						JOptionPane.showMessageDialog(Main.frame, ep);
 					} else if(!silent){
-						JOptionPane.showConfirmDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.DEFAULT_OPTION);
+						JOptionPane.showMessageDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			} else {
 				if(!silent){
-					JOptionPane.showConfirmDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.DEFAULT_OPTION);
+					JOptionPane.showMessageDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		} catch (IOException e) {
@@ -107,7 +108,7 @@ public class UpdateHandler {
 						+ "Newest version can be found manually <a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases\">here</a></center><br />"
 						+ "Note: This might open up two tabs. sorry, glitch, if you're here then there is something wrong anyways so >.>"
 						+ "</body></html>");
-				JOptionPane.showConfirmDialog(Main.frame, ep, "UPDATE CHECKING ERROR", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(Main.frame, ep, "UPDATE CHECKING ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
