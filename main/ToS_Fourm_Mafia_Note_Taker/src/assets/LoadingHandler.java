@@ -38,7 +38,7 @@ public class LoadingHandler implements ContentHandler{
 				Version = saveV+"."+patch;
 				if(VersionParsingHandler.isVersionLessThan(Version, "0.0.1.0")){
 					int value = JOptionPane.showConfirmDialog(Main.frame, "WARNING! The save you are"
-							+ "loading is from a previous version, between then and now the "
+							+ "loading is from a alpha version, between then and now the "
 							+ "playerlist and graveyard have merged.\n\n"
 							+ "If you want to keep the graveyard and scrap the playerlist, push yes.\n"
 							+ "If you want to keep the playerlist and scrap the graveyard, push no\n"
@@ -50,7 +50,7 @@ public class LoadingHandler implements ContentHandler{
 					} else if(value == JOptionPane.NO_OPTION){
 						usePlayers = true;
 					} else {
-						throw new SAXException(){};
+						throw new SAXException("User canceled load operation"){};
 					}
 				} else {
 					usePlayers = true;
