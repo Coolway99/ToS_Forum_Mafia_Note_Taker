@@ -33,7 +33,7 @@ public class MainRightClickMenu extends JPopupMenu{
 	private static HashMap<Integer, HashMap<Boolean, String>> CodeList = new HashMap<Integer, HashMap<Boolean, String>>();
 	@SuppressWarnings("static-access")
 	public static void initPopup(){
-		String[] FromList  = {"\\[color=", "\\[/color\\]", "\\[size=", "\\[/size\\]", "\n", "\\[b\\]",
+		String[] FromList  = {"\\[color=", "\\[/color\\]", "\\[size=", "\\[/size\\]", "\n", "\\[b\\]", "\\[/b\\]",
 				"\\[i\\]", "\\[/i\\]", "\\[u\\]", "\\[/u\\]", "\\[s\\]", "\\[/s\\]"};
 		String[] ToList = {"<font color=", "</font>", "<font size=", "</font>", "<br />", "<b>", "</b>",
 				"<i>", "</i>", "<u>", "</u>", "<s>", "</s>"};
@@ -108,7 +108,7 @@ public class MainRightClickMenu extends JPopupMenu{
 			B = A[0];
 			for(int x = 1; x < A.length; x++){
 				B += CodeList.get(y).get(false);
-				B += (CodeList.get(y).get(true).endsWith("]")) ? A[x] : A[x].replaceFirst("\\]", ">");
+				B += (CodeList.get(y).get(false).endsWith(">")) ? A[x] : A[x].replaceFirst("\\]", ">");
 			}
 		}
 		return "<font face=\"arial\">"+B+"</font>";
