@@ -43,7 +43,7 @@ public class Main {
 	 * First line: version
 	 * Optional Second Line: Hotfix letter
 	 */
-	public static final String progVers = "1.3\n"
+	public static final String progVers = "1.4\n"
 										+ "";
 	private static int Width;
 	private static int Height;
@@ -75,7 +75,7 @@ public class Main {
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
-	public static final String title = "Forum Mafia Note Taker V1.3";
+	public static final String title = "Forum Mafia Note Taker V1.4";
 	
 	public static void main(String[] Args){
 		if(Args.length > 0){
