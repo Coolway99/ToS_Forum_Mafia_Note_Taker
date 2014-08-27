@@ -55,8 +55,8 @@ public class Main {
 	public static final JButton whisper = new JButton("Whisper");
 	public static final JButton update = new JButton("<html>&nbsp;Check<br />&nbsp;&nbsp;&nbsp;&nbsp;for<br />updates</html>");
 	public static final JButton saveAs = new JButton("<html>Save<br />&nbsp;&nbsp;&nbsp;&nbsp;As...</html>");
-	//public static final JButton = new JButton();
 	public static final JButton help = new JButton("Help");
+	public static final JButton generalNotes = new JButton("<html>General<br />&nbsp;Notes</html>");
 	public static final JButton info = new JButton("Info");
 	public static final JTextField dayLabel = new JTextField();
 	public static final JTextField playersLabel = new JTextField();
@@ -125,6 +125,7 @@ public class Main {
 			whisper.addActionListener(secondaryListener);
 			update.addActionListener(secondaryListener);
 			info.addActionListener(secondaryListener);
+			generalNotes.addActionListener(secondaryListener);
 			help.addActionListener(secondaryListener);
 			fc.setFileFilter(new FileFilter() {
 				
@@ -177,6 +178,7 @@ public class Main {
 		frame.setEnabled(true);
 		UpdateHandler.check(progVers, true);
 		if(Args.length == 1){
+			fc.setSelectedFile(new File(Args[0]));
 			listener.load(new File(Args[0]));
 		}
 	}
@@ -272,18 +274,18 @@ public class Main {
 		c.gridx = 36;
 		c.gridy = 28;
 		mainPanel.add(saveAs, c);
-		/*resetConstraints();
+		resetConstraints();
 		c.gridwidth = 5;
 		c.gridheight = 5;
 		c.gridx = 42;
 		c.gridy = 28;
-		mainPanel.add(, c);*/
+		mainPanel.add(help, c);
 		resetConstraints();
 		c.gridwidth = 5;
 		c.gridheight = 5;
 		c.gridx = 48;
 		c.gridy = 28;
-		mainPanel.add(help, c);
+		mainPanel.add(generalNotes, c);
 		resetConstraints();
 		c.gridwidth = 5;
 		c.gridheight = 5;
