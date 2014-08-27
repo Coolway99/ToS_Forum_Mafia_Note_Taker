@@ -136,7 +136,6 @@ class PersonalActionListener implements ActionListener{
 		MenuInterface menu = (MenuInterface)e.getSource();
 		menu.doAction(e);
 	}
-	
 }
 @SuppressWarnings("serial")
 class MenuInterface extends JMenuItem{
