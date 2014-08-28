@@ -29,7 +29,7 @@ public class SavingHandler{
 	/**
 	 * @see {@link assets.SavingHandler.saveV}
 	 */
-	private static String patch = "2";
+	private static String patch = "3";
 	@SuppressWarnings("serial")
 	public static boolean save(File filepath){
 		try{
@@ -55,6 +55,9 @@ public class SavingHandler{
 					output.write("<roles>");
 						output.write(parse(Main.roleList.origString));
 					output.write("</roles>");
+					output.write("<generalNotes>");
+						output.write(parse(Main.secondaryListener.genNoteArea.getText()));
+					output.write("</generalNotes>");
 				output.write("</data>");
 				for(int x = 1; x <= Main.dayButtons.getDay(); x++){
 					output.write("<number day=\""+Integer.toString(x)+"\" >");
