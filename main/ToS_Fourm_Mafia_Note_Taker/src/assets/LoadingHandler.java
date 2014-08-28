@@ -156,12 +156,7 @@ public class LoadingHandler implements ContentHandler{
 	private String unParse(String in){
 		String B = in;
 		for(int y = 0; y < Main.parseList.length; y++){
-			String A[] = B.split(Main.unParseList[y]);
-			B = A[0];
-			for(int x = 1; x < A.length; x++){
-				B += Main.parseList[y];
-				B += A[x];
-			}
+			B = B.replaceAll(Main.unParseList[y], Main.parseList[y]);
 		} return B;
 	}
 }
