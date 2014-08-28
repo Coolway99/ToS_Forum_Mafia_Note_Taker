@@ -34,9 +34,9 @@ public class MainRightClickMenu extends JPopupMenu{
 	@SuppressWarnings("static-access")
 	public static void initPopup(){
 		String[] FromList  = {"\\[color=", "\\[/color\\]", "\\[size=", "\\[/size\\]", "\n", "\\[b\\]", "\\[/b\\]",
-				"\\[i\\]", "\\[/i\\]", "\\[u\\]", "\\[/u\\]", "\\[s\\]", "\\[/s\\]"};
+				"\\[i\\]", "\\[/i\\]", "\\[u\\]", "\\[/u\\]", "\\[s\\]", "\\[/s\\]", "\\[url=", "\\[/url\\]"};
 		String[] ToList = {"<font color=", "</font>", "<font size=", "</font>", "<br />", "<b>", "</b>",
-				"<i>", "</i>", "<u>", "</u>", "<s>", "</s>"};
+				"<i>", "</i>", "<u>", "</u>", "<s>", "</s>", "<a href=\"", "</a>"};
 		for(int x = 0; x < FromList.length; x++){
 			CodeList.put(x, new HashMap<Boolean, String>());
 			CodeList.get(x).put(true, FromList[x]);
@@ -108,7 +108,7 @@ public class MainRightClickMenu extends JPopupMenu{
 			B = A[0];
 			for(int x = 1; x < A.length; x++){
 				B += CodeList.get(y).get(false);
-				B += (CodeList.get(y).get(false).endsWith(">")) ? A[x] : A[x].replaceFirst("\\]", ">");
+				B += (CodeList.get(y).get(false).endsWith(">")) ? A[x] : (CodeList.get(y).get(false).equals("<a href=\"") ? A[x].replaceFirst("\\]", "\">") :A[x].replaceFirst("\\]", ">"));
 			}
 		}
 		return "<font face=\"arial\">"+B+"</font>";
