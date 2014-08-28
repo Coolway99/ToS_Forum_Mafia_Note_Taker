@@ -3,4 +3,4 @@ build:
 	mkdir -p bin
 	javac -d bin -sourcepath src src/main/Main.java
 run:
-	java -cp bin main.Main
+	java -cp bin main.Main "$(file)"
