@@ -144,6 +144,19 @@ public class Main {
 				}
 			});
 		}
+		HyperlinkListener HPL = new HyperlinkListener() {
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+				if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)){
+					try {
+						Desktop.getDesktop().browse(e.getURL().toURI());
+					} catch (IOException | URISyntaxException e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(Main.frame, "Error opening link", "ERROR", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		};
 		MainRightClickMenu.initPopup();
 		dayButtons.init();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -151,7 +164,9 @@ public class Main {
 		playerNumbers.setContentType("text/html");
 		playerNumbers.setText("<font face=\"arial\">1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />18<br />19<br />20<br /></font>");
 		roleList.setEditable(false);
+		roleList.addHyperlinkListener(HPL);
 		playerArea.setEditable(false);
+		playerArea.addHyperlinkListener(HPL);
 		notes.setEditable(false);
 		roleList.addMouseListener(MainRightClickMenu.mouse);
 		playerArea.addMouseListener(MainRightClickMenu.mouse);
