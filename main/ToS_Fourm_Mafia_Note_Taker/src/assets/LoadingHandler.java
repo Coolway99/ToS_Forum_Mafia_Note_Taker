@@ -21,7 +21,7 @@ public class LoadingHandler implements ContentHandler{
 	@Override
 	public void startDocument() throws SAXException {
 		String theTagList[] = {"beginSave", "data", "totalDays", "players", "whispers", "graveyard"
-				, "roles", "number", "day", "notes", "night"};
+				, "roles", "generalNotes", "number", "day", "notes", "night"};
 		for(int x = 0; x < theTagList.length; x++){
 			tags.put(theTagList[x], false);
 		}
@@ -104,6 +104,8 @@ public class LoadingHandler implements ContentHandler{
 			} else {
 				Main.dayButtons.setWhisperString(unParse(string), day);
 			}
+		} else if(tags.get("generalNotes")){
+			Main.secondaryListener.genNoteArea.setText(unParse(string));
 		}
 	}
 	@Override
