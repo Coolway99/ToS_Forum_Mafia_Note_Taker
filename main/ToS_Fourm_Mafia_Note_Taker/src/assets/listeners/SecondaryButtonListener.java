@@ -24,6 +24,8 @@ import main.Main;
 public class SecondaryButtonListener implements ActionListener{
 	private JFrame whisperFrame;
 	public JTextArea whisperArea;
+	private JFrame genNoteFrame;
+	public JTextArea genNoteArea;
 	@SuppressWarnings("static-access")
 	public SecondaryButtonListener() {
 		super();
@@ -33,6 +35,11 @@ public class SecondaryButtonListener implements ActionListener{
 			whisperFrame = new JFrame("Whispers");
 			whisperFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 			whisperFrame.setSize(400, 400);
+			genNoteArea = new JTextArea();
+			genNoteArea.setLineWrap(true);
+			genNoteFrame = new JFrame("General Notes");
+			genNoteFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+			genNoteFrame.setSize(400, 400);
 			GridBagLayout layout = new GridBagLayout();
 			int rows[] = new int[5];
 			for(int x = 0; x < rows.length; x++){
@@ -53,7 +60,20 @@ public class SecondaryButtonListener implements ActionListener{
 			c.gridheight = 5;
 			c.gridwidth = 1;
 			c.fill = c.BOTH;
-			whisperFrame.add(new JScrollPane(whisperArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), c);
+			whisperFrame.add(new JScrollPane(whisperArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
+			layout = new GridBagLayout();
+			layout.rowHeights = rows;
+			layout.columnWidths = columns;
+			genNoteFrame.setLayout(layout);
+			c = new GridBagConstraints();
+			c.weightx = 1.0;
+			c.weighty = 1.0;
+			c.gridx = 0;
+			c.gridy = 0;
+			c.gridheight = 5;
+			c.gridwidth = 1;
+			c.fill = c.BOTH;
+			genNoteFrame.add(new JScrollPane(genNoteArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
 		}
 	}
 	@Override
@@ -61,7 +81,10 @@ public class SecondaryButtonListener implements ActionListener{
 		if(e.getSource() == Main.whisper){
 			whisperFrame.setLocationRelativeTo(null);
 			whisperFrame.setVisible(true);
-		} else if(e.getSource() == Main.update){
+		}else if(e.getSource() == Main.generalNotes){
+			genNoteFrame.setLocationRelativeTo(null);
+			genNoteFrame.setVisible(true);
+		}else if(e.getSource() == Main.update){
 			UpdateHandler.check(Main.progVers, false);
 		} else if(e.getSource() == Main.info){
 			// for copying style
