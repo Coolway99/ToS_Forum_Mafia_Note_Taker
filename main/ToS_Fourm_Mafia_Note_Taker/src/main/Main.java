@@ -43,7 +43,7 @@ public class Main {
 	 * First line: version
 	 * Optional Second Line: Hotfix letter
 	 */
-	public static final String progVers = "1.4\n"
+	public static final String progVers = "1.4\n";
 	
 	private static int Width;
 	private static int Height;
