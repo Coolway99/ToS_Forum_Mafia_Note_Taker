@@ -39,12 +39,12 @@ public class Main {
 	public static String[] unParseList = {"!NL!","!S!", "!lfBrkt!", "!rtBrkt!", "!ampt!",
 		"!dbQuote!", "!snQuote!", "!tab!", "!numb!", "!leftsqrt!", "!rightsqrt!"};
 	/**
-	 * Will check this against https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/master/version.txt
+	 * Will check this against <a href="https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/master/version.txt">https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/master/version.txt<a/>
 	 * First line: version
 	 * Optional Second Line: Hotfix letter
 	 */
 	public static final String progVers = "1.4\n"
-										+ "";
+	
 	private static int Width;
 	private static int Height;
 	public static final JFileChooser fc = new JFileChooser();
@@ -197,6 +197,11 @@ public class Main {
 			listener.load(new File(Args[0]));
 		}
 	}
+	/**
+	 * A function called to initalize the layout, is in it's own function to support being re-called to re-init
+	 * the layout. This is for the daybuttons, which when it is added and removed, must be recalled for the layout
+	 * to add them accordingly.
+	 */
 	public static void initLayout(){
 		/*Math and Layout below this line, pass at your own risk
 		----------------------------------------------------------*/
@@ -308,6 +313,9 @@ public class Main {
 		c.gridy = 28;
 		mainPanel.add(info, c);
 	}
+	/**
+	 * A function called to reset constraints, just a convenience 
+	 */
 	@SuppressWarnings("static-access")
 	public static void resetConstraints(){
 		c = new GridBagConstraints();
@@ -315,13 +323,27 @@ public class Main {
 		c.weighty = 1.0;
 		c.fill = c.BOTH;
 	}
+	/**
+	 * Called whenever the program has problems writing to a file.<br />
+	 * TODO Why does the main class handle saving errors, it should be in the save functions.
+	 * @param error The error returned.
+	 */
 	public static void writeError(String error){
 		JOptionPane.showMessageDialog(frame, "There was an error writing to the file!\nError:"+error, "Write Error", JOptionPane.ERROR_MESSAGE);
 	}
+	/**
+	 * Called when the file already exsists, and a confirmation to overwrite it.<br />
+	 * TODO Why does the mainfile handle this, TO THE SAVE HANDLER WITH YE
+	 * @param filename The file name to overwrite
+	 * @return If the user clicked OK or not.
+	 */
 	public static boolean notifyOverwrite(String filename){
-		int value = JOptionPane.showConfirmDialog(frame, "There is already a file here, do you wish to overwrite?", "Overwrite?", JOptionPane.YES_NO_OPTION);
+		int value = JOptionPane.showConfirmDialog(frame, "There is already a file here, do you wish to overwrite?\nFilename:"+filename, "Overwrite?", JOptionPane.YES_NO_OPTION);
 		return (value == JOptionPane.OK_OPTION);
 	}
+	/**
+	 * Prompts the program to save whatever is in the notes pane to the day/night, this is not automatic
+	 */
 	public static void saveNoteString(){
 		if(isDay){
 			dayButtons.setDayString(notes.origString, selectedDay);
@@ -330,6 +352,12 @@ public class Main {
 		}
 		dayButtons.setWhisperString(secondaryListener.whisperArea.getText(), selectedDay);
 	}
+	/**
+	 * Manually override the string that is associated with the day/night, for loading purposes.
+	 * @param day The day number to overwrite
+	 * @param isDay Is it the day or the night that we are overwriting?
+	 * @param s The string to replace it with
+	 */
 	public static void setNoteString(int day, boolean isDay, String s){
 		notes.setText(MainRightClickMenu.unParse(s));
 		notes.origString = s;
