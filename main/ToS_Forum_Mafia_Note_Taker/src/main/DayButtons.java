@@ -1,4 +1,4 @@
-package assets;
+package main;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -10,8 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-
-import main.Main;
 
 @SuppressWarnings("serial")
 public class DayButtons extends Component{

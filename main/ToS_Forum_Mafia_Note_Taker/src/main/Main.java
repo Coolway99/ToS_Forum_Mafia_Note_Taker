@@ -22,10 +22,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.filechooser.FileFilter;
 
-import assets.DayButtons;
-import assets.MainRightClickMenu;
-import assets.MainTextPane;
-import assets.UpdateHandler;
 import assets.listeners.SaveLoadButtonListener;
 import assets.listeners.SecondaryButtonListener;
 

@@ -1,4 +1,4 @@
-package assets;
+package main;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,8 +14,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
-import main.Main;
 
 
 @SuppressWarnings("serial")

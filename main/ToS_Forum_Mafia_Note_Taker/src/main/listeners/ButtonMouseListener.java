@@ -1,10 +1,10 @@
-package assets.listeners;
+package main.listeners;
 
 import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
-import assets.Buttons1;
+import main.Buttons1;
 
 public class ButtonMouseListener extends MouseInputAdapter{
 	@SuppressWarnings("static-access")

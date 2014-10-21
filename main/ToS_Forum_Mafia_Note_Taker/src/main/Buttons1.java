@@ -1,4 +1,4 @@
-package assets;
+package main;
 
 import javax.swing.Icon;
 import javax.swing.JButton;

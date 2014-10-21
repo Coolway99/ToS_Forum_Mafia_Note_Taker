@@ -1,4 +1,4 @@
-package assets.listeners;
+package main.listeners;
 
 import java.awt.Desktop;
 import java.awt.Font;
@@ -18,8 +18,8 @@ import javax.swing.JTextArea;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import assets.UpdateHandler;
 import main.Main;
+import main.UpdateHandler;
 
 public class SecondaryButtonListener implements ActionListener{
 	private JFrame whisperFrame;

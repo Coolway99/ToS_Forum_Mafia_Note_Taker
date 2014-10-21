@@ -1,10 +1,8 @@
-package assets;
+package main;
 
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
-
-import main.Main;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;

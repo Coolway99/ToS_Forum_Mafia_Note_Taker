@@ -1,4 +1,4 @@
-package assets;
+package main;
 
 import java.awt.Desktop;
 import java.awt.Font;
@@ -13,8 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-
-import main.Main;
 
 public class UpdateHandler {
 	private static final JEditorPane ep = new JEditorPane();
