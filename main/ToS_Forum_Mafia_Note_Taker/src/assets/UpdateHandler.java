@@ -19,6 +19,11 @@ import main.Main;
 public class UpdateHandler {
 	private static final JEditorPane ep = new JEditorPane();
 	private static StringBuffer style;
+	/**
+	 * Used for checking the version
+	 * @param oldVer The current version
+	 * @param silent Should it notify if it's up to date or there was a issue
+	 */
 	public static void check(String oldVer, boolean silent){
 		// for copying style
 		JLabel label = new JLabel();
@@ -63,7 +68,9 @@ public class UpdateHandler {
 				//If this version is indeed a hotfix
 				if(oldVer.split("\n").length > 1){
 					newVer = in.readLine();
+					//If the newer version is also a hotfix
 					if(newVer != null){
+						//If the letter is higher than the previous (I.E. A < B)
 						if(oldVer.split("\n")[1].toCharArray()[0] < newVer.toCharArray()[0]){
 							ep.setText("<html><body style=\"" + style + "\">"
 									+ "New Hotfix found, it is strongly recommended that you download it "
@@ -71,12 +78,15 @@ public class UpdateHandler {
 									oldVer.split("\n")[0]+"-Hotfix-"+newVer+"\">here</a>"
 									+ "</body></html>");
 							JOptionPane.showMessageDialog(Main.frame, ep, "New Hotfix Found", JOptionPane.INFORMATION_MESSAGE);
+						//Else if the versions are the same
 						} else if((oldVer.split("\n")[1].toCharArray()[0] == newVer.toCharArray()[0]) && !silent){
 							JOptionPane.showMessageDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
+				// Else if this version is not a hotfix
 				} else {
 					newVer = in.readLine();
+					//If the new version is indeed a hotfix
 					if(newVer != null){
 						ep.setText("<html><body style=\"" + style + "\">"
 								+ "New Hotfix found, it is SUPER strongly recommended that you download it "
@@ -84,15 +94,16 @@ public class UpdateHandler {
 								oldVer.split("\n")[0]+"-Hotfix-"+newVer+"\">here</a>"
 								+ "</body></html>");
 						JOptionPane.showMessageDialog(Main.frame, ep);
+					//Else if the versions are the same
 					} else if(!silent){
 						JOptionPane.showMessageDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
-			} else {
-				if(!silent){
-					JOptionPane.showMessageDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.INFORMATION_MESSAGE);
-				}
+			//Else if the version is higher
+			} else if(!slient){
+				JOptionPane.showMessageDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.INFORMATION_MESSAGE);
 			}
+		//Catch the non-internet error
 		} catch (IOException e) {
 			e.printStackTrace();
 			if(!silent){
