@@ -22,8 +22,8 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.filechooser.FileFilter;
 
-import assets.listeners.SaveLoadButtonListener;
-import assets.listeners.SecondaryButtonListener;
+import main.listeners.SaveLoadButtonListener;
+import main.listeners.SecondaryButtonListener;
 
 public class Main {
 	/**

@@ -98,7 +98,7 @@ public class UpdateHandler {
 					}
 				}
 			//Else if the version is higher
-			} else if(!slient){
+			} else if(!silent){
 				JOptionPane.showMessageDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.INFORMATION_MESSAGE);
 			}
 		//Catch the non-internet error
