@@ -28,8 +28,7 @@ public class UpdateHandler {
 		style = new StringBuffer("font-family:" + font.getFamily() + ";");
 		style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
 		style.append("font-size:" + font.getSize() + "pt;");
-		ep.addHyperlinkListener(new HyperlinkListener()
-		{
+		ep.addHyperlinkListener(new HyperlinkListener(){
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent e){
 				if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)){
@@ -44,30 +43,24 @@ public class UpdateHandler {
 		});
 		ep.setBackground(label.getBackground());
 		ep.setEditable(false);
-		try {
+		try /*so the entire program doesn't break when it doesn't get it's way*/{
 			URL url = new URL("https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/master/version.txt");
 			BufferedReader in = new BufferedReader(
 					new InputStreamReader(url.openStream()));
 			String newVer = in.readLine();
+			//If the new version is greater than the old version, the '+.0.0' is because this re-uses the saving version handler
 			if(VersionParsingHandler.isVersionGreaterThan(newVer+".0.0", oldVer.split("\n")[0]+".0.0")){
 				String ver = newVer;
 				newVer = in.readLine();
-				if(newVer == null){
-					ep.setText("<html><body style=\"" + style + "\">"
-							+ "New Version found, it is strongly recommended that you download it "
-							+ "<a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases/V"+
-							ver+"\">here</a>"
-							+ "</body></html>");
-					JOptionPane.showMessageDialog(Main.frame, ep, "Update Found", JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					ep.setText("<html><body style=\"" + style + "\">"
-							+ "New Version found, it is strongly recommended that you download it "
-							+ "<a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases/V"+
-							ver+"-Hotfix-"+newVer+"\">here</a>"
-							+ "</body></html>");
-					JOptionPane.showMessageDialog(Main.frame, ep, "Update Found", JOptionPane.INFORMATION_MESSAGE);
-				}
+				ep.setText("<html><body style=\"" + style + "\">"
+						+ "New Version found, it is strongly recommended that you download it "
+						+ "<a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases/V"+
+						ver+((newVer != null /*If there is a hotfix*/) ? "-Hotfix-"+newVer : "")+"\">here</a>"
+						+ "</body></html>");
+				JOptionPane.showMessageDialog(Main.frame, ep, "Update Found", JOptionPane.INFORMATION_MESSAGE);
+			//Else if the versions are the same (I.E. might be different hotfixes)
 			} else if(VersionParsingHandler.isVersionEqualToo(newVer+".0.0", oldVer.split("\n")[0]+".0.0")){
+				//If this version is indeed a hotfix
 				if(oldVer.split("\n").length > 1){
 					newVer = in.readLine();
 					if(newVer != null){
