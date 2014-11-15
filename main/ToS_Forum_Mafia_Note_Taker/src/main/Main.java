@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -25,7 +26,8 @@ import javax.swing.filechooser.FileFilter;
 import main.listeners.SaveLoadButtonListener;
 import main.listeners.SecondaryButtonListener;
 
-public class Main {
+@SuppressWarnings("serial")
+public class Main extends JFrame{
 	/**
 	 * For saving/loading. Saving uses parseList to unParseList, loading unParseList to parseList.
 	 * <br /> Must always be the same size as unParseList
@@ -35,11 +37,13 @@ public class Main {
 	public static String[] unParseList = {"!NL!","!S!", "!lfBrkt!", "!rtBrkt!", "!ampt!",
 		"!dbQuote!", "!snQuote!", "!tab!", "!numb!", "!leftsqrt!", "!rightsqrt!"};
 	/**
-	 * Will check this against <a href="https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/master/version.txt">https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/master/version.txt<a/>
-	 * First line: version
+	 * Will check this against 
+	 * <a href="https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/master/version.txt">
+	 * https://raw.githubusercontent.com.../master/version.txt<a/><br />
+	 * First line: Version<br />
 	 * Optional Second Line: Hotfix letter
 	 */
-	public static final String progVers = "1.4\n";
+	public static final String progVers = "1.5\n";
 	
 	private static int Width;
 	private static int Height;
@@ -71,9 +75,15 @@ public class Main {
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
-	public static final String title = "Forum Mafia Note Taker V1.4";
+	public static final String title = "Forum Mafia Note Taker V1.5";
+	
+	public Main(String s){
+		super(s);
+	}
 	
 	public static void main(String[] Args){
+		System.out.println(Main.class.getClassLoader().getResource("assets/images/dayButton.png"));
+		
 		if(Args.length > 0){
 			System.out.println("Has Args:");
 			for(int x = 0; x < Args.length; x++){
@@ -82,7 +92,7 @@ public class Main {
 		} else {
 			System.out.println("No Args");
 		}
-		frame = new JFrame(title + " - new");
+		frame = new Main(title + " - new");
 		frame.setVisible(true);
 		frame.setEnabled(false);
 		playerArea.setContentType("text/html");
@@ -192,9 +202,20 @@ public class Main {
 			fc.setSelectedFile(new File(Args[0]));
 			listener.load(new File(Args[0]));
 		}
+		(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				Main.dayButtons.initIcons();
+			}
+		}).run();
 	}
 	/**
-	 * A function called to initalize the layout, is in it's own function to support being re-called to re-init
+	 * A function called to initialize the layout, is in it's own function to support being re-called to re-init
 	 * the layout. This is for the daybuttons, which when it is added and removed, must be recalled for the layout
 	 * to add them accordingly.
 	 */
@@ -363,6 +384,18 @@ public class Main {
 			dayLabel.setText("Day "+Integer.toString(day));
 		} else {
 			dayLabel.setText("Night "+Integer.toString(day));
+		}
+	}
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
+		if(e.getID() == WindowEvent.WINDOW_CLOSING){
+			if(JOptionPane.showConfirmDialog(this, "Are you sure you want to close? Unsaved data may be lost",
+					"WARNING", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)
+					== JOptionPane.OK_OPTION){
+				super.processWindowEvent(e);
+			}
+		} else {
+			super.processWindowEvent(e);
 		}
 	}
 }

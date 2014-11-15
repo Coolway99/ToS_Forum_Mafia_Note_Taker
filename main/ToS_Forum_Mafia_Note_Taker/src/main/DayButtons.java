@@ -1,20 +1,21 @@
 package main;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-@SuppressWarnings("serial")
-public class DayButtons extends Component{
+public class DayButtons{
 	private HashMap<Integer, Buttons> buttonArray;
-	private Timer timer = new Timer(50, null);
+	private Timer timer = new Timer(50, new TimerActionListener());
 	public void init(){
 		buttonArray = new HashMap<Integer, Buttons>();
 		buttonArray.put(0, new Buttons());
@@ -71,15 +72,18 @@ public class DayButtons extends Component{
 		}
 	}
 	public void removeADay(){
+		this.removeDays();
 		if(!timer.isRunning()){
 			if(buttonArray.size() > 2){
 				if(JOptionPane.showConfirmDialog(Main.mainPanel, "Do you want to remove a day?", "Remove a day", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION){
-					Main.mainPanel.remove(buttonArray.get(buttonArray.size()-1).getDay());
-					Main.mainPanel.remove(buttonArray.get(buttonArray.size()-1).getNight());
-					buttonArray.remove(buttonArray.size()-1);
-					Main.initLayout();
-					Main.mainPanel.revalidate();
-					Main.frame.repaint();
+					if(Main.selectedDay >= buttonArray.size()-1){
+						if(Main.isDay){
+							buttonArray.get(buttonArray.size()-2).getDay().doClick();
+						} else {
+							buttonArray.get(buttonArray.size()-2).getNight().doClick();
+						}
+					}
+					this.removeDays();
 					timer.restart();
 				}
 			} else {
@@ -97,14 +101,22 @@ public class DayButtons extends Component{
 			Main.frame.repaint();
 		}
 	}
-	public void setLocation(GridBagConstraints c, int startX, int startY, int dayButtonsWidth, int dayButtonsHeight, int AddRemoveStartX, int AddRemoveStartY,  int AddRemoveWidth, int AddRemoveButtonHeight){
+	public void setLocation(GridBagConstraints c, int startX, int startY, int dayButtonsWidth,
+			int dayButtonsHeight, int AddRemoveStartX, int AddRemoveStartY,  int AddRemoveWidth,
+			int AddRemoveButtonHeight){
 		for(int x = 1; x < buttonArray.size(); x++){
 			Main.resetConstraints();
-			buttonArray.get(x).setLocation(c, (startX + ((x-1)*(dayButtonsWidth/(buttonArray.size()-1)))), startY, dayButtonsWidth/(buttonArray.size()-1), dayButtonsHeight);
-			buttonArray.get(x).initIcons(dayButtonsWidth/(buttonArray.size()-1), dayButtonsHeight);
+			buttonArray.get(x).setLocation(c, (startX + ((x-1)*(dayButtonsWidth/(buttonArray.size()-1)))),
+					startY, dayButtonsWidth/(buttonArray.size()-1), dayButtonsHeight);
 		}
-		buttonArray.get(0).setLocation(c, AddRemoveStartX, AddRemoveStartY, AddRemoveWidth, AddRemoveButtonHeight);
+		buttonArray.get(0).setLocation(c, AddRemoveStartX, AddRemoveStartY, AddRemoveWidth,
+				AddRemoveButtonHeight);
 		Main.mainPanel.revalidate();
+	}
+	public void initIcons(){
+		for(int x = 1; x < buttonArray.size(); x++){
+		//	buttonArray.get(x).initIcons();
+		}
 	}
 }
 
@@ -156,21 +168,17 @@ class Buttons {
 	public JButton getNight(){
 		return nightButton;
 	}
-	public void initIcons(int width, int height){
-		/*Toolkit tk = Toolkit.getDefaultToolkit();
+	public void initIcons(){
+	Toolkit tk = Toolkit.getDefaultToolkit();
 		try {
-			Image dayImage = tk.createImage(Main.class.getResource("/assets/images/dayButton.png"));
-			Image nightImage = tk.createImage(Main.class.getResource("/assets/images/nightButton.png"));
-			tk.prepareImage(dayImage, width, height/2, null);
-			tk.prepareImage(nightImage, width, height/2, null);
-			ImageIcon dayIcon = new ImageIcon(dayImage);
-			ImageIcon nightIcon = new ImageIcon(nightImage);
+			Image dayImage = tk.createImage(Main.class.getClassLoader().getResource("assets/images/dayButton.png"));
+			Image nightImage = tk.createImage(Main.class.getClassLoader().getResource("assets/images/nightButton.png"));
 			
-			dayButton.setIcon(dayIcon);
-			nightButton.setIcon(nightIcon);
+			dayButton.setIcon(new ImageIcon(dayImage.getScaledInstance(dayButton.getWidth(), dayButton.getHeight(), Image.SCALE_FAST)));
+			nightButton.setIcon(new ImageIcon(nightImage.getScaledInstance(nightButton.getWidth(), nightButton.getHeight(), Image.SCALE_FAST)));
 		} catch (IllegalArgumentException e1){
 			e1.printStackTrace();
-		}*/
+		}
 	}
 	
 	public String getDayString(){return dayString;}
@@ -201,10 +209,6 @@ class Buttons {
 		Main.mainPanel.add(nightButton, c);
 	}
 }
-class PrivateTimerListener implements ActionListener{
-	@Override
-	public void actionPerformed(ActionEvent e){}
-}
 class PrivateAddDayActionListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -215,5 +219,17 @@ class PrivateRemoveDayActionListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e){
 		Main.dayButtons.removeADay();
+	}
+}
+class TimerActionListener implements ActionListener{
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		try{
+			Main.frame.revalidate();
+			Main.initLayout();
+			Main.dayButtons.initIcons();
+		} catch(Exception err){
+			System.out.println(err.getMessage() + " In the timer thread");
+		}
 	}
 }
