@@ -43,11 +43,11 @@ public class SecondaryButtonListener implements ActionListener{
 			GridBagLayout layout = new GridBagLayout();
 			int rows[] = new int[5];
 			for(int x = 0; x < rows.length; x++){
-				rows[x] = (int) ((400/rows.length)/2);
+				rows[x] = (400/rows.length)/2;
 			}
 			int columns[] = new int[1];
 			for(int x = 0; x < columns.length; x++){
-				columns[x] = (int) ((400/columns.length)/2);
+				columns[x] = (400/columns.length)/2;
 			}
 			layout.rowHeights = rows;
 			layout.columnWidths = columns;

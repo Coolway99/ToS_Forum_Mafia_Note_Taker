@@ -144,9 +144,8 @@ public class Main extends JFrame{
 				public boolean accept(File f) {
 					if(f.getName().toUpperCase().endsWith(".FMNT") || f.isDirectory()){
 						return true;
-					} else {
-						return false;
 					}
+					return false;
 				}
 			});
 		}
@@ -225,11 +224,11 @@ public class Main extends JFrame{
 		{
 			int rows[] = new int[34];
 			for(int x = 0; x < rows.length; x++){
-				rows[x] = (int) ((Height/rows.length)/2);
+				rows[x] = (Height/rows.length)/2;
 			}
 			int columns[] = new int[60];
 			for(int x = 0; x < columns.length; x++){
-				columns[x] = (int) ((Width/columns.length)/2);
+				columns[x] = (Width/columns.length)/2;
 			}
 			layout.rowHeights = rows;
 			layout.columnWidths = columns;
@@ -386,10 +385,13 @@ public class Main extends JFrame{
 			dayLabel.setText("Night "+Integer.toString(day));
 		}
 	}
+	/**
+	 * To intercept the close button being pressed to present a warning
+	 */
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if(e.getID() == WindowEvent.WINDOW_CLOSING){
-			if(JOptionPane.showConfirmDialog(this, "Are you sure you want to close? Unsaved data may be lost",
+			if(JOptionPane.showConfirmDialog(this, "Are you sure you want to close? Unsaved data will be lost",
 					"WARNING", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)
 					== JOptionPane.OK_OPTION){
 				super.processWindowEvent(e);

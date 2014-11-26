@@ -34,10 +34,9 @@ public class SavingHandler{
 			if(filepath.exists()){
 				if(!Main.notifyOverwrite(filepath.getName())){
 					throw new UserException("User canceled overwrite"){};
-					} else {
-						filepath.renameTo(new File(filepath.toString() + "_OLD"));
-						filepath.createNewFile();
 					}
+				filepath.renameTo(new File(filepath.toString() + "_OLD"));
+				filepath.createNewFile();
 				} else {filepath.createNewFile();}
 			
 			if(!filepath.canWrite()){Main.writeError("No write permissions"); throw new UserException("Unable to write"){};}

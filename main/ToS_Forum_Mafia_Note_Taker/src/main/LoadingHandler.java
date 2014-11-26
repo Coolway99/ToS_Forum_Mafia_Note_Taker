@@ -10,7 +10,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 public class LoadingHandler implements ContentHandler{
-	private HashMap<String, Boolean> tags = new HashMap<String, Boolean>();
+	private HashMap<String, Boolean> tags = new HashMap<>();
 	private String saveV;
 	private String patch;
 	private String Version;
@@ -164,33 +164,26 @@ class VersionParsingHandler{
 		int B[] = parseVersion(lessThanThis);
 		if(A[0] < B[0]){
 			return true;
-		} else {
-			if(A[0] == B[0]){
-				if(A[1] < B[1]){
+		}
+		if(A[0] == B[0]){
+			if(A[1] < B[1]){
+				return true;
+			}
+			if(A[1] == B[1]){
+				if(A[2] < B[2]){
 					return true;
-				} else {
-					if(A[1] == B[1]){
-						if(A[2] < B[2]){
-							return true;
-						} else {
-							if(A[2] == B[2]){
-								if(A[3] < B[3]){
-									return true;
-								} else {
-									return false;
-								}
-							} else {
-								return false;
-							}
-						}
-					} else {
-						return false;
-					}
 				}
-			} else {
+				if(A[2] == B[2]){
+					if(A[3] < B[3]){
+						return true;
+					}
+					return false;
+				}
 				return false;
 			}
+			return false;
 		}
+		return false;
 	}
 	public static boolean isVersionEqualToo(String isThis, String equalToThis){
 		int A[] = parseVersion(isThis);
@@ -200,51 +193,40 @@ class VersionParsingHandler{
 				if(A[2] == B[2]){
 					if(A[3] == B[3]){
 						return true;
-					} else {
-						return false;
 					}
-				} else {
 					return false;
 				}
-			} else {
 				return false;
 			}
-		} else {
 			return false;
 		}
+		return false;
 	}
 	public static boolean isVersionGreaterThan(String isThis, String greaterThanThis){
 		int A[] = parseVersion(isThis);
 		int B[] = parseVersion(greaterThanThis);
 		if(A[0] > B[0]){
 			return true;
-		} else {
-			if(A[0] == B[0]){
-				if(A[1] > B[1]){
+		}
+		if(A[0] == B[0]){
+			if(A[1] > B[1]){
+				return true;
+			}
+			if(A[1] == B[1]){
+				if(A[2] > B[2]){
 					return true;
-				} else {
-					if(A[1] == B[1]){
-						if(A[2] > B[2]){
-							return true;
-						} else {
-							if(A[2] == B[2]){
-								if(A[3] > B[3]){
-									return true;
-								} else {
-									return false;
-								}
-							} else {
-								return false;
-							}
-						}
-					} else {
-						return false;
-					}
 				}
-			} else {
+				if(A[2] == B[2]){
+					if(A[3] > B[3]){
+						return true;
+					}
+					return false;
+				}
 				return false;
 			}
+			return false;
 		}
+		return false;
 	}
 	private static int[] parseVersion(String Version){
 		String unParsed[] = Version.split("\\.");

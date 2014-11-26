@@ -17,7 +17,7 @@ public class DayButtons{
 	private HashMap<Integer, Buttons> buttonArray;
 	private Timer timer = new Timer(50, new TimerActionListener());
 	public void init(){
-		buttonArray = new HashMap<Integer, Buttons>();
+		buttonArray = new HashMap<>();
 		buttonArray.put(0, new Buttons());
 		buttonArray.put(1, new Buttons(1));
 		this.setDayActionListener(new PrivateAddDayActionListener(), 0);
@@ -75,7 +75,8 @@ public class DayButtons{
 		this.removeDays();
 		if(!timer.isRunning()){
 			if(buttonArray.size() > 2){
-				if(JOptionPane.showConfirmDialog(Main.mainPanel, "Do you want to remove a day?", "Remove a day", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION){
+				if(JOptionPane.showConfirmDialog(Main.mainPanel, "Do you want to remove a day?",
+						"Remove a day", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION){
 					if(Main.selectedDay >= buttonArray.size()-1){
 						if(Main.isDay){
 							buttonArray.get(buttonArray.size()-2).getDay().doClick();
