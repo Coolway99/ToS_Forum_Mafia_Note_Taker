@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -179,8 +178,8 @@ public class MainRightClickMenu extends JPopupMenu {
 		});
 		try {
 			final BufferedImage colors =
-					ImageIO.read(new File(Main.class.getClassLoader()
-							.getResource("assets/images/colors.png").toURI()));;
+					ImageIO.read(Main.class.getClassLoader()
+							.getResource("assets/images/colors.png"));;
 			class ButtonListener implements ActionListener {
 				private BufferedImage icon;
 				public ButtonListener(BufferedImage icon){
@@ -237,7 +236,7 @@ public class MainRightClickMenu extends JPopupMenu {
 			} else {
 				System.out.println("Error loading colors.png in images, will not use colors");
 			}
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
