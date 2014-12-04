@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -106,6 +105,18 @@ public class MainRightClickMenu extends JPopupMenu {
 		c.gridheight = 10;
 		bbcPanel.setLayout(new BoxLayout(bbcPanel, BoxLayout.Y_AXIS));
 		{
+			class InsertListener implements ActionListener{
+				private final String b;
+				private final String a;
+				public InsertListener(String before, String after){
+					b = before;
+					a = after;
+				}
+				@Override
+				public void actionPerformed(ActionEvent e){
+					insertText(b, a);
+				}
+			}
 			JButton b = bbcButtons[0];
 			b.addActionListener(new ActionListener(){
 				@Override
@@ -114,49 +125,19 @@ public class MainRightClickMenu extends JPopupMenu {
 				}
 			});
 			b = bbcButtons[1];
-			b.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e){
-					insertText("[size=", "[/size]");
-				}
-			});
+			b.addActionListener(new InsertListener("[size=", "[/size]"));
 			b = bbcButtons[2];
-			b.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e){
-					insertText("[b]", "[/b]");
-				}
-			});
+			b.addActionListener(new InsertListener("[b]", "[/b]"));
 			b.setFont(b.getFont().deriveFont(Font.BOLD));
 			b = bbcButtons[3];
-			b.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e){
-					insertText("[i]", "[/i]");
-				}
-			});
+			b.addActionListener(new InsertListener("[i]", "[/i]"));
 			b.setFont(b.getFont().deriveFont(Font.ITALIC));
 			b = bbcButtons[4];
-			b.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e){
-					insertText("[u]", "[/u]");
-				}
-			});
+			b.addActionListener(new InsertListener("[u]", "[/u]"));
 			b = bbcButtons[5];
-			b.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e){
-					insertText("[s]", "[/s]");
-				}
-			});
+			b.addActionListener(new InsertListener("[s]", "[/s]"));
 			b = bbcButtons[6];
-			b.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e){
-					insertText("[url=]", "[url]");
-				}
-			});
+			b.addActionListener(new InsertListener("[url=]", "[url]"));
 		}
 		for(JButton b : bbcButtons){
 			bbcPanel.add(b);
@@ -228,7 +209,7 @@ public class MainRightClickMenu extends JPopupMenu {
 								colorButtons[y][x].setBorder(null);
 								colorButtons[y][x].setIcon(new ImageIcon(icon.getScaledInstance(
 										colorButtons[y][x].getWidth(),
-														colorButtons[y][x].getHeight(), Image.SCALE_FAST)));
+										colorButtons[y][x].getHeight(), Image.SCALE_FAST)));
 							}
 						}
 					}

@@ -29,6 +29,7 @@ public class DayButtons{
 		return buttonArray.size()-1;
 	}
 	public void setDay(int day){
+		buttonArray.get(1).getDay().doClick();
 		if(buttonArray.size()-1 < day){
 			for(int x = 0; x < day+1; x++){
 				while(timer.isRunning()){} //This will delay the method until timer has ran out
@@ -72,7 +73,6 @@ public class DayButtons{
 		}
 	}
 	public void removeADay(){
-		this.removeDays();
 		if(!timer.isRunning()){
 			if(buttonArray.size() > 2){
 				if(JOptionPane.showConfirmDialog(Main.mainPanel, "Do you want to remove a day?",
@@ -97,7 +97,6 @@ public class DayButtons{
 			Main.mainPanel.remove(buttonArray.get(buttonArray.size()-1).getDay());
 			Main.mainPanel.remove(buttonArray.get(buttonArray.size()-1).getNight());
 			buttonArray.remove(buttonArray.size()-1);
-			Main.initLayout();
 			Main.mainPanel.revalidate();
 			Main.frame.repaint();
 		}

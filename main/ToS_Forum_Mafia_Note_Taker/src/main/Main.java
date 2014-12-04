@@ -43,7 +43,7 @@ public class Main extends JFrame{
 	 * First line: Version<br />
 	 * Optional Second Line: Hotfix letter
 	 */
-	public static final String progVers = "1.5\n";
+	public static final String progVers = "1.5\nA";
 	
 	private static int Width;
 	private static int Height;
@@ -75,7 +75,7 @@ public class Main extends JFrame{
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
-	public static final String title = "Forum Mafia Note Taker V1.5";
+	public static final String title = "Forum Mafia Note Taker V1.5A";
 	
 	public Main(String s){
 		super(s);
@@ -167,7 +167,7 @@ public class Main extends JFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		playerNumbers.setEditable(false);
 		playerNumbers.setContentType("text/html");
-		playerNumbers.setText("<font face=\"arial\">1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />18<br />19<br />20<br /></font>");
+		playerNumbers.setText("<font face=\"arial\">1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />18<br />19<br />20</font>");
 		roleList.setEditable(false);
 		roleList.addHyperlinkListener(HPL);
 		playerArea.setEditable(false);
