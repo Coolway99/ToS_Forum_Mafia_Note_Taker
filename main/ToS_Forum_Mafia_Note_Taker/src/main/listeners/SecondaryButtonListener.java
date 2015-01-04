@@ -22,10 +22,10 @@ import main.Main;
 import main.UpdateHandler;
 
 public class SecondaryButtonListener implements ActionListener{
-	private JFrame whisperFrame;
-	public JTextArea whisperArea;
-	private JFrame genNoteFrame;
-	public JTextArea genNoteArea;
+	private final JFrame whisperFrame;
+	public final JTextArea whisperArea;
+	private final JFrame genNoteFrame;
+	public final JTextArea genNoteArea;
 	@SuppressWarnings("static-access")
 	public SecondaryButtonListener() {
 		super();

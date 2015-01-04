@@ -62,12 +62,12 @@ public class Main extends JFrame{
 	public static final JTextField playersLabel = new JTextField();
 	public static final JTextField graveyardLabel = new JTextField();
 	public static final JTextField roleListLabel = new JTextField();
-	public static JTextPane playerNumbers = new JTextPane();
-	public static MainTextPane playerArea = new MainTextPane();
-	public static MainTextPane roleList = new MainTextPane();
-	public static MainTextPane notes = new MainTextPane();
-	public static JScrollPane notesPane = new JScrollPane(notes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-	public static DayButtons dayButtons = new DayButtons();
+	public static final JTextPane playerNumbers = new JTextPane();
+	public static final MainTextPane playerArea = new MainTextPane();
+	public static final MainTextPane roleList = new MainTextPane();
+	public static final MainTextPane notes = new MainTextPane();
+	public static final JScrollPane notesPane = new JScrollPane(notes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	public static final DayButtons dayButtons = new DayButtons();
 	private static GridBagLayout layout;
 	private static GridBagConstraints c;
 	public static final SaveLoadButtonListener listener = new SaveLoadButtonListener();
@@ -75,17 +75,16 @@ public class Main extends JFrame{
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
 	public static boolean fileSelected = false;
-	public static final String title = "Forum Mafia Note Taker V1.5A";
+	public static final String title = "Forum Mafia Note Taker V1.5B";
 	
 	public Main(String s){
 		super(s);
 	}
 	
 	public static void main(String[] Args){
-		System.out.println(Main.class.getClassLoader().getResource("assets/images/dayButton.png"));
 		
 		if(Args.length > 0){
-			System.out.println("Has Args:");
+			System.out.print("Has Args: ");
 			for(int x = 0; x < Args.length; x++){
 				System.out.println(Args[x]);
 			}
@@ -167,7 +166,9 @@ public class Main extends JFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		playerNumbers.setEditable(false);
 		playerNumbers.setContentType("text/html");
-		playerNumbers.setText("<font face=\"arial\">1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />15<br />16<br />17<br />18<br />19<br />20</font>");
+		playerNumbers.setText("<font face=\"arial\">1<br />2<br />3<br />"
+				+ "4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />"
+				+ "15<br />16<br />17<br />18<br />19<br />20</font>");
 		roleList.setEditable(false);
 		roleList.addHyperlinkListener(HPL);
 		playerArea.setEditable(false);
