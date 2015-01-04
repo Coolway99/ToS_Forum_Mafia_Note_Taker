@@ -43,7 +43,7 @@ public class Main extends JFrame{
 	 * First line: Version<br />
 	 * Optional Second Line: Hotfix letter
 	 */
-	public static final String progVers = "1.5\nA";
+	public static final String progVers = "1.5\nB";
 	
 	private static int Width;
 	private static int Height;
