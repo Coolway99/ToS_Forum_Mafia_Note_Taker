@@ -44,7 +44,7 @@ public class MainRightClickMenu extends JPopupMenu {
 	public static JButton colorButtons[][];
 	protected static MouseEvent eBox;
 	private static GridBagLayout layout = new GridBagLayout();
-	private static JFrame colorFrame = new JFrame();
+	public static JFrame colorFrame = new JFrame();
 	private static GridBagLayout colorFrameLayout = new GridBagLayout();
 	private static GridBagConstraints c;
 	private static HashMap<Integer, HashMap<Boolean, String>> CodeList = new HashMap<>();
@@ -153,6 +153,7 @@ public class MainRightClickMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				MainRightClickMenu.editFrame.setVisible(false);
+				MainRightClickMenu.colorFrame.setVisible(false);
 				Main.frame.setEnabled(true);
 				Main.frame.requestFocus();
 			}
@@ -247,13 +248,12 @@ public class MainRightClickMenu extends JPopupMenu {
 			B = A[0];
 			for (int x = 1; x < A.length; x++) {
 				B += CodeList.get(y).get(false);
-				B +=
-						(CodeList.get(y).get(false).endsWith(">")) ? A[x] : (CodeList.get(y)
+				B += (CodeList.get(y).get(false).endsWith(">")) ? A[x] : (CodeList.get(y)
 								.get(false).equals("<a href=\"") ? A[x].replaceFirst("\\]", "\">")
 										: A[x].replaceFirst("\\]", ">"));
 			}
 		}
-		return "<font face=\"" + Main.frame.getFont().getFamily() + "\">" + B + "</font>";
+		return "<font face=\"arial\">" + B + "</font>";
 	}
 }
 class PersonalMouseListener extends MouseAdapter {
@@ -308,6 +308,7 @@ class EditButtonActionListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e){
 		MainRightClickMenu.editFrame.setVisible(false);
+		MainRightClickMenu.colorFrame.setVisible(false);
 		((MainTextPane) MainRightClickMenu.eBox.getSource()).origString =
 				MainRightClickMenu.editArea.getText();
 		((MainTextPane) MainRightClickMenu.eBox.getSource()).setText(MainRightClickMenu
