@@ -23,11 +23,11 @@ public class SavingHandler{
 	 * If it is 1.2.3.4 and Minor goes up by 1, then it becomes 1.3.0.0<br />
 	 * ect.
 	 */
-	private static String saveV = "0.0.1";
+	private static String saveV = "0.0.2";
 	/**
-	 * @see {@link assets.SavingHandler.saveV}
+	 * @see {@link #saveV}
 	 */
-	private static String patch = "3";
+	private static String patch = "0";
 	@SuppressWarnings("serial")
 	public static boolean save(File filepath){
 		try{
