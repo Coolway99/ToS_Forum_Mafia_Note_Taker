@@ -34,8 +34,8 @@ public class Main extends JFrame{
 	 */
 	public static String[] parseList  = {"\n", " ", "<", ">", "&", "\"", "'", "\t", "#", "[", "]"};
 	/**@see Main.parseList */
-	public static String[] unParseList = {"!NL!","!S!", "!lfBrkt!", "!rtBrkt!", "!ampt!",
-		"!dbQuote!", "!snQuote!", "!tab!", "!numb!", "!leftsqrt!", "!rightsqrt!"};
+	public static String[] unParseList = {"-!NL!-","-!S!-", "-!lfBrkt!-", "-!rtBrkt!-", "-!ampt!-",
+		"-!dbQuote!-", "-!snQuote!-", "-!tab!-", "-!numb!-", "-!leftsqrt!-", "-!rightsqrt!-"};
 	/**
 	 * Will check this against 
 	 * <a href="https://raw.githubusercontent.com/Coolway99/ToS_Forum_Mafia_Note_Taker/master/version.txt">
@@ -43,7 +43,7 @@ public class Main extends JFrame{
 	 * First line: Version<br />
 	 * Optional Second Line: Hotfix letter
 	 */
-	public static final String progVers = "1.5\nB";
+	public static final String progVers = "1.6";
 	
 	private static int Width;
 	private static int Height;
@@ -55,9 +55,9 @@ public class Main extends JFrame{
 	public static final JButton whisper = new JButton("Whisper");
 	public static final JButton update = new JButton("<html>&nbsp;Check<br />&nbsp;&nbsp;&nbsp;&nbsp;for<br />updates</html>");
 	public static final JButton saveAs = new JButton("<html>Save<br />&nbsp;&nbsp;&nbsp;&nbsp;As...</html>");
-	public static final JButton help = new JButton("Help");
+	public static final JButton options = new JButton("Options");
 	public static final JButton generalNotes = new JButton("<html>General<br />&nbsp;Notes</html>");
-	public static final JButton info = new JButton("Info");
+	public static final JButton info = new JButton("<html>Info\\<br />Help</html>");
 	public static final JTextField dayLabel = new JTextField();
 	public static final JTextField playersLabel = new JTextField();
 	public static final JTextField graveyardLabel = new JTextField();
@@ -74,8 +74,9 @@ public class Main extends JFrame{
 	public static final SecondaryButtonListener secondaryListener = new SecondaryButtonListener();
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
+	public static boolean numbersShown = true;
 	public static boolean fileSelected = false;
-	public static final String title = "Forum Mafia Note Taker V1.5B";
+	public static final String title = "Forum Mafia Note Taker V1.6";
 	
 	public Main(String s){
 		super(s);
@@ -131,7 +132,7 @@ public class Main extends JFrame{
 			update.addActionListener(secondaryListener);
 			info.addActionListener(secondaryListener);
 			generalNotes.addActionListener(secondaryListener);
-			help.addActionListener(secondaryListener);
+			options.addActionListener(secondaryListener);
 			fc.setFileFilter(new FileFilter() {
 				
 				@Override
@@ -220,6 +221,7 @@ public class Main extends JFrame{
 	 * to add them accordingly.
 	 */
 	public static void initLayout(){
+		mainPanel.removeAll();
 		/*Math and Layout below this line, pass at your own risk
 		----------------------------------------------------------*/
 		{
@@ -316,7 +318,7 @@ public class Main extends JFrame{
 		c.gridheight = 5;
 		c.gridx = 42;
 		c.gridy = 28;
-		mainPanel.add(help, c);
+		mainPanel.add(options, c);
 		resetConstraints();
 		c.gridwidth = 5;
 		c.gridheight = 5;
