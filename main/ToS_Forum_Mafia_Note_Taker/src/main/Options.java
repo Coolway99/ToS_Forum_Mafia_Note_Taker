@@ -103,6 +103,12 @@ public class Options extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				Main.numbersShown = !Main.numbersShown;
+				if(!Main.numbersShown){
+					optionsNumberPlayers.setText("0");
+				} else {
+					optionsNumberPlayers.setText("20");
+					optionsSetPlayerNumbers.doClick();
+				}
 				Main.initLayout();
 			}
 		});
