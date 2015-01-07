@@ -74,8 +74,10 @@ public class Main extends JFrame{
 	public static final SecondaryButtonListener secondaryListener = new SecondaryButtonListener();
 	public static int selectedDay = 1;
 	public static boolean isDay = true;
-	public static boolean numbersShown = true;
 	public static boolean fileSelected = false;
+	public static boolean numbersShown = true;
+	public static int numOfPlayers = 20;
+	public static String font = "arial";
 	public static final String title = "Forum Mafia Note Taker V1.6";
 	
 	public Main(String s){
@@ -131,8 +133,8 @@ public class Main extends JFrame{
 			whisper.addActionListener(secondaryListener);
 			update.addActionListener(secondaryListener);
 			info.addActionListener(secondaryListener);
-			generalNotes.addActionListener(secondaryListener);
 			options.addActionListener(secondaryListener);
+			generalNotes.addActionListener(secondaryListener);
 			fc.setFileFilter(new FileFilter() {
 				
 				@Override
@@ -167,7 +169,7 @@ public class Main extends JFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		playerNumbers.setEditable(false);
 		playerNumbers.setContentType("text/html");
-		playerNumbers.setText("<font face=\"arial\">1<br />2<br />3<br />"
+		playerNumbers.setText("<font face=\""+font+"\">1<br />2<br />3<br />"
 				+ "4<br />5<br />6<br />7<br />8<br />9<br />10<br />11<br />12<br />13<br />14<br />"
 				+ "15<br />16<br />17<br />18<br />19<br />20</font>");
 		roleList.setEditable(false);
@@ -216,6 +218,19 @@ public class Main extends JFrame{
 		}).run();
 	}
 	/**
+	 * Called for reparsing the notes, numbers, players, and rolelist.
+	 */
+	public static void reparseAll(){
+		playerArea.setText(MainRightClickMenu.unParse(playerArea.origString));
+		roleList.setText(MainRightClickMenu.unParse(roleList.origString));
+		notes.setText(MainRightClickMenu.unParse(notes.origString));
+		String playernum = "<font face=\""+font+"\">";
+		for(int x = 1; x <= numOfPlayers; x++){
+			playernum += x + "<br />";
+		}
+		playerNumbers.setText(playernum+"</font>");
+	}
+	/**
 	 * A function called to initialize the layout, is in it's own function to support being re-called to re-init
 	 * the layout. This is for the daybuttons, which when it is added and removed, must be recalled for the layout
 	 * to add them accordingly.
@@ -237,19 +252,28 @@ public class Main extends JFrame{
 			layout.columnWidths = columns;
 		}
 		resetConstraints();
-		c.gridx = 0;
-		c.gridy = 2;
-		c.gridwidth = 1;
-		c.gridheight = 20;
-		c.insets  = new Insets(0, 0, 0, 1);
-		mainPanel.add(playerNumbers, c);
-		resetConstraints();
-		c.gridx = 1;
-		c.gridy = 2;
-		c.gridheight = 20;
-		c.gridwidth = 17;
-		c.insets  = new Insets(0, 0, 0, 1);
-		mainPanel.add(playerArea, c);
+		if(numbersShown){
+			c.gridx = 0;
+			c.gridy = 2;
+			c.gridwidth = 1;
+			c.gridheight = 20;
+			c.insets  = new Insets(0, 0, 0, 1);
+			mainPanel.add(playerNumbers, c);
+			resetConstraints();
+			c.gridx = 1;
+			c.gridy = 2;
+			c.gridheight = 20;
+			c.gridwidth = 17;
+			c.insets  = new Insets(0, 0, 0, 1);
+			mainPanel.add(playerArea, c);
+		} else {
+			c.gridx = 0;
+			c.gridy = 2;
+			c.gridheight = 20;
+			c.gridwidth = 18;
+			c.insets  = new Insets(0, 0, 0, 1);
+			mainPanel.add(playerArea, c);
+		}
 		resetConstraints();
 		c.gridx = 0;
 		c.gridy = 0;

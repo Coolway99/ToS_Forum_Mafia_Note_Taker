@@ -247,7 +247,7 @@ public class MainRightClickMenu extends JPopupMenu {
 								: A[x].replaceFirst("\\]", ">"));
 			}
 		}
-		return "<font face=\"arial\">" + B + "</font>";
+		return "<font face=\""+Main.font+"\">" + B + "</font>";
 	}
 }
 class PersonalMouseListener extends MouseAdapter {
