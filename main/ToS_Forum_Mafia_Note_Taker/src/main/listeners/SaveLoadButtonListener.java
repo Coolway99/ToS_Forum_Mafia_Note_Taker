@@ -26,7 +26,7 @@ public class SaveLoadButtonListener implements ActionListener {
 			if(!(e.getSource() == Main.save && Main.fileSelected)) {value = Main.fc.showSaveDialog(Main.fc);}else{value = Main.fc.APPROVE_OPTION;}
 			if(value == Main.fc.APPROVE_OPTION){
 				File file = Main.fc.getSelectedFile();
-				if(!file.getName().endsWith(".FMNT")){
+				if(!file.getName().toUpperCase().endsWith(".FMNT")){
 					file = new File(file.toString()+".FMNT");
 				}
 				SavingHandler.save(file);
