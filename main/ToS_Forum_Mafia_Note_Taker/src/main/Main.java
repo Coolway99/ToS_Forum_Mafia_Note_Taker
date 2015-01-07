@@ -367,24 +367,6 @@ public class Main extends JFrame{
 		c.fill = c.BOTH;
 	}
 	/**
-	 * Called whenever the program has problems writing to a file.<br />
-	 * TODO Why does the main class handle saving errors, it should be in the save functions.
-	 * @param error The error returned.
-	 */
-	public static void writeError(String error){
-		JOptionPane.showMessageDialog(frame, "There was an error writing to the file!\nError:"+error, "Write Error", JOptionPane.ERROR_MESSAGE);
-	}
-	/**
-	 * Called when the file already exsists, and a confirmation to overwrite it.<br />
-	 * TODO Why does the mainfile handle this, TO THE SAVE HANDLER WITH YE
-	 * @param filename The file name to overwrite
-	 * @return If the user clicked OK or not.
-	 */
-	public static boolean notifyOverwrite(String filename){
-		int value = JOptionPane.showConfirmDialog(frame, "There is already a file here, do you wish to overwrite?\nFilename:"+filename, "Overwrite?", JOptionPane.YES_NO_OPTION);
-		return (value == JOptionPane.OK_OPTION);
-	}
-	/**
 	 * Prompts the program to save whatever is in the notes pane to the day/night, this is not automatic
 	 */
 	public static void saveNoteString(){

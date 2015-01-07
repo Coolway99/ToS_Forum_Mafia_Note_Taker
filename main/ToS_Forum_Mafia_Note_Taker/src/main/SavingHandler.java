@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import org.omg.CORBA.UserException;
 
 public class SavingHandler{
@@ -32,14 +34,14 @@ public class SavingHandler{
 	public static boolean save(File filepath){
 		try{
 			if(filepath.exists()){
-				if(!Main.notifyOverwrite(filepath.getName())){
+				if(!notifyOverwrite(filepath.getName())){
 					throw new UserException("User canceled overwrite"){};
 					}
 				filepath.renameTo(new File(filepath.toString() + "_OLD"));
 				filepath.createNewFile();
 				} else {filepath.createNewFile();}
 			
-			if(!filepath.canWrite()){Main.writeError("No write permissions"); throw new UserException("Unable to write"){};}
+			if(!filepath.canWrite()){writeError("No write permissions"); throw new UserException("Unable to write"){};}
 			FileWriter output = new FileWriter(filepath);
 			Main.saveNoteString();
 			output.write("<?xml version=\""+"1.0"+"\" "+"encoding=\""+output.getEncoding()+"\"?>");
@@ -81,7 +83,7 @@ public class SavingHandler{
 			if(new File(filepath.toString() + "_OLD").exists()){new File(filepath.toString() + "_OLD").delete();}
 			return true;
 		} catch (IOException e){
-			Main.writeError("IOException");
+			writeError("IOException");
 			if(filepath.exists()){filepath.delete();}
 			new File(filepath.toString() + "_OLD").renameTo(filepath);
 			return false;
@@ -89,6 +91,24 @@ public class SavingHandler{
 			System.out.println(e.getMessage());
 			return false;
 		}
+	}
+	/**
+	 * Called whenever the program has problems writing to a file.<br />
+	 * @param error The error returned.
+	 */
+	private static void writeError(String error){
+		JOptionPane.showMessageDialog(Main.frame, "There was an error writing to the file!\nError:"+error,
+				"Write Error", JOptionPane.ERROR_MESSAGE);
+	}
+	/**
+	 * Called when the file already exsists, and a confirmation to overwrite it.<br />
+	 * @param filename The file name to overwrite
+	 * @return If the user clicked OK or not.
+	 */
+	private static boolean notifyOverwrite(String filename){
+		int value = JOptionPane.showConfirmDialog(Main.frame, "There is already a file here,"
+				+ " do you wish to overwrite?\nFilename:"+filename, "Overwrite?", JOptionPane.YES_NO_OPTION);
+		return (value == JOptionPane.OK_OPTION);
 	}
 	public static String parse(String in){
 		String B = in;
