@@ -14,9 +14,9 @@ import javax.swing.JTextField;
 public class Options extends JFrame {
 	private static final long serialVersionUID = 6276186283926336030L;
 	
-	private final JTextField optionsFont = new JTextField("arial");
+	public final JTextField optionsFont = new JTextField("arial");
 	private final JButton optionsFontSelect = new JButton("Set Font");
-	private final JTextField optionsNumberPlayers = new JTextField("20");
+	public final JTextField optionsNumberPlayers = new JTextField("20");
 	private final JButton optionsSetPlayerNumbers = new JButton("Set # of Players");
 	private final JButton optionsNumberToggle = new JButton("Toggle Player Numbers");
 	private final JButton optionsDefault = new JButton("Reset to Default");
