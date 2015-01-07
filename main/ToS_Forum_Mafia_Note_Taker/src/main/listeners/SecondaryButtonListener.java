@@ -29,7 +29,7 @@ public class SecondaryButtonListener implements ActionListener{
 	private final JFrame genNoteFrame = new JFrame("General Notes");
 	public final JTextArea genNoteArea = new JTextArea();
 	
-	private final Options optionFrame = new Options();
+	public final Options optionFrame = new Options();
 	
 	public SecondaryButtonListener() {
 		super();
