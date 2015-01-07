@@ -117,4 +117,23 @@ public class Options extends JFrame {
 			}
 		});
 	}
+	public void setFont(String font){
+		this.optionsFont.setText(font);
+		this.optionsFontSelect.doClick();
+	}
+	public void setPlayers(String num){
+		if(!num.equals("0")){
+			this.optionsNumberPlayers.setText(num);
+			this.optionsSetPlayerNumbers.doClick();
+			if(!Main.numbersShown){
+				Main.numbersShown = true;
+				Main.initLayout();
+			}
+		} else {
+			if(Main.numbersShown){
+				Main.numbersShown = false;
+				Main.initLayout();
+			}
+		}
+	}
 }
