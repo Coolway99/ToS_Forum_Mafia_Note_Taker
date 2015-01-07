@@ -19,6 +19,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import main.Main;
+import main.Options;
 import main.UpdateHandler;
 
 public class SecondaryButtonListener implements ActionListener{
@@ -27,6 +28,8 @@ public class SecondaryButtonListener implements ActionListener{
 	
 	private final JFrame genNoteFrame = new JFrame("General Notes");
 	public final JTextArea genNoteArea = new JTextArea();
+	
+	private final Options optionFrame = new Options();
 	
 	public SecondaryButtonListener() {
 		super();
@@ -124,6 +127,9 @@ public class SecondaryButtonListener implements ActionListener{
 			ep.setBackground(label.getBackground());
 			JOptionPane.showMessageDialog(Main.frame, ep, "Help / Contact Info",
 					JOptionPane.INFORMATION_MESSAGE);
+		} else if(e.getSource() == Main.options){
+			optionFrame.setLocationRelativeTo(null);
+			optionFrame.setVisible(true);
 		}
 	}
 }
