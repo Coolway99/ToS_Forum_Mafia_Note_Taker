@@ -55,6 +55,12 @@ public class SavingHandler{
 					output.write("<generalNotes>");
 						output.write(parse(Main.secondaryListener.genNoteArea.getText()));
 					output.write("</generalNotes>");
+					output.write("<font>");
+						output.write(parse(Main.secondaryListener.optionFrame.optionsFont.getText()));
+					output.write("</font>");
+					output.write("<playerNum>");
+						output.write(parse(Main.secondaryListener.optionFrame.optionsNumberPlayers.getText()));
+					output.write("</playerNum>");
 				output.write("</data>");
 				for(int x = 1; x <= Main.dayButtons.getDay(); x++){
 					output.write("<number day=\""+Integer.toString(x)+"\" >");
