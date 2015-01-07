@@ -18,8 +18,8 @@ public class LoadingHandler implements ContentHandler{
 	private boolean usePlayers;
 	@Override
 	public void startDocument() throws SAXException {
-		String theTagList[] = {"beginSave", "data", "totalDays", "players", "whispers", "graveyard"
-				, "roles", "generalNotes", "number", "day", "notes", "night"};
+		String theTagList[] = {"beginSave", "data", "totalDays", "players", "whispers", "graveyard",
+				"roles", "generalNotes", "number", "day", "notes", "night", "font", "playerNum"};
 		for(int x = 0; x < theTagList.length; x++){
 			tags.put(theTagList[x], false);
 		}
@@ -72,6 +72,10 @@ public class LoadingHandler implements ContentHandler{
 				Main.playerArea.setText(MainRightClickMenu.unParse(unParse(string)));
 				Main.playerArea.origString = unParse(string);
 			}
+		} else if(tags.get("font")){
+			Main.secondaryListener.optionFrame.setFont(string);
+		} else if(tags.get("playerNum")){
+			Main.secondaryListener.optionFrame.setPlayers(string);
 		} else if(tags.get("roles")){
 			Main.roleList.setText(MainRightClickMenu.unParse(unParse(string)));
 			Main.roleList.origString = unParse(string);
@@ -118,33 +122,20 @@ public class LoadingHandler implements ContentHandler{
 		Main.frame.setTitle(Main.title + " - " + Main.fc.getSelectedFile().getName().split(".FMNT")[0]);
 		Main.fileSelected = true;
 	}
+	
 	@Override
-	public void endPrefixMapping(String prefix) throws SAXException {
-		// TODO Auto-generated method stub
-	}
+	public void endPrefixMapping(String prefix) throws SAXException {}
 	@Override
-	public void ignorableWhitespace(char[] ch, int start, int length)
-			throws SAXException {
-		// TODO Auto-generated method stub
-	}
+	public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {}
 	@Override
-	public void processingInstruction(String target, String data)
-			throws SAXException {
-		// TODO Auto-generated method stub
-	}
+	public void processingInstruction(String target, String data) throws SAXException {}
 	@Override
-	public void setDocumentLocator(Locator locator) {
-		// TODO Auto-generated method stub
-	}
+	public void setDocumentLocator(Locator locator) {}
 	@Override
-	public void skippedEntity(String name) throws SAXException {
-		// TODO Auto-generated method stub
-	}
+	public void skippedEntity(String name) throws SAXException {}
 	@Override
-	public void startPrefixMapping(String prefix, String uri)
-			throws SAXException {
-		// TODO Auto-generated method stub
-	}
+	public void startPrefixMapping(String prefix, String uri) throws SAXException {}
+	
 	private String unParse(String in){
 		String B = in;
 		for(int y = 0; y < Main.parseList.length; y++){
