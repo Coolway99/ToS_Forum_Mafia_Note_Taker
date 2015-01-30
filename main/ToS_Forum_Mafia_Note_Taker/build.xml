@@ -4,7 +4,7 @@
 
 <taskdef name="bundleapp"
          classname="com.oracle.appbundler.AppBundlerTask"
-         classpath="libs/appbundler-1.0.jar" />
+         classpath="lib/appbundler-1.0.jar" />
 
 <target name="bundle-FMNT">
     <bundleapp outputdirectory="dist"
@@ -12,7 +12,7 @@
         displayname="FMNT"
         identifier="main.Main"
         mainclassname="main.Main">
-        <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_67.jdk/Contents/Home" />
+        <runtime dir="${env.JAVA_HOME}" />
         <classpath file="dist/ButtonDemo.jar" />
     </bundleapp>
 </target>
