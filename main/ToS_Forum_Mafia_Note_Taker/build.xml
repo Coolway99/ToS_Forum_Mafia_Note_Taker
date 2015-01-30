@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="FMNT" default="default" basedir=".">
+<property environment="env" />
+
+<taskdef name="bundleapp"
+         classname="com.oracle.appbundler.AppBundlerTask"
+         classpath="libs/appbundler-1.0.jar" />
+
+<target name="bundle-FMNT">
+    <bundleapp outputdirectory="dist"
+        name="FMNT"
+        displayname="FMNT"
+        identifier="main.Main"
+        mainclassname="main.Main">
+        <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_67.jdk/Contents/Home" />
+        <classpath file="dist/ButtonDemo.jar" />
+    </bundleapp>
+</target>
+
+</project>
