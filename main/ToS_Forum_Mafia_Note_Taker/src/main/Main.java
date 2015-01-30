@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -45,8 +46,8 @@ public class Main extends JFrame{
 	 */
 	public static final String progVers = "1.6";
 	
-	private static int Width;
-	private static int Height;
+	private static final int Width = 960;
+	private static final int Height = 580;
 	public static final JFileChooser fc = new JFileChooser();
 	public static JPanel mainPanel;
 	public static JFrame frame;
@@ -68,8 +69,10 @@ public class Main extends JFrame{
 	public static final MainTextPane notes = new MainTextPane();
 	public static final JScrollPane notesPane = new JScrollPane(notes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	public static final DayButtons dayButtons = new DayButtons();
-	private static GridBagLayout layout;
+	private static final GridBagLayout layout = new GridBagLayout();
 	private static GridBagConstraints c;
+	private static final GridBagLayout jointAreaLayout = new GridBagLayout();
+	private static final JPanel playerJointArea = new JPanel(jointAreaLayout);
 	public static final SaveLoadButtonListener listener = new SaveLoadButtonListener();
 	public static final SecondaryButtonListener secondaryListener = new SecondaryButtonListener();
 	public static int selectedDay = 1;
@@ -115,17 +118,7 @@ public class Main extends JFrame{
 				}
 			}
 		});
-		int screenWidth;
-		int screenHeight;
-		{
-			Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-			screenWidth = screen.width;
-			screenHeight = screen.height;
-		}
-		Width = screenWidth;
-		Height = screenHeight;
-		mainPanel = new MainPanel(Width, Height);
-		layout = new GridBagLayout();
+		mainPanel = new MainPanel(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		{
 			save.addActionListener(listener);
 			saveAs.addActionListener(listener);
@@ -181,6 +174,7 @@ public class Main extends JFrame{
 		playerArea.addMouseListener(MainRightClickMenu.mouse);
 		notes.addMouseListener(MainRightClickMenu.mouse);
 		mainPanel.setLayout(layout);
+		playerJointArea.setBackground(new Color(0x333333));
 		
 		initLayout();
 		
@@ -198,14 +192,14 @@ public class Main extends JFrame{
 		dayLabel.setEditable(false);
 		dayLabel.setHorizontalAlignment(JTextField.CENTER);
 		frame.setAlwaysOnTop(false); //Here for testing purposes only
-		frame.setSize((screenWidth/2)+20, (screenHeight/2)+20);
+		frame.setSize(Width, Height);
 		frame.setEnabled(true);
 		UpdateHandler.check(progVers, true);
 		if(Args.length == 1){
 			fc.setSelectedFile(new File(Args[0]));
 			listener.load(new File(Args[0]));
 		}
-		(new Runnable(){
+		(new Thread(){
 			@Override
 			public void run() {
 				try {
@@ -215,7 +209,7 @@ public class Main extends JFrame{
 				}
 				Main.dayButtons.initIcons();
 			}
-		}).run();
+		}).start();
 	}
 	/**
 	 * Called for reparsing the notes, numbers, players, and rolelist.
@@ -237,43 +231,60 @@ public class Main extends JFrame{
 	 */
 	public static void initLayout(){
 		mainPanel.removeAll();
+		playerJointArea.removeAll();
 		/*Math and Layout below this line, pass at your own risk
 		----------------------------------------------------------*/
 		{
-			int rows[] = new int[34];
+			int[] rows = new int[34];
 			for(int x = 0; x < rows.length; x++){
-				rows[x] = (Height/rows.length)/2;
+				rows[x] = (Height/rows.length);
 			}
-			int columns[] = new int[60];
+			int[] columns = new int[60];
 			for(int x = 0; x < columns.length; x++){
-				columns[x] = (Width/columns.length)/2;
+				columns[x] = (Width/columns.length);
 			}
 			layout.rowHeights = rows;
 			layout.columnWidths = columns;
+			
+			int y = columns[0];
+			rows = new int[]{rows[0]};
+			columns = new int[16];
+			for(int x = 0; x < columns.length; x++){
+				columns[x] = y;
+			}
+			jointAreaLayout.rowHeights = rows;
+			jointAreaLayout.columnWidths = columns;
 		}
 		resetConstraints();
 		if(numbersShown){
 			c.gridx = 0;
-			c.gridy = 2;
+			c.gridy = 0;
 			c.gridwidth = 1;
-			c.gridheight = 20;
+			c.gridheight = 1;
 			c.insets  = new Insets(0, 0, 0, 1);
-			mainPanel.add(playerNumbers, c);
+			playerJointArea.add(playerNumbers, c);
 			resetConstraints();
 			c.gridx = 1;
-			c.gridy = 2;
-			c.gridheight = 20;
-			c.gridwidth = 17;
-			c.insets  = new Insets(0, 0, 0, 1);
-			mainPanel.add(playerArea, c);
+			c.gridy = 0;
+			c.gridheight = 1;
+			c.gridwidth = 15;
+			playerJointArea.add(playerArea, c);
 		} else {
 			c.gridx = 0;
-			c.gridy = 2;
-			c.gridheight = 20;
-			c.gridwidth = 18;
+			c.gridy = 0;
+			c.gridheight = 1;
+			c.gridwidth = 16;
 			c.insets  = new Insets(0, 0, 0, 1);
-			mainPanel.add(playerArea, c);
+			playerJointArea.add(playerArea, c);
 		}
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridheight = 20;
+		c.gridwidth = 18;
+		c.insets  = new Insets(0, 0, 0, 1);
+		mainPanel.add(new JScrollPane(playerJointArea,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
 		resetConstraints();
 		c.gridx = 0;
 		c.gridy = 0;

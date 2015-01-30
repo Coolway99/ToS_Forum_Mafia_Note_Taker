@@ -40,7 +40,9 @@ public class SaveLoadButtonListener implements ActionListener {
 					XMLReader xr = XMLReaderFactory.createXMLReader();
 					LoadingHandler handler = new LoadingHandler();
 					xr.setContentHandler(handler);
-					xr.parse(new InputSource(new FileReader(Main.fc.getSelectedFile())));
+					FileReader f = new FileReader(Main.fc.getSelectedFile());
+					xr.parse(new InputSource(f));
+					f.close();
 				} catch (SAXException | IOException e1) {
 					e1.printStackTrace();
 				}
@@ -52,7 +54,9 @@ public class SaveLoadButtonListener implements ActionListener {
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			LoadingHandler handler = new LoadingHandler();
 			xr.setContentHandler(handler);
-			xr.parse(new InputSource(new FileReader(filepath)));
+			FileReader f = new FileReader(filepath);
+			xr.parse(new InputSource(f));
+			f.close();
 		} catch (FileNotFoundException e1) {
 			System.out.println("ERROR: "+e1.getMessage());
 			JOptionPane.showMessageDialog(Main.frame, "ERROR: Could not find the path specified", "ERROR", JOptionPane.ERROR_MESSAGE);
