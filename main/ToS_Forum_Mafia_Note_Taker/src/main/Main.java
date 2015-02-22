@@ -2,16 +2,15 @@ package main;
 
 import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -98,8 +97,25 @@ public class Main extends JFrame{
 			System.out.println("No Args");
 		}
 		frame = new Main(title + " - new");
+		try{
+		frame.setIconImage(ImageIO.read(Main.class.getClassLoader().getResource("assets/images/logo.png")));
+		} catch(IOException e){
+			System.out.println("Error loading icon");
+			System.out.println(e.getMessage());
+		}
 		frame.setVisible(true);
 		frame.setEnabled(false);
+		/*try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+		} catch (ClassNotFoundException e2) {
+			e2.printStackTrace();
+		} catch (InstantiationException e2) {
+			e2.printStackTrace();
+		} catch (IllegalAccessException e2) {
+			e2.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e2) {
+			e2.printStackTrace();
+		}*/
 		playerArea.setContentType("text/html");
 		playerArea.fieldName = "Player \\ Graveyard";
 		roleList.setContentType("text/html");
