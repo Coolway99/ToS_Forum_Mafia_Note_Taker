@@ -86,12 +86,17 @@ public class Main extends JFrame{
 		super(s);
 	}
 	
-	public static void main(String[] Args){
-		
-		if(Args.length > 0){
+	public static void main(String[] args){
+		if(args.length > 0){
 			System.out.print("Has Args: ");
-			for(int x = 0; x < Args.length; x++){
-				System.out.println(Args[x]);
+			for(int x = 0; x < args.length; x++){
+				System.out.println(args[x]);
+			}
+			if(args.length > 1){
+				if(args[1].equals("--test")){
+					test(args);
+					return;
+				}
 			}
 		} else {
 			System.out.println("No Args");
@@ -211,9 +216,9 @@ public class Main extends JFrame{
 		frame.setSize(Width, Height);
 		frame.setEnabled(true);
 		UpdateHandler.check(progVers, true);
-		if(Args.length == 1){
-			fc.setSelectedFile(new File(Args[0]));
-			listener.load(new File(Args[0]));
+		if(args.length == 1){
+			fc.setSelectedFile(new File(args[0]));
+			listener.load(new File(args[0]));
 		}
 		(new Thread(){
 			@Override
@@ -435,5 +440,12 @@ public class Main extends JFrame{
 		} else {
 			super.processWindowEvent(e);
 		}
+	}
+	
+	/**
+	 * This command is ran only if --test is true, used for ant testing (hopefully)
+	 */
+	private static void test(String args[]){
+		System.out.println("Build successful?");
 	}
 }
