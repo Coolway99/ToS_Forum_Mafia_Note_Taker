@@ -1,2 +1,2 @@
 language: java
-install: make travis
+install: echo $JAVA_HOME;make travis
