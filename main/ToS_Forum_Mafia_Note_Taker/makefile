@@ -6,7 +6,7 @@ build:
 run:
 	java -cp bin main.Main "$(file)"
 build-app:
-	$(shell echo $JAVA_HOME)
+	$(shell echo \$JAVA_HOME)
 	mkdir -p lib
 	wget https://java.net/projects/appbundler/downloads/download/appbundler-1.0.jar
 	mv appbundler-1.0.jar lib
