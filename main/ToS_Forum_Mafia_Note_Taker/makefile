@@ -10,6 +10,6 @@ build-app:
 	wget https://java.net/projects/appbundler/downloads/download/appbundler-1.0.jar
 	mv appbundler-1.0.jar lib
 	mkdir -p dist
-	ant bundle-FMNT
+	JAVA_HOME=/usr/lib/foo ant bundle-FMNT
 	rm Info.plist
 	rm -R lib
