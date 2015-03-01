@@ -13,9 +13,10 @@
     </description>
 	<property name="name" value="Forum_Mafia_Note_Taker"/>
 	
-	<property name="src" location="src"/>
-	<property name="build" location="build"/>
-	<property name="dist"  location="dist"/>
+	<property name="cd" location="main/ToS_Forum_Mafia_Note_Taker"/>
+	<property name="src" location="${cd}/src"/>
+	<property name="build" location="${cd}/build"/>
+	<property name="dist"  location="${cd}/dist"/>
 	
 	
 	<target name="init">
@@ -42,6 +43,7 @@
 	</path>
 	
 	<target name="test" depends="build">
+		<echo>Cleaning</echo>
 		<antcall target="clean"/>
 		<echo>Testing file now</echo>
 		<java classname="main.Main">
