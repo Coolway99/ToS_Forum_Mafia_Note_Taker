@@ -311,5 +311,17 @@ class EditButtonActionListener implements ActionListener {
 				.unParse(MainRightClickMenu.editArea.getText()));
 		Main.frame.setEnabled(true);
 		Main.frame.requestFocus();
+		//This is used to allow the frame to "update" it's content before the layout updates
+		(new Thread(){
+			@Override
+			public void run(){
+				try{
+					Thread.sleep(1);
+				} catch(InterruptedException e){
+					//Doesn't really matter anyways
+				}
+				Main.initLayout();
+			};
+		}).start();
 	}
 }

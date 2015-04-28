@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.filechooser.FileFilter;
@@ -66,7 +68,8 @@ public class Main extends JFrame{
 	public static final MainTextPane playerArea = new MainTextPane();
 	public static final MainTextPane roleList = new MainTextPane();
 	public static final MainTextPane notes = new MainTextPane();
-	public static final JScrollPane notesPane = new JScrollPane(notes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	public static final JScrollPane notesPane = new JScrollPane(notes, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	public static final JScrollPane roleScrollPane = new JScrollPane(roleList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	public static final DayButtons dayButtons = new DayButtons();
 	private static final GridBagLayout layout = new GridBagLayout();
 	private static GridBagConstraints c;
@@ -140,31 +143,31 @@ public class Main extends JFrame{
 			}
 		});
 		mainPanel = new MainPanel(Integer.MAX_VALUE, Integer.MAX_VALUE);
-		{
-			save.addActionListener(listener);
-			saveAs.addActionListener(listener);
-			load.addActionListener(listener);
-			whisper.addActionListener(secondaryListener);
-			update.addActionListener(secondaryListener);
-			info.addActionListener(secondaryListener);
-			options.addActionListener(secondaryListener);
-			generalNotes.addActionListener(secondaryListener);
-			fc.setFileFilter(new FileFilter() {
-				
-				@Override
-				public String getDescription() {
-					return "FMNT Files";
+		
+		save.addActionListener(listener);
+		saveAs.addActionListener(listener);
+		load.addActionListener(listener);
+		whisper.addActionListener(secondaryListener);
+		update.addActionListener(secondaryListener);
+		info.addActionListener(secondaryListener);
+		options.addActionListener(secondaryListener);
+		generalNotes.addActionListener(secondaryListener);
+		fc.setFileFilter(new FileFilter() {
+			
+			@Override
+			public String getDescription() {
+				return "FMNT Files";
+			}
+			
+			@Override
+			public boolean accept(File f) {
+				if(f.getName().toUpperCase().endsWith(".FMNT") || f.isDirectory()){
+					return true;
 				}
-				
-				@Override
-				public boolean accept(File f) {
-					if(f.getName().toUpperCase().endsWith(".FMNT") || f.isDirectory()){
-						return true;
-					}
-					return false;
-				}
-			});
-		}
+				return false;
+			}
+		});
+		
 		HyperlinkListener HPL = new HyperlinkListener() {
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent e) {
@@ -202,16 +205,16 @@ public class Main extends JFrame{
 		frame.add(mainPanel);
 		playersLabel.setText("Players");
 		playersLabel.setEditable(false);
-		playersLabel.setHorizontalAlignment(JTextField.CENTER);
+		playersLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		roleListLabel.setText("Role List");
 		roleListLabel.setEditable(false);
-		roleListLabel.setHorizontalAlignment(JTextField.CENTER);
+		roleListLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		graveyardLabel.setText("Players \\ Graveyard");
 		graveyardLabel.setEditable(false);
-		graveyardLabel.setHorizontalAlignment(JTextField.CENTER);
+		graveyardLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		dayLabel.setText("Day 1");
 		dayLabel.setEditable(false);
-		dayLabel.setHorizontalAlignment(JTextField.CENTER);
+		dayLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		frame.setAlwaysOnTop(false); //Here for testing purposes only
 		frame.setSize(Width, Height);
 		frame.setEnabled(true);
@@ -304,8 +307,8 @@ public class Main extends JFrame{
 		c.gridwidth = 18;
 		c.insets  = new Insets(0, 0, 0, 1);
 		mainPanel.add(new JScrollPane(playerJointArea,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
 		resetConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -316,11 +319,11 @@ public class Main extends JFrame{
 		resetConstraints();
 		dayButtons.setLocation(c, 0, 22, 20, 12, 20, 22, 7, 12);
 		resetConstraints();
-		c.gridwidth = 9;
+		c.gridwidth = ((roleScrollPane.getVerticalScrollBar().isVisible()) ? 10 : 9);
 		c.gridheight = 20;
 		c.gridy = 2;
 		c.gridx = 18;
-		mainPanel.add(roleList, c);
+		mainPanel.add(roleScrollPane, c);
 		resetConstraints();
 		c.gridheight = 2;
 		c.gridwidth = 9;
@@ -445,6 +448,7 @@ public class Main extends JFrame{
 	/**
 	 * This command is ran only if --test is true, used for ant testing (hopefully)
 	 */
+	@SuppressWarnings("unused")
 	private static void test(String args[]){
 		System.out.println("Build successful?");
 	}
