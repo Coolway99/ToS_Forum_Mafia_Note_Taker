@@ -33,13 +33,13 @@ public class SecondaryButtonListener implements ActionListener{
 	
 	public SecondaryButtonListener() {
 		super();
-		whisperArea.setLineWrap(true);
-		whisperFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		whisperFrame.setSize(400, 400);
+		this.whisperArea.setLineWrap(true);
+		this.whisperFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		this.whisperFrame.setSize(400, 400);
 		
-		genNoteArea.setLineWrap(true);
-		genNoteFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		genNoteFrame.setSize(400, 400);
+		this.genNoteArea.setLineWrap(true);
+		this.genNoteFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		this.genNoteFrame.setSize(400, 400);
 		
 		GridBagLayout layout = new GridBagLayout();
 		int rows[] = new int[5];
@@ -52,25 +52,25 @@ public class SecondaryButtonListener implements ActionListener{
 		}
 		layout.rowHeights = rows;
 		layout.columnWidths = columns;
-		whisperFrame.setLayout(layout);
+		this.whisperFrame.setLayout(layout);
 		GridBagConstraints c = resetConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridheight = 5;
 		c.gridwidth = 1;
-		whisperFrame.add(new JScrollPane(whisperArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
+		this.whisperFrame.add(new JScrollPane(this.whisperArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
 		layout = new GridBagLayout();
 		layout.rowHeights = rows;
 		layout.columnWidths = columns;
-		genNoteFrame.setLayout(layout);
+		this.genNoteFrame.setLayout(layout);
 		c = resetConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridheight = 5;
 		c.gridwidth = 1;
-		genNoteFrame.add(new JScrollPane(genNoteArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
+		this.genNoteFrame.add(new JScrollPane(this.genNoteArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
 	}
-	private GridBagConstraints resetConstraints(){
+	private static GridBagConstraints resetConstraints(){
 		GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -80,11 +80,11 @@ public class SecondaryButtonListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == Main.whisper){
-			whisperFrame.setLocationRelativeTo(null);
-			whisperFrame.setVisible(true);
+			this.whisperFrame.setLocationRelativeTo(null);
+			this.whisperFrame.setVisible(true);
 		} else if(e.getSource() == Main.generalNotes){
-			genNoteFrame.setLocationRelativeTo(null);
-			genNoteFrame.setVisible(true);
+			this.genNoteFrame.setLocationRelativeTo(null);
+			this.genNoteFrame.setVisible(true);
 		} else if(e.getSource() == Main.update){
 			UpdateHandler.check(Main.progVers, false);
 		} else if(e.getSource() == Main.info){
@@ -128,8 +128,8 @@ public class SecondaryButtonListener implements ActionListener{
 			JOptionPane.showMessageDialog(Main.frame, ep, "Help / Contact Info",
 					JOptionPane.INFORMATION_MESSAGE);
 		} else if(e.getSource() == Main.options){
-			optionFrame.setLocationRelativeTo(null);
-			optionFrame.setVisible(true);
+			this.optionFrame.setLocationRelativeTo(null);
+			this.optionFrame.setVisible(true);
 		}
 	}
 }

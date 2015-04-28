@@ -109,12 +109,12 @@ public class MainRightClickMenu extends JPopupMenu {
 				private final String b;
 				private final String a;
 				public InsertListener(String before, String after){
-					b = before;
-					a = after;
+					this.b = before;
+					this.a = after;
 				}
 				@Override
 				public void actionPerformed(ActionEvent e){
-					insertText(b, a);
+					insertText(this.b, this.a);
 				}
 			}
 			JButton b = bbcButtons[0];
@@ -163,12 +163,14 @@ public class MainRightClickMenu extends JPopupMenu {
 					ImageIO.read(Main.class.getClassLoader().getResource("assets/images/colors.png"));
 					class ButtonListener implements ActionListener {
 						private BufferedImage icon;
+						
+						@SuppressWarnings("hiding")
 						public ButtonListener(BufferedImage icon){
 							this.icon = icon;
 						}
 						@Override
 						public void actionPerformed(ActionEvent e){
-							insertText(String.format("[color=#%06X]", icon.getRGB(0, 0) - 0xFF000000),
+							insertText(String.format("[color=#%06X]", this.icon.getRGB(0, 0) - 0xFF000000),
 									"[/color]");
 						}
 					}
@@ -218,6 +220,7 @@ public class MainRightClickMenu extends JPopupMenu {
 	}
 	
 	private static GridBagConstraints resetConstraints(){
+		@SuppressWarnings("hiding")
 		GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -261,7 +264,7 @@ class PersonalMouseListener extends MouseAdapter {
 		popup(e);
 	}
 	
-	public void popup(MouseEvent e){
+	public static void popup(MouseEvent e){
 		if (e.isPopupTrigger()) {
 			if (e.isPopupTrigger()) {
 				MainRightClickMenu.pop.show(e.getComponent(), e.getX(), e.getY());
@@ -274,8 +277,7 @@ class PersonalActionListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e){
-		MenuInterface menu = (MenuInterface) e.getSource();
-		menu.doAction(e);
+		MenuInterface.doAction(e);
 	}
 }
 class MenuInterface extends JMenuItem {
@@ -285,7 +287,7 @@ class MenuInterface extends JMenuItem {
 		super(string);
 	}
 	
-	public void doAction(ActionEvent e){
+	public static void doAction(ActionEvent e){
 		if (!MainRightClickMenu.editFrame.isVisible()) {
 			MainRightClickMenu.editFrame.setTitle(((MainTextPane) MainRightClickMenu.eBox
 					.getSource()).fieldName);
