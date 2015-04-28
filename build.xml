@@ -42,20 +42,26 @@
 		<fileset dir="${dist}" includes="${name}_TEST.jar"/>
 	</path>
 	
-	<target name="test" depends="build">
-		<echo>Cleaning</echo>
-		<antcall target="clean"/>
+	<target name="test" depends="build, clean">
 		<echo>Testing file now</echo>
-		<java classname="main.Main">
-			<arg value="Test.FMNT"/>
+		<java classname="main.Main" resultproperty="java.result">
 			<arg value="--test"/>
+			<arg value="Test.FMNT"/>
 			<classpath>
 				<path refid="classpath"/>
 				<path location="${dist}/${name}_TEST.jar"/>
 			</classpath>
 		</java>
+		<fail>
+			<condition>
+				<not>
+					<equals arg1="${java.result}" arg2="0"/>
+				</not>
+			</condition>
+		</fail>
 		<move file="${dist}/${name}_TEST.jar" tofile="${dist}/${name}_snapshot-${DSTAMP}T${TSTAMP}.jar"/>
 	</target>
+	
 
 	<target name="clean">
 		<delete dir="${build}"/>

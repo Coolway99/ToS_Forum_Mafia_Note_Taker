@@ -84,19 +84,24 @@ public class Main extends JFrame{
 	public static int numOfPlayers = 20;
 	public static String font = "arial";
 	public static final String title = "Forum Mafia Note Taker V1.6";
+	/**
+	 * "Are we in a test enviroment", aka, was the program started with the --test command
+	 */
+	public static boolean test = false;
 	
 	public Main(String s){
 		super(s);
 	}
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws Exception{
 		if(args.length > 0){
 			System.out.print("Has Args: ");
 			for(int x = 0; x < args.length; x++){
 				System.out.println(args[x]);
 			}
-			if(args.length > 1){
-				if(args[1].equals("--test")){
+			if(args.length > 0){
+				if(args[0].equals("--test")){
+					test = true;
 					test(args);
 					return;
 				}
@@ -449,7 +454,24 @@ public class Main extends JFrame{
 	 * This command is ran only if --test is true, used for ant testing (hopefully)
 	 */
 	@SuppressWarnings("unused")
-	private static void test(String args[]){
-		System.out.println("Build successful?");
+	private static void test(String args[]) throws Exception{
+		//System.out.println("Build successful?");
+		dayButtons.init();
+		frame = new Main("You shouldn't see this");
+		System.out.println("Testing saving/loading");
+		String testString = "!@#$%^&*()1234567890\n\t [S]S!S#S(S)";
+		roleList.origString = testString;
+		File file = ((args.length > 2) ? new File(args[1]) : new File("Test.FMNT"));
+		fc.setSelectedFile(file);
+		SavingHandler.save(file);
+		roleList.origString = "";
+		listener.load(file);
+		if(!roleList.origString.equals(testString)){
+			System.out.println("ERROR: Saving/Loading test failed, got "
+		+roleList.origString+", expected "+testString);
+			System.exit(1);
+			return;
+		}
+		System.out.println("Saving/Loading test passed!");
 	}
 }

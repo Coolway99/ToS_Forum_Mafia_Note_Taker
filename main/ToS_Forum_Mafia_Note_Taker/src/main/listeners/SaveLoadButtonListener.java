@@ -59,10 +59,10 @@ public class SaveLoadButtonListener implements ActionListener {
 			f.close();
 		} catch (FileNotFoundException e1) {
 			System.out.println("ERROR: "+e1.getMessage());
-			JOptionPane.showMessageDialog(Main.frame, "ERROR: Could not find the path specified", "ERROR", JOptionPane.ERROR_MESSAGE);
+			if(!Main.test) JOptionPane.showMessageDialog(Main.frame, "ERROR: Could not find the path specified", "ERROR", JOptionPane.ERROR_MESSAGE);
 		} catch (SAXException | IOException e1){
 			e1.printStackTrace();
-			JOptionPane.showMessageDialog(Main.frame, "ERROR WHILE LOADING", "ERROR", JOptionPane.ERROR_MESSAGE);
+			if(!Main.test) JOptionPane.showMessageDialog(Main.frame, "ERROR WHILE LOADING", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
