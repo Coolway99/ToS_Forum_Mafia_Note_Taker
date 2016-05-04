@@ -1,18 +1,17 @@
 package main;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
@@ -25,17 +24,17 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-public class MainRightClickMenu extends JPopupMenu {
+public class MainRightClickMenu extends JPopupMenu implements ActionListener, MouseListener{
 	private static final long serialVersionUID = 2360564545515706123L;
+	
 	protected static JPopupMenu pop = new JPopupMenu();
-	private static PersonalActionListener listener = new PersonalActionListener();
-	public static PersonalMouseListener mouse = new PersonalMouseListener();
 	public static JFrame editFrame = new JFrame();
 	public static JTextArea editArea = new JTextArea();
-	public static JButton editSubmit = new JButton();
-	public static JButton editCancel = new JButton();
+	public static JButton editSubmit = new JButton("Submit");
+	public static JButton editCancel = new JButton("Cancel");
 	public static JPanel bbcPanel = new JPanel();
 	public static JButton bbcButtons[] = {new JButton("Colors"), new JButton("Size"),
 		new JButton("b"), new JButton("i"),
@@ -48,6 +47,7 @@ public class MainRightClickMenu extends JPopupMenu {
 	private static GridBagLayout colorFrameLayout = new GridBagLayout();
 	private static GridBagConstraints c;
 	private static HashMap<Integer, HashMap<Boolean, String>> CodeList = new HashMap<>();
+	public static final MainRightClickMenu self = new MainRightClickMenu();
 	
 	public static void initPopup(){
 		String[] FromList =
@@ -63,8 +63,9 @@ public class MainRightClickMenu extends JPopupMenu {
 			CodeList.get(x).put(false, ToList[x]);
 		}
 		colorFrame.setLayout(colorFrameLayout);
-		MenuInterface menuItem = new MenuInterface("Edit");
-		menuItem.addActionListener(listener);
+		JMenuItem menuItem = new JMenuItem("Edit");
+		menuItem.addActionListener(self);
+		menuItem.setName("Edit");
 		pop.add(menuItem);
 		editFrame.setSize(600, 400);
 		editArea.setLineWrap(true);
@@ -118,12 +119,8 @@ public class MainRightClickMenu extends JPopupMenu {
 				}
 			}
 			JButton b = bbcButtons[0];
-			b.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e){
-					colorFrame.setVisible(true);
-				}
-			});
+			b.addActionListener(self);
+			b.setName("Color");
 			b = bbcButtons[1];
 			b.addActionListener(new InsertListener("[size=", "[/size]"));
 			b = bbcButtons[2];
@@ -146,25 +143,16 @@ public class MainRightClickMenu extends JPopupMenu {
 		colorFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		editFrame.setLocationRelativeTo(null);
 		editFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		editSubmit.setText("Submit");
-		editCancel.setText("Cancel");
-		editSubmit.addActionListener(new EditButtonActionListener());
-		editCancel.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e){
-				MainRightClickMenu.editFrame.setVisible(false);
-				MainRightClickMenu.colorFrame.setVisible(false);
-				Main.frame.setEnabled(true);
-				Main.frame.requestFocus();
-			}
-		});
+		editSubmit.setName("Submit");
+		editSubmit.addActionListener(self);
+		editCancel.addActionListener(self);
+		editCancel.setName("Cancel");
 		try {
 			final BufferedImage colors =
 					ImageIO.read(Main.class.getClassLoader().getResource("assets/images/colors.png"));
 					class ButtonListener implements ActionListener {
 						private BufferedImage icon;
 						
-						@SuppressWarnings("hiding")
 						public ButtonListener(BufferedImage icon){
 							this.icon = icon;
 						}
@@ -199,8 +187,7 @@ public class MainRightClickMenu extends JPopupMenu {
 						}
 					}
 					colorFrame.pack();
-					Timer initIcons = new Timer("Color init icons", true);
-					initIcons.schedule(new TimerTask(){
+					SwingUtilities.invokeLater(new Runnable(){
 						@Override
 						public void run(){
 							for (int y = 0; y < colorButtons.length; y++) {
@@ -213,14 +200,13 @@ public class MainRightClickMenu extends JPopupMenu {
 								}
 							}
 						}
-					}, 1000);
+					});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	private static GridBagConstraints resetConstraints(){
-		@SuppressWarnings("hiding")
 		GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 1.0;
 		c.weighty = 1.0;
@@ -252,8 +238,48 @@ public class MainRightClickMenu extends JPopupMenu {
 		}
 		return "<font face=\""+Main.font+"\">" + B + "</font>";
 	}
-}
-class PersonalMouseListener extends MouseAdapter {
+
+	@Override
+	public void actionPerformed(ActionEvent e){
+		switch(((Component) e.getSource()).getName()){
+			case("Edit"):
+				if(!MainRightClickMenu.editFrame.isVisible()){
+					MainRightClickMenu.editFrame.setTitle(((MainTextPane) MainRightClickMenu.eBox
+							.getSource()).fieldName);
+					MainRightClickMenu.editArea
+							.setText(((MainTextPane) MainRightClickMenu.eBox.getSource()).origString);
+					MainRightClickMenu.editFrame.setVisible(true);
+					MainRightClickMenu.editArea.requestFocus();
+					
+					Main.frame.setEnabled(false);
+				}
+				break;
+			case("Color"):
+				MainRightClickMenu.colorFrame.setVisible(true);
+				MainRightClickMenu.colorFrame.requestFocus();
+				break;
+			case("Cancel"):
+				MainRightClickMenu.editFrame.setVisible(false);
+				MainRightClickMenu.colorFrame.setVisible(false);
+				Main.frame.setEnabled(true);
+				Main.frame.requestFocus();
+				break;
+			case("Submit"):
+				MainRightClickMenu.editFrame.setVisible(false);
+				MainRightClickMenu.colorFrame.setVisible(false);
+				((MainTextPane) MainRightClickMenu.eBox.getSource()).origString =
+						MainRightClickMenu.editArea.getText();
+				((MainTextPane) MainRightClickMenu.eBox.getSource()).setText(MainRightClickMenu
+						.unParse(MainRightClickMenu.editArea.getText()));
+				Main.frame.setEnabled(true);
+				Main.frame.requestFocus();
+				Main.initLayout();
+			break;
+			default:
+				break;
+		}
+	}
+	
 	@Override
 	public void mousePressed(MouseEvent e){
 		popup(e);
@@ -266,62 +292,15 @@ class PersonalMouseListener extends MouseAdapter {
 	
 	public static void popup(MouseEvent e){
 		if (e.isPopupTrigger()) {
-			if (e.isPopupTrigger()) {
-				MainRightClickMenu.pop.show(e.getComponent(), e.getX(), e.getY());
-				MainRightClickMenu.eBox = e;
-			}
+			pop.show(e.getComponent(), e.getX(), e.getY());
+			eBox = e;
 		}
 	}
-}
-class PersonalActionListener implements ActionListener {
-	
+
 	@Override
-	public void actionPerformed(ActionEvent e){
-		MenuInterface.doAction(e);
-	}
-}
-class MenuInterface extends JMenuItem {
-	private static final long serialVersionUID = -3707695245298165419L;
-	
-	public MenuInterface(String string){
-		super(string);
-	}
-	
-	public static void doAction(ActionEvent e){
-		if (!MainRightClickMenu.editFrame.isVisible()) {
-			MainRightClickMenu.editFrame.setTitle(((MainTextPane) MainRightClickMenu.eBox
-					.getSource()).fieldName);
-			MainRightClickMenu.editArea
-			.setText(((MainTextPane) MainRightClickMenu.eBox.getSource()).origString);
-			MainRightClickMenu.editFrame.setVisible(true);
-			MainRightClickMenu.editArea.requestFocus();
-			
-			Main.frame.setEnabled(false);
-		}
-	}
-}
-class EditButtonActionListener implements ActionListener {
+	public void mouseClicked(MouseEvent e){/*UNUSED*/}
 	@Override
-	public void actionPerformed(ActionEvent e){
-		MainRightClickMenu.editFrame.setVisible(false);
-		MainRightClickMenu.colorFrame.setVisible(false);
-		((MainTextPane) MainRightClickMenu.eBox.getSource()).origString =
-				MainRightClickMenu.editArea.getText();
-		((MainTextPane) MainRightClickMenu.eBox.getSource()).setText(MainRightClickMenu
-				.unParse(MainRightClickMenu.editArea.getText()));
-		Main.frame.setEnabled(true);
-		Main.frame.requestFocus();
-		//This is used to allow the frame to "update" it's content before the layout updates
-		(new Thread(){
-			@Override
-			public void run(){
-				try{
-					Thread.sleep(1);
-				} catch(InterruptedException e){
-					//Doesn't really matter anyways
-				}
-				Main.initLayout();
-			};
-		}).start();
-	}
+	public void mouseEntered(MouseEvent e){/*UNUSED*/}
+	@Override
+	public void mouseExited(MouseEvent e){/*UNUSED*/}
 }

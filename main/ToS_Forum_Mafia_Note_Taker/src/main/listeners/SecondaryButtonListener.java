@@ -105,7 +105,7 @@ public class SecondaryButtonListener implements ActionListener{
 					+ "Newest version can be found manually <a href=\"http://github.com/Coolway99/ToS_Forum_Mafia_Note_Taker/releases/latest\">here</a><br />"
 					+ "Email:<a href=\"mailto:xxcoolwayxx@gmail.com\" >xxcoolwayxx@gmail.com</a><br />"
 					+ "<br />"
-					+ "Copy-whatever 2014-2015 Coolway99<br />"
+					+ "Copy-whatever 2014-2016 Coolway99<br />"
 					+ "Licenced under the GNU v2"
 					+ "</body></html>");
 			ep.addHyperlinkListener(new HyperlinkListener()

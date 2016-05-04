@@ -199,9 +199,9 @@ public class Main extends JFrame{
 		playerArea.setEditable(false);
 		playerArea.addHyperlinkListener(HPL);
 		notes.setEditable(false);
-		roleList.addMouseListener(MainRightClickMenu.mouse);
-		playerArea.addMouseListener(MainRightClickMenu.mouse);
-		notes.addMouseListener(MainRightClickMenu.mouse);
+		roleList.addMouseListener(MainRightClickMenu.self);
+		playerArea.addMouseListener(MainRightClickMenu.self);
+		notes.addMouseListener(MainRightClickMenu.self);
 		mainPanel.setLayout(layout);
 		playerJointArea.setBackground(new Color(0x333333));
 		
