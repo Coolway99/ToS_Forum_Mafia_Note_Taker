@@ -21,20 +21,19 @@ public class LoadingHandler implements ContentHandler{
 		String theTagList[] = {"beginSave", "data", "totalDays", "players", "whispers", "graveyard",
 				"roles", "generalNotes", "number", "day", "notes", "night", "font", "playerNum"};
 		for(int x = 0; x < theTagList.length; x++){
-			tags.put(theTagList[x], false);
+			this.tags.put(theTagList[x], false);
 		}
 	}
-	@SuppressWarnings("serial")
 	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
-		if(tags.containsKey(qName)){
-			tags.put(qName, true);
+		if(this.tags.containsKey(qName)){
+			this.tags.put(qName, true);
 			if(qName.equals("beginSave")){
-				saveV = atts.getValue("version");
-				patch = atts.getValue("patch");
-				Version = saveV+"."+patch;
-				if(VersionParsingHandler.isVersionLessThan(Version, "0.0.1.0")){
+				this.saveV = atts.getValue("version");
+				this.patch = atts.getValue("patch");
+				this.Version = this.saveV+"."+this.patch;
+				if(VersionParsingHandler.isVersionLessThan(this.Version, "0.0.1.0")){
 					int value = JOptionPane.showConfirmDialog(Main.frame, "WARNING! The save you are"
 							+ "loading is from an alpha version, between then and now the "
 							+ "playerlist and graveyard have merged.\n\n"
@@ -44,17 +43,17 @@ public class LoadingHandler implements ContentHandler{
 							JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.WARNING_MESSAGE);
 					if(value == JOptionPane.YES_OPTION){
-						usePlayers = false;
+						this.usePlayers = false;
 					} else if(value == JOptionPane.NO_OPTION){
-						usePlayers = true;
+						this.usePlayers = true;
 					} else {
-						throw new SAXException("User canceled load operation"){};
+						throw new SAXException("User canceled load operation");
 					}
 				} else {
-					usePlayers = true;
+					this.usePlayers = true;
 				}
 			} else if(qName.equals("number")){
-				day = Integer.parseInt(atts.getValue("day"));
+				this.day = Integer.parseInt(atts.getValue("day"));
 			}
 		}
 	}
@@ -65,56 +64,56 @@ public class LoadingHandler implements ContentHandler{
 		for(int x = start; x < start+length; x++){
 			string += ch[x];
 		}
-		if(tags.get("totalDays")){
+		if(this.tags.get("totalDays")){
 			Main.dayButtons.setDay(Integer.parseInt(string));
-		} else if(tags.get("players")){
-			if(usePlayers){
+		} else if(this.tags.get("players")){
+			if(this.usePlayers){
 				Main.playerArea.setText(MainRightClickMenu.unParse(unParse(string)));
 				Main.playerArea.origString = unParse(string);
 			}
-		} else if(tags.get("font")){
+		} else if(this.tags.get("font")){
 			Main.secondaryListener.optionFrame.setFont(string);
-		} else if(tags.get("playerNum")){
+		} else if(this.tags.get("playerNum")){
 			Main.secondaryListener.optionFrame.setPlayers(string);
-		} else if(tags.get("roles")){
+		} else if(this.tags.get("roles")){
 			Main.roleList.setText(MainRightClickMenu.unParse(unParse(string)));
 			Main.roleList.origString = unParse(string);
-		} else if(tags.get("graveyard")){
-			if(!usePlayers){
+		} else if(this.tags.get("graveyard")){
+			if(!this.usePlayers){
 				Main.playerArea.setText(MainRightClickMenu.unParse(unParse(string)));
 				Main.playerArea.origString = unParse(string);
 			}
-		} else if(tags.get("day")){
-			if(tags.get("notes")){
-				if(day == Main.selectedDay && Main.isDay){
-					Main.setNoteString(day, true, unParse(string));
+		} else if(this.tags.get("day")){
+			if(this.tags.get("notes")){
+				if(this.day == Main.selectedDay && Main.isDay){
+					Main.setNoteString(this.day, true, unParse(string));
 				} else {
-					Main.dayButtons.setDayString(unParse(string), day);
+					Main.dayButtons.setDayString(unParse(string), this.day);
 				}
 			}
-		} else if(tags.get("night")){
-			if(tags.get("notes")){
-				if(day == Main.selectedDay && !Main.isDay){
-					Main.setNoteString(day, false, unParse(string));
+		} else if(this.tags.get("night")){
+			if(this.tags.get("notes")){
+				if(this.day == Main.selectedDay && !Main.isDay){
+					Main.setNoteString(this.day, false, unParse(string));
 				} else {
-					Main.dayButtons.setNightString(unParse(string), day);
+					Main.dayButtons.setNightString(unParse(string), this.day);
 				}
 			}
-		} else if(tags.get("whispers")){
-			if(day == Main.selectedDay){
+		} else if(this.tags.get("whispers")){
+			if(this.day == Main.selectedDay){
 				Main.secondaryListener.whisperArea.setText(unParse(string));
 			} else {
-				Main.dayButtons.setWhisperString(unParse(string), day);
+				Main.dayButtons.setWhisperString(unParse(string), this.day);
 			}
-		} else if(tags.get("generalNotes")){
+		} else if(this.tags.get("generalNotes")){
 			Main.secondaryListener.genNoteArea.setText(unParse(string));
 		}
 	}
 	@Override
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
-		if(tags.containsKey(qName)){
-			tags.put(qName, false);
+		if(this.tags.containsKey(qName)){
+			this.tags.put(qName, false);
 		}
 	}
 	@Override
@@ -124,22 +123,22 @@ public class LoadingHandler implements ContentHandler{
 	}
 	
 	@Override
-	public void endPrefixMapping(String prefix) throws SAXException {}
+	public void endPrefixMapping(String prefix) throws SAXException{/*UNUSED*/}
 	@Override
-	public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {}
+	public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException{/*UNUSED*/}
 	@Override
-	public void processingInstruction(String target, String data) throws SAXException {}
+	public void processingInstruction(String target, String data) throws SAXException{/*UNUSED*/}
 	@Override
-	public void setDocumentLocator(Locator locator) {}
+	public void setDocumentLocator(Locator locator){/*UNUSED*/}
 	@Override
-	public void skippedEntity(String name) throws SAXException {}
+	public void skippedEntity(String name) throws SAXException{/*UNUSED*/}
 	@Override
-	public void startPrefixMapping(String prefix, String uri) throws SAXException {}
+	public void startPrefixMapping(String prefix, String uri) throws SAXException{/*UNUSED*/}
 	
 	private String unParse(String in){
 		String B = in;
 		for(int y = 0; y < Main.parseList.length; y++){
-			B = B.replaceAll((Integer.parseInt(Version.split("\\.")[2]) >= 2 ? Main.unParseList[y] :
+			B = B.replaceAll((Integer.parseInt(this.Version.split("\\.")[2]) >= 2 ? Main.unParseList[y] :
 				Main.unParseList[y].replaceAll("-", "")), Main.parseList[y]);
 		} return B;
 	}

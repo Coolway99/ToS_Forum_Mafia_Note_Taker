@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
-import org.omg.CORBA.UserException;
-
 public class SavingHandler{
 	/**
 	 * This variable is in place so I know what version of the save file I have up<br />
@@ -30,65 +28,68 @@ public class SavingHandler{
 	 * @see {@link #saveV}
 	 */
 	private static String patch = "0";
-	@SuppressWarnings("serial")
 	public static boolean save(File filepath){
 		try{
 			if(filepath.exists()){
 				if(!notifyOverwrite(filepath.getName())){
-					throw new UserException("User canceled overwrite"){};
-					}
+					System.out.println("User Canceled Overwrite");
+					return false;
+				}
 				filepath.renameTo(new File(filepath.toString() + "_OLD"));
 				filepath.createNewFile();
-				} else {filepath.createNewFile();}
-			
-			if(!filepath.canWrite()){writeError("No write permissions"); throw new UserException("Unable to write"){};}
-			FileWriter output = new FileWriter(filepath);
-			Main.saveNoteString();
-			output.write("<?xml version=\""+"1.0"+"\" "+"encoding=\""+output.getEncoding()+"\"?>");
-			output.write("<beginSave version=\""+saveV+"\" patch=\""+patch+"\" >");
-				output.write("<data>");
-					output.write("<totalDays>"+Main.dayButtons.getDay()+"</totalDays>");
-					output.write("<players>");
-						output.write(parse(Main.playerArea.origString));
-					output.write("</players>");
-					output.write("<roles>");
-						output.write(parse(Main.roleList.origString));
-					output.write("</roles>");
-					output.write("<generalNotes>");
-						output.write(parse(Main.secondaryListener.genNoteArea.getText()));
-					output.write("</generalNotes>");
-					output.write("<font>");
-						output.write(parse(Main.secondaryListener.optionFrame.optionsFont.getText()));
-					output.write("</font>");
-					output.write("<playerNum>");
-						output.write(parse(Main.secondaryListener.optionFrame.optionsNumberPlayers.getText()));
-					output.write("</playerNum>");
-				output.write("</data>");
-				for(int x = 1; x <= Main.dayButtons.getDay(); x++){
-					output.write("<number day=\""+Integer.toString(x)+"\" >");
-						output.write("<day>");
-							output.write("<notes>"+parse(Main.dayButtons.getDayString(x))+"</notes>");
-						output.write("</day>");
-						output.write("<night>");
-							output.write("<notes>"+parse(Main.dayButtons.getNightString(x))+"</notes>");
-						output.write("</night>");
-						output.write("<whispers>");
-							output.write(parse(Main.dayButtons.getWhisperString(x)));
-						output.write("</whispers>");
-					output.write("</number>");
-				}
-			output.write("</beginSave>");
-			output.close();
-			Main.frame.setTitle(Main.title + " - " + Main.fc.getSelectedFile().getName().split(".FMNT")[0]);
-			if(new File(filepath.toString() + "_OLD").exists()){new File(filepath.toString() + "_OLD").delete();}
-			return true;
-		} catch (IOException e){
+			} else {
+				filepath.createNewFile();
+			}
+			if(!filepath.canWrite()){
+				writeError("No write permissions"); 
+				System.out.println("Unable to write");
+				return false;
+			}
+			try(FileWriter output = new FileWriter(filepath)){
+				Main.saveNoteString();
+				output.write("<?xml version=\""+"1.0"+"\" "+"encoding=\""+output.getEncoding()+"\"?>");
+				output.write("<beginSave version=\""+saveV+"\" patch=\""+patch+"\" >");
+					output.write("<data>");
+						output.write("<totalDays>"+Main.dayButtons.getDay()+"</totalDays>");
+						output.write("<players>");
+							output.write(parse(Main.playerArea.origString));
+						output.write("</players>");
+						output.write("<roles>");
+							output.write(parse(Main.roleList.origString));
+						output.write("</roles>");
+						output.write("<generalNotes>");
+							output.write(parse(Main.secondaryListener.genNoteArea.getText()));
+						output.write("</generalNotes>");
+						output.write("<font>");
+							output.write(parse(Main.secondaryListener.optionFrame.optionsFont.getText()));
+						output.write("</font>");
+						output.write("<playerNum>");
+							output.write(parse(Main.secondaryListener.optionFrame.optionsNumberPlayers.getText()));
+						output.write("</playerNum>");
+					output.write("</data>");
+					for(int x = 1; x <= Main.dayButtons.getDay(); x++){
+						output.write("<number day=\""+Integer.toString(x)+"\" >");
+							output.write("<day>");
+								output.write("<notes>"+parse(Main.dayButtons.getDayString(x))+"</notes>");
+							output.write("</day>");
+							output.write("<night>");
+								output.write("<notes>"+parse(Main.dayButtons.getNightString(x))+"</notes>");
+							output.write("</night>");
+							output.write("<whispers>");
+								output.write(parse(Main.dayButtons.getWhisperString(x)));
+							output.write("</whispers>");
+						output.write("</number>");
+					}
+				output.write("</beginSave>");
+				output.close();
+				Main.frame.setTitle(Main.title + " - " + Main.fc.getSelectedFile().getName().split(".FMNT")[0]);
+				if(new File(filepath.toString() + "_OLD").exists()){new File(filepath.toString() + "_OLD").delete();}
+				return true;
+			}
+		} catch(IOException e){
 			writeError("IOException");
 			if(filepath.exists()){filepath.delete();}
 			new File(filepath.toString() + "_OLD").renameTo(filepath);
-			return false;
-		} catch (UserException e){
-			System.out.println(e.getMessage());
 			return false;
 		}
 	}
@@ -101,7 +102,7 @@ public class SavingHandler{
 				"Write Error", JOptionPane.ERROR_MESSAGE);
 	}
 	/**
-	 * Called when the file already exsists, and a confirmation to overwrite it.<br />
+	 * Called when the file already exists, and a confirmation to overwrite it.<br />
 	 * @param filename The file name to overwrite
 	 * @return If the user clicked OK or not.
 	 */
@@ -116,7 +117,9 @@ public class SavingHandler{
 			try{
 				B = B.replaceAll((Main.parseList[y] != "[" && Main.parseList[y] != "]")? Main.parseList[y] : "\\" + Main.parseList[y]
 						,Main.unParseList[y]);
-			} catch (NullPointerException e){System.out.print("Found no data");}
+			} catch(NullPointerException e){
+				System.out.print("Found no data");
+			}
 		} return B;
 	}
 }

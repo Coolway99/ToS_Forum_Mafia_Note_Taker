@@ -36,11 +36,10 @@ public class SaveLoadButtonListener implements ActionListener {
 		if(e.getSource() == Main.load){
 			int value = Main.fc.showOpenDialog(Main.fc);
 			if(value == Main.fc.APPROVE_OPTION){
-				try {
+				try(FileReader f = new FileReader(Main.fc.getSelectedFile())){
 					XMLReader xr = XMLReaderFactory.createXMLReader();
 					LoadingHandler handler = new LoadingHandler();
 					xr.setContentHandler(handler);
-					FileReader f = new FileReader(Main.fc.getSelectedFile());
 					xr.parse(new InputSource(f));
 					f.close();
 				} catch (SAXException | IOException e1) {
@@ -49,18 +48,17 @@ public class SaveLoadButtonListener implements ActionListener {
 			}
 		}
 	}
-	public void load(File filepath){
-		try {
+	public static void load(File filepath){
+		try(FileReader f = new FileReader(filepath)){
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			LoadingHandler handler = new LoadingHandler();
 			xr.setContentHandler(handler);
-			FileReader f = new FileReader(filepath);
 			xr.parse(new InputSource(f));
 			f.close();
-		} catch (FileNotFoundException e1) {
+		} catch(FileNotFoundException e1){
 			System.out.println("ERROR: "+e1.getMessage());
 			if(!Main.test) JOptionPane.showMessageDialog(Main.frame, "ERROR: Could not find the path specified", "ERROR", JOptionPane.ERROR_MESSAGE);
-		} catch (SAXException | IOException e1){
+		} catch(SAXException | IOException e1){
 			e1.printStackTrace();
 			if(!Main.test) JOptionPane.showMessageDialog(Main.frame, "ERROR WHILE LOADING", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}

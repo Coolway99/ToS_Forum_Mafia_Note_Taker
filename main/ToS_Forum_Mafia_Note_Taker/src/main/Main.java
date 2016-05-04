@@ -226,7 +226,7 @@ public class Main extends JFrame{
 		UpdateHandler.check(progVers, true);
 		if(args.length == 1){
 			fc.setSelectedFile(new File(args[0]));
-			listener.load(new File(args[0]));
+			SaveLoadButtonListener.load(new File(args[0]));
 		}
 		(new Thread(){
 			@Override
@@ -399,12 +399,11 @@ public class Main extends JFrame{
 	/**
 	 * A function called to reset constraints, just a convenience 
 	 */
-	@SuppressWarnings("static-access")
 	public static void resetConstraints(){
 		c = new GridBagConstraints();
 		c.weightx = 1.0;
 		c.weighty = 1.0;
-		c.fill = c.BOTH;
+		c.fill = GridBagConstraints.BOTH;
 	}
 	/**
 	 * Prompts the program to save whatever is in the notes pane to the day/night, this is not automatic
@@ -453,7 +452,6 @@ public class Main extends JFrame{
 	/**
 	 * This command is ran only if --test is true, used for ant testing (hopefully)
 	 */
-	@SuppressWarnings("unused")
 	private static void test(String args[]) throws Exception{
 		//System.out.println("Build successful?");
 		dayButtons.init();
@@ -465,7 +463,7 @@ public class Main extends JFrame{
 		fc.setSelectedFile(file);
 		SavingHandler.save(file);
 		roleList.origString = "";
-		listener.load(file);
+		SaveLoadButtonListener.load(file);
 		if(!roleList.origString.equals(testString)){
 			System.out.println("ERROR: Saving/Loading test failed, got "
 		+roleList.origString+", expected "+testString);

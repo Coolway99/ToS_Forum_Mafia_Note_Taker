@@ -7,7 +7,7 @@ public class MainTextPane extends JTextPane{
 	public String origString;
 	public String fieldName;
 	public MainTextPane(){
-		origString = "";
-		fieldName = "";
+		this.origString = "";
+		this.fieldName = "";
 	}
 }

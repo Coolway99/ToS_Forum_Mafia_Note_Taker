@@ -27,9 +27,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-public class MainRightClickMenu extends JPopupMenu implements ActionListener, MouseListener{
-	private static final long serialVersionUID = 2360564545515706123L;
+public class MainRightClickMenu implements ActionListener, MouseListener{
 	
+	public static final MainRightClickMenu self = new MainRightClickMenu();
 	protected static JPopupMenu pop = new JPopupMenu();
 	public static JFrame editFrame = new JFrame();
 	public static JTextArea editArea = new JTextArea();
@@ -47,7 +47,6 @@ public class MainRightClickMenu extends JPopupMenu implements ActionListener, Mo
 	private static GridBagLayout colorFrameLayout = new GridBagLayout();
 	private static GridBagConstraints c;
 	private static HashMap<Integer, HashMap<Boolean, String>> CodeList = new HashMap<>();
-	public static final MainRightClickMenu self = new MainRightClickMenu();
 	
 	public static void initPopup(){
 		String[] FromList =

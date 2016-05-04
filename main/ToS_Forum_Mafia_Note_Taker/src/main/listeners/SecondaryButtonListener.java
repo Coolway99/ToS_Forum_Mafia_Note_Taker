@@ -15,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -34,11 +36,11 @@ public class SecondaryButtonListener implements ActionListener{
 	public SecondaryButtonListener() {
 		super();
 		this.whisperArea.setLineWrap(true);
-		this.whisperFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		this.whisperFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.whisperFrame.setSize(400, 400);
 		
 		this.genNoteArea.setLineWrap(true);
-		this.genNoteFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		this.genNoteFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.genNoteFrame.setSize(400, 400);
 		
 		GridBagLayout layout = new GridBagLayout();
@@ -58,7 +60,7 @@ public class SecondaryButtonListener implements ActionListener{
 		c.gridy = 0;
 		c.gridheight = 5;
 		c.gridwidth = 1;
-		this.whisperFrame.add(new JScrollPane(this.whisperArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
+		this.whisperFrame.add(new JScrollPane(this.whisperArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
 		layout = new GridBagLayout();
 		layout.rowHeights = rows;
 		layout.columnWidths = columns;
@@ -68,7 +70,7 @@ public class SecondaryButtonListener implements ActionListener{
 		c.gridy = 0;
 		c.gridheight = 5;
 		c.gridwidth = 1;
-		this.genNoteFrame.add(new JScrollPane(this.genNoteArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
+		this.genNoteFrame.add(new JScrollPane(this.genNoteArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
 	}
 	private static GridBagConstraints resetConstraints(){
 		GridBagConstraints c = new GridBagConstraints();
