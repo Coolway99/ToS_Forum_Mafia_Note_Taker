@@ -7,27 +7,33 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-
-import main.LoadingHandler;
-import main.Main;
-import main.SavingHandler;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-public class SaveLoadButtonListener implements ActionListener {
-	@SuppressWarnings("static-access")
+
+import main.LoadingHandler;
+import main.Main;
+import main.SavingHandler;
+
+public class SaveLoadButtonListener implements ActionListener{
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == Main.saveAs || e.getSource() == Main.save){
 			int value;
-			if(!(e.getSource() == Main.save && Main.fileSelected)) {value = Main.fc.showSaveDialog(Main.fc);}else{value = Main.fc.APPROVE_OPTION;}
-			if(value == Main.fc.APPROVE_OPTION){
+			//If this source != Main.save AND we have not selected a file
+			if((e.getSource() != Main.save) && (!Main.fileSelected)){
+				value = Main.fc.showSaveDialog(Main.frame);
+			} else {
+				value = JFileChooser.APPROVE_OPTION;
+			}
+			if(value == JFileChooser.APPROVE_OPTION){
 				File file = Main.fc.getSelectedFile();
-				if(!file.getName().toUpperCase().endsWith(".FMNT")){
-					file = new File(file.toString()+".FMNT");
+				if( !file.getName().toUpperCase().endsWith(".FMNT")) {
+					file = new File(file.toString() + ".FMNT");
 				}
 				SavingHandler.save(file);
 				Main.fileSelected = true;
@@ -43,12 +49,13 @@ public class SaveLoadButtonListener implements ActionListener {
 					FileReader f = new FileReader(Main.fc.getSelectedFile());
 					xr.parse(new InputSource(f));
 					f.close();
-				} catch (SAXException | IOException e1) {
+				} catch(SAXException | IOException e1){
 					e1.printStackTrace();
 				}
 			}
 		}
 	}
+
 	public void load(File filepath){
 		try {
 			XMLReader xr = XMLReaderFactory.createXMLReader();
@@ -57,13 +64,13 @@ public class SaveLoadButtonListener implements ActionListener {
 			FileReader f = new FileReader(filepath);
 			xr.parse(new InputSource(f));
 			f.close();
-		} catch (FileNotFoundException e1) {
+		} catch(FileNotFoundException e1){
 			System.out.println("ERROR: "+e1.getMessage());
-			if(!Main.test) JOptionPane.showMessageDialog(Main.frame, "ERROR: Could not find the path specified", "ERROR", JOptionPane.ERROR_MESSAGE);
-		} catch (SAXException | IOException e1){
+			JOptionPane.showMessageDialog(Main.frame, "ERROR: Could not find the path specified",
+					"ERROR", 0);
+		} catch(SAXException | IOException e1) {
 			e1.printStackTrace();
-			if(!Main.test) JOptionPane.showMessageDialog(Main.frame, "ERROR WHILE LOADING", "ERROR", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(Main.frame, "ERROR WHILE LOADING", "ERROR", 0);
 		}
 	}
 }
-

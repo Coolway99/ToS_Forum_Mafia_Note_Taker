@@ -2,12 +2,14 @@ package main;
 
 import javax.swing.JTextPane;
 
-@SuppressWarnings("serial")
 public class MainTextPane extends JTextPane{
+	private static final long serialVersionUID = -8987094032065248053L;
+	
 	public String origString;
 	public String fieldName;
+
 	public MainTextPane(){
-		origString = "";
-		fieldName = "";
+		this.origString = "";
+		this.fieldName = "";
 	}
 }

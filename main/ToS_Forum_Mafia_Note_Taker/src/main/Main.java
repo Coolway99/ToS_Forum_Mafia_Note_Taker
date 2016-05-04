@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -28,7 +29,6 @@ import javax.swing.filechooser.FileFilter;
 import main.listeners.SaveLoadButtonListener;
 import main.listeners.SecondaryButtonListener;
 
-@SuppressWarnings("serial")
 public class Main extends JFrame{
 	/**
 	 * For saving/loading. Saving uses parseList to unParseList, loading unParseList to parseList.
@@ -46,9 +46,9 @@ public class Main extends JFrame{
 	 * Optional Second Line: Hotfix letter
 	 */
 	public static final String progVers = "1.6";
-	
 	private static final int Width = 960;
 	private static final int Height = 580;
+
 	public static final JFileChooser fc = new JFileChooser();
 	public static JPanel mainPanel;
 	public static JFrame frame;
@@ -70,7 +70,7 @@ public class Main extends JFrame{
 	public static final MainTextPane notes = new MainTextPane();
 	public static final JScrollPane notesPane = new JScrollPane(notes, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	public static final JScrollPane roleScrollPane = new JScrollPane(roleList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-	public static final DayButtons dayButtons = new DayButtons();
+	public static DayButtons dayButtons = new DayButtons();
 	private static final GridBagLayout layout = new GridBagLayout();
 	private static GridBagConstraints c;
 	private static final GridBagLayout jointAreaLayout = new GridBagLayout();
@@ -83,28 +83,17 @@ public class Main extends JFrame{
 	public static boolean numbersShown = true;
 	public static int numOfPlayers = 20;
 	public static String font = "arial";
-	public static final String title = "Forum Mafia Note Taker V1.6";
-	/**
-	 * "Are we in a test enviroment", aka, was the program started with the --test command
-	 */
-	public static boolean test = false;
-	
+	public static final String title = "Forum Mafia Note Taker Beta V2.0";
+
 	public Main(String s){
 		super(s);
 	}
-	
+
 	public static void main(String[] args) throws Exception{
 		if(args.length > 0){
 			System.out.print("Has Args: ");
 			for(int x = 0; x < args.length; x++){
 				System.out.println(args[x]);
-			}
-			if(args.length > 0){
-				if(args[0].equals("--test")){
-					test = true;
-					test(args);
-					return;
-				}
 			}
 		} else {
 			System.out.println("No Args");
@@ -135,20 +124,20 @@ public class Main extends JFrame{
 		roleList.fieldName = "Role List";
 		notes.fieldName = "Notes";
 		notes.setContentType("text/html");
-		notes.addHyperlinkListener(new HyperlinkListener() {
+		notes.addHyperlinkListener(new HyperlinkListener(){
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent e) {
 				if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)){
 					try {
 						Desktop.getDesktop().browse(e.getURL().toURI());
-					} catch (IOException | URISyntaxException e1) {
+					} catch(IOException | URISyntaxException e1){
 						e1.printStackTrace();
 					}
 				}
 			}
 		});
 		mainPanel = new MainPanel(Integer.MAX_VALUE, Integer.MAX_VALUE);
-		
+		dayButtons.init();
 		save.addActionListener(listener);
 		saveAs.addActionListener(listener);
 		load.addActionListener(listener);
@@ -157,15 +146,14 @@ public class Main extends JFrame{
 		info.addActionListener(secondaryListener);
 		options.addActionListener(secondaryListener);
 		generalNotes.addActionListener(secondaryListener);
-		fc.setFileFilter(new FileFilter() {
-			
+		fc.setFileFilter(new FileFilter(){
 			@Override
-			public String getDescription() {
+			public String getDescription(){
 				return "FMNT Files";
 			}
-			
+
 			@Override
-			public boolean accept(File f) {
+			public boolean accept(File f){
 				if(f.getName().toUpperCase().endsWith(".FMNT") || f.isDirectory()){
 					return true;
 				}
@@ -173,13 +161,13 @@ public class Main extends JFrame{
 			}
 		});
 		
-		HyperlinkListener HPL = new HyperlinkListener() {
+		HyperlinkListener HPL = new HyperlinkListener(){
 			@Override
-			public void hyperlinkUpdate(HyperlinkEvent e) {
-				if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)){
+			public void hyperlinkUpdate(HyperlinkEvent e){
+				if(e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)){
 					try {
 						Desktop.getDesktop().browse(e.getURL().toURI());
-					} catch (IOException | URISyntaxException e1) {
+					} catch(IOException | URISyntaxException e1){
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(Main.frame, "Error opening link", "ERROR", JOptionPane.ERROR_MESSAGE);
 					}
@@ -187,7 +175,6 @@ public class Main extends JFrame{
 			}
 		};
 		MainRightClickMenu.initPopup();
-		dayButtons.init();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		playerNumbers.setEditable(false);
 		playerNumbers.setContentType("text/html");
@@ -204,9 +191,9 @@ public class Main extends JFrame{
 		notes.addMouseListener(MainRightClickMenu.mouse);
 		mainPanel.setLayout(layout);
 		playerJointArea.setBackground(new Color(0x333333));
-		
+
 		initLayout();
-		
+
 		frame.add(mainPanel);
 		playersLabel.setText("Players");
 		playersLabel.setEditable(false);
@@ -228,18 +215,27 @@ public class Main extends JFrame{
 			fc.setSelectedFile(new File(args[0]));
 			listener.load(new File(args[0]));
 		}
+
 		(new Thread(){
 			@Override
-			public void run() {
+			public void run(){
 				try {
 					Thread.sleep(100);
-				} catch (InterruptedException e) {
+				} catch(InterruptedException e){
 					e.printStackTrace();
 				}
-				Main.dayButtons.initIcons();
 			}
 		}).start();
+		Preferences prefs = Preferences.userRoot();
+
+		if( !prefs.getBoolean("hasShown", false)) {
+			JOptionPane.showMessageDialog(frame,
+					"Hey, thanks for using this program\nThe next version will be a complete re-write, so be sure\n to input what you want to see in the program!\n\nNote: This message will only show once");
+
+			prefs.putBoolean("hasShown", true);
+		}
 	}
+
 	/**
 	 * Called for reparsing the notes, numbers, players, and rolelist.
 	 */
@@ -253,6 +249,7 @@ public class Main extends JFrame{
 		}
 		playerNumbers.setText(playernum+"</font>");
 	}
+	
 	/**
 	 * A function called to initialize the layout, is in it's own function to support being re-called to re-init
 	 * the layout. This is for the daybuttons, which when it is added and removed, must be recalled for the layout
@@ -284,13 +281,20 @@ public class Main extends JFrame{
 			jointAreaLayout.rowHeights = rows;
 			jointAreaLayout.columnWidths = columns;
 		}
+		/*		
+		layout.rowWeights = new double[34];
+		layout.columnWeights = new double[60];
+		
+		jointAreaLayout.rowWeights = new double[1];
+		jointAreaLayout.columnWeights = new double[16];
+		*/
 		resetConstraints();
 		if(numbersShown){
 			c.gridx = 0;
 			c.gridy = 0;
 			c.gridwidth = 1;
 			c.gridheight = 1;
-			c.insets  = new Insets(0, 0, 0, 1);
+			c.insets = new Insets(0, 0, 0, 1);
 			playerJointArea.add(playerNumbers, c);
 			resetConstraints();
 			c.gridx = 1;
@@ -310,7 +314,7 @@ public class Main extends JFrame{
 		c.gridy = 2;
 		c.gridheight = 20;
 		c.gridwidth = 18;
-		c.insets  = new Insets(0, 0, 0, 1);
+		c.insets = new Insets(0, 0, 0, 1);
 		mainPanel.add(new JScrollPane(playerJointArea,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
@@ -319,12 +323,17 @@ public class Main extends JFrame{
 		c.gridy = 0;
 		c.gridheight = 2;
 		c.gridwidth = 18;
-		c.insets  = new Insets(0, 0, 0, 1);
+		c.insets = new Insets(0, 0, 0, 1);
 		mainPanel.add(graveyardLabel, c);
 		resetConstraints();
-		dayButtons.setLocation(c, 0, 22, 20, 12, 20, 22, 7, 12);
+		c.gridx = 0;
+		c.gridy = 22;
+		c.gridwidth = 27;
+		c.gridheight = 12;
+		mainPanel.add(dayButtons.panel, c);
+		dayButtons.drawButtons();
 		resetConstraints();
-		c.gridwidth = ((roleScrollPane.getVerticalScrollBar().isVisible()) ? 10 : 9);
+		c.gridwidth = (roleScrollPane.getVerticalScrollBar().isVisible() ? 10 : 9);
 		c.gridheight = 20;
 		c.gridy = 2;
 		c.gridx = 18;
@@ -396,16 +405,17 @@ public class Main extends JFrame{
 		c.gridy = 28;
 		mainPanel.add(info, c);
 	}
+	
 	/**
 	 * A function called to reset constraints, just a convenience 
 	 */
-	@SuppressWarnings("static-access")
 	public static void resetConstraints(){
 		c = new GridBagConstraints();
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		c.fill = c.BOTH;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.fill = GridBagConstraints.BOTH;
 	}
+	
 	/**
 	 * Prompts the program to save whatever is in the notes pane to the day/night, this is not automatic
 	 */
@@ -417,6 +427,7 @@ public class Main extends JFrame{
 		}
 		dayButtons.setWhisperString(secondaryListener.whisperArea.getText(), selectedDay);
 	}
+	
 	/**
 	 * Manually override the string that is associated with the day/night, for loading purposes.
 	 * @param day The day number to overwrite
@@ -429,11 +440,37 @@ public class Main extends JFrame{
 		Main.isDay = isDay;
 		selectedDay = day;
 		if(isDay){
-			dayLabel.setText("Day "+Integer.toString(day));
+			dayLabel.setText("Day "+day);
 		} else {
-			dayLabel.setText("Night "+Integer.toString(day));
+			dayLabel.setText("Night "+day);
 		}
 	}
+
+	private static String unParse(String s){
+		return MainRightClickMenu.unParse(s);
+	}
+
+	public static void setNoteString(int day, boolean isDay){
+		String s;
+		if(isDay) {
+			s = dayButtons.getDayString(day);
+			dayLabel.setText("Day " + day);
+		} else {
+			s = dayButtons.getNightString(day);
+			dayLabel.setText("Night " + day);
+		}
+		notes.setText(unParse(s));
+		notes.origString = s;
+		secondaryListener.whisperArea.setText(dayButtons.getWhisperString(day));
+		Main.isDay = isDay;
+		selectedDay = day;
+	}
+
+	public static void update(){
+		frame.revalidate();
+		frame.repaint();
+	}
+
 	/**
 	 * To intercept the close button being pressed to present a warning
 	 */
@@ -448,30 +485,5 @@ public class Main extends JFrame{
 		} else {
 			super.processWindowEvent(e);
 		}
-	}
-	
-	/**
-	 * This command is ran only if --test is true, used for ant testing (hopefully)
-	 */
-	@SuppressWarnings("unused")
-	private static void test(String args[]) throws Exception{
-		//System.out.println("Build successful?");
-		dayButtons.init();
-		frame = new Main("You shouldn't see this");
-		System.out.println("Testing saving/loading");
-		String testString = "!@#$%^&*()1234567890\n\t [S]S!S#S(S)";
-		roleList.origString = testString;
-		File file = ((args.length > 2) ? new File(args[1]) : new File("Test.FMNT"));
-		fc.setSelectedFile(file);
-		SavingHandler.save(file);
-		roleList.origString = "";
-		listener.load(file);
-		if(!roleList.origString.equals(testString)){
-			System.out.println("ERROR: Saving/Loading test failed, got "
-		+roleList.origString+", expected "+testString);
-			System.exit(1);
-			return;
-		}
-		System.out.println("Saving/Loading test passed!");
 	}
 }

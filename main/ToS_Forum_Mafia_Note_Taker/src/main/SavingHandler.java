@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
-import org.omg.CORBA.UserException;
-
 public class SavingHandler{
 	/**
 	 * This variable is in place so I know what version of the save file I have up<br />
@@ -30,24 +28,28 @@ public class SavingHandler{
 	 * @see {@link #saveV}
 	 */
 	private static String patch = "0";
-	@SuppressWarnings("serial")
+
 	public static boolean save(File filepath){
 		try{
 			if(filepath.exists()){
 				if(!notifyOverwrite(filepath.getName())){
-					throw new UserException("User canceled overwrite"){};
-					}
+					throw new RuntimeException("User canceled overwrite");
+				}
 				filepath.renameTo(new File(filepath.toString() + "_OLD"));
 				filepath.createNewFile();
-				} else {filepath.createNewFile();}
-			
-			if(!filepath.canWrite()){writeError("No write permissions"); throw new UserException("Unable to write"){};}
+			} else {
+				filepath.createNewFile();
+			}
+			if(!filepath.canWrite()){
+				writeError("No write permissions");
+				throw new RuntimeException("Unable to write");
+			}
 			FileWriter output = new FileWriter(filepath);
 			Main.saveNoteString();
-			output.write("<?xml version=\""+"1.0"+"\" "+"encoding=\""+output.getEncoding()+"\"?>");
+			output.write("<?xml version=\"1.0\" encoding=\""+output.getEncoding()+"\"?>");
 			output.write("<beginSave version=\""+saveV+"\" patch=\""+patch+"\" >");
 				output.write("<data>");
-					output.write("<totalDays>"+Main.dayButtons.getDay()+"</totalDays>");
+					output.write("<totalDays>"+Main.dayButtons.getDays()+"</totalDays>");
 					output.write("<players>");
 						output.write(parse(Main.playerArea.origString));
 					output.write("</players>");
@@ -64,7 +66,7 @@ public class SavingHandler{
 						output.write(parse(Main.secondaryListener.optionFrame.optionsNumberPlayers.getText()));
 					output.write("</playerNum>");
 				output.write("</data>");
-				for(int x = 1; x <= Main.dayButtons.getDay(); x++){
+				for(int x = 1; x <= Main.dayButtons.getDays(); x++){
 					output.write("<number day=\""+Integer.toString(x)+"\" >");
 						output.write("<day>");
 							output.write("<notes>"+parse(Main.dayButtons.getDayString(x))+"</notes>");
@@ -82,16 +84,18 @@ public class SavingHandler{
 			Main.frame.setTitle(Main.title + " - " + Main.fc.getSelectedFile().getName().split(".FMNT")[0]);
 			if(new File(filepath.toString() + "_OLD").exists()){new File(filepath.toString() + "_OLD").delete();}
 			return true;
-		} catch (IOException e){
+		} catch(IOException e){
 			writeError("IOException");
-			if(filepath.exists()){filepath.delete();}
+			if(filepath.exists()){
+				filepath.delete();
+			}
 			new File(filepath.toString() + "_OLD").renameTo(filepath);
-			return false;
-		} catch (UserException e){
+		} catch(RuntimeException e){
 			System.out.println(e.getMessage());
-			return false;
 		}
+		return false;
 	}
+	
 	/**
 	 * Called whenever the program has problems writing to a file.<br />
 	 * @param error The error returned.
@@ -100,6 +104,7 @@ public class SavingHandler{
 		JOptionPane.showMessageDialog(Main.frame, "There was an error writing to the file!\nError:"+error,
 				"Write Error", JOptionPane.ERROR_MESSAGE);
 	}
+	
 	/**
 	 * Called when the file already exsists, and a confirmation to overwrite it.<br />
 	 * @param filename The file name to overwrite
@@ -110,13 +115,15 @@ public class SavingHandler{
 				+ " do you wish to overwrite?\nFilename:"+filename, "Overwrite?", JOptionPane.YES_NO_OPTION);
 		return (value == JOptionPane.OK_OPTION);
 	}
+
 	public static String parse(String in){
 		String B = in;
-		for(int y = 0; y < Main.parseList.length; y++){
-			try{
-				B = B.replaceAll((Main.parseList[y] != "[" && Main.parseList[y] != "]")? Main.parseList[y] : "\\" + Main.parseList[y]
-						,Main.unParseList[y]);
-			} catch (NullPointerException e){System.out.print("Found no data");}
-		} return B;
+		for(int y = 0; y < Main.parseList.length; y ++)
+			try {
+				B = B.replaceAll("\\" + Main.parseList[y], Main.unParseList[y]);
+			} catch(NullPointerException e){
+				System.out.print("Found no data");
+			}
+		return B;
 	}
 }

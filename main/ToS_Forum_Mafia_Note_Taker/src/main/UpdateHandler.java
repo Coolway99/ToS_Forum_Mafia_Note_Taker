@@ -14,9 +14,10 @@ import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-public class UpdateHandler {
+public class UpdateHandler{
 	private static final JEditorPane ep = new JEditorPane();
 	private static StringBuffer style;
+	
 	/**
 	 * Used for checking the version
 	 * @param oldVer The current version
@@ -34,10 +35,10 @@ public class UpdateHandler {
 		ep.addHyperlinkListener(new HyperlinkListener(){
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent e){
-				if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)){
+				if(e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)){
 					try {
 						Desktop.getDesktop().browse(e.getURL().toURI());
-					} catch (IOException | URISyntaxException e1) {
+					} catch(IOException | URISyntaxException e1){
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(Main.frame, "Error opening link", "ERROR", JOptionPane.ERROR_MESSAGE);
 					}
@@ -102,7 +103,7 @@ public class UpdateHandler {
 				JOptionPane.showMessageDialog(Main.frame, "Up to date!", "Up to date", JOptionPane.INFORMATION_MESSAGE);
 			}
 		//Catch the non-internet error
-		} catch (IOException e) {
+		} catch(IOException e){
 			e.printStackTrace();
 			if(!silent){
 				ep.setText("<html><body style=\"" + style + "\">"

@@ -27,7 +27,7 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 
-public class MainRightClickMenu extends JPopupMenu {
+public class MainRightClickMenu extends JPopupMenu{
 	private static final long serialVersionUID = 2360564545515706123L;
 	protected static JPopupMenu pop = new JPopupMenu();
 	private static PersonalActionListener listener = new PersonalActionListener();
@@ -41,14 +41,14 @@ public class MainRightClickMenu extends JPopupMenu {
 		new JButton("b"), new JButton("i"),
 		new JButton("u"), new JButton("s"),
 		new JButton("[url=]") };
-	public static JButton colorButtons[][];
+	public static JButton[][] colorButtons;
 	protected static MouseEvent eBox;
 	private static GridBagLayout layout = new GridBagLayout();
 	public static JFrame colorFrame = new JFrame();
 	private static GridBagLayout colorFrameLayout = new GridBagLayout();
 	private static GridBagConstraints c;
 	private static HashMap<Integer, HashMap<Boolean, String>> CodeList = new HashMap<>();
-	
+
 	public static void initPopup(){
 		String[] FromList =
 			{"\\[color=", "\\[/color\\]", "\\[size=", "\\[/size\\]", "\n", "\\[b\\]",
@@ -69,12 +69,12 @@ public class MainRightClickMenu extends JPopupMenu {
 		editFrame.setSize(600, 400);
 		editArea.setLineWrap(true);
 		editFrame.setLayout(layout);
-		int rows[] = new int[10];
-		for (int x = 0; x < rows.length; x++) {
+		int[] rows = new int[10];
+		for(int x = 0; x < rows.length; x++) {
 			rows[x] = (400 / rows.length);
 		}
-		int columns[] = new int[3];
-		for (int x = 0; x < columns.length; x++) {
+		int[] columns = new int[3];
+		for(int x = 0; x < columns.length; x++) {
 			columns[x] = (600 / columns.length);
 		}
 		layout.rowHeights = rows;
@@ -161,75 +161,76 @@ public class MainRightClickMenu extends JPopupMenu {
 		try {
 			final BufferedImage colors =
 					ImageIO.read(Main.class.getClassLoader().getResource("assets/images/colors.png"));
-					class ButtonListener implements ActionListener {
-						private BufferedImage icon;
-						
-						@SuppressWarnings("hiding")
-						public ButtonListener(BufferedImage icon){
-							this.icon = icon;
-						}
-						@Override
-						public void actionPerformed(ActionEvent e){
-							insertText(String.format("[color=#%06X]", this.icon.getRGB(0, 0) - 0xFF000000),
-									"[/color]");
-						}
-					}
-					colorButtons = new JButton[colors.getHeight()][colors.getWidth()];
-					rows = new int[colors.getHeight()];
-					for (int x = 0; x < rows.length; x++) {
-						rows[x] = 16;
-					}
-					columns = new int[colors.getWidth()];
-					for (int x = 0; x < columns.length; x++) {
-						columns[x] = 16;
-					}
-					colorFrameLayout.rowHeights = rows;
-					colorFrameLayout.columnWidths = columns;
-					for (int y = 0; y < colorButtons.length; y++) {
-						for (int x = 0; x < colorButtons[0].length; x++) {
-							final BufferedImage icon = colors.getSubimage(x, y, 1, 1);
-							colorButtons[y][x] = new JButton();
-							colorButtons[y][x].addActionListener(new ButtonListener(icon));
-							c = resetConstraints();
-							c.gridx = x;
-							c.gridy = y;
-							c.gridheight = 1;
-							c.gridwidth = 1;
-							colorFrame.add(colorButtons[y][x], c);
-						}
-					}
-					colorFrame.pack();
-					Timer initIcons = new Timer("Color init icons", true);
-					initIcons.schedule(new TimerTask(){
-						@Override
-						public void run(){
-							for (int y = 0; y < colorButtons.length; y++) {
-								for (int x = 0; x < colorButtons[0].length; x++) {
-									final BufferedImage icon = colors.getSubimage(x, y, 1, 1);
-									colorButtons[y][x].setBorder(null);
-									colorButtons[y][x].setIcon(new ImageIcon(icon.getScaledInstance(
-											colorButtons[y][x].getWidth(), colorButtons[y][x].getHeight(),
+			
+			class ButtonListener implements ActionListener {
+				private BufferedImage icon;
+				
+				public ButtonListener(BufferedImage icon){
+					this.icon = icon;
+				}
+				@Override
+				public void actionPerformed(ActionEvent e){
+					insertText(String.format("[color=#%06X]", this.icon.getRGB(0, 0) - 0xFF000000),
+							"[/color]");
+				}
+			}
+			colorButtons = new JButton[colors.getHeight()][colors.getWidth()];
+			rows = new int[colors.getHeight()];
+			for(int x = 0; x < rows.length; x ++) {
+				rows[x] = 16;
+			}
+			columns = new int[colors.getWidth()];
+			for(int x = 0; x < columns.length; x ++) {
+				columns[x] = 16;
+			}
+			colorFrameLayout.rowHeights = rows;
+			colorFrameLayout.columnWidths = columns;
+			for(int y = 0; y < colorButtons.length; y ++) {
+				for(int x = 0; x < colorButtons[0].length; x ++) {
+					BufferedImage icon = colors.getSubimage(x, y, 1, 1);
+					colorButtons[y][x] = new JButton();
+					colorButtons[y][x].addActionListener(new ButtonListener(icon));
+					c = resetConstraints();
+					c.gridx = x;
+					c.gridy = y;
+					c.gridheight = 1;
+					c.gridwidth = 1;
+					colorFrame.add(colorButtons[y][x], c);
+				}
+			}
+			colorFrame.pack();
+			Timer initIcons = new Timer("Color init icons", true);
+			initIcons.schedule(new TimerTask(){
+				@Override
+				public void run(){
+					for(int y = 0; y < colorButtons.length; y ++) {
+						for(int x = 0; x < colorButtons[0].length; x ++) {
+							BufferedImage icon = colors.getSubimage(x, y, 1, 1);
+							colorButtons[y][x].setBorder(null);
+							colorButtons[y][x]
+									.setIcon(new ImageIcon(icon.getScaledInstance(
+											colorButtons[y][x].getWidth(),
+											colorButtons[y][x].getHeight(), 
 											Image.SCALE_FAST)));
-								}
-							}
 						}
-					}, 1000);
-		} catch (IOException e) {
+					}
+				}
+			}, 1000);
+		} catch(IOException e){
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static GridBagConstraints resetConstraints(){
-		@SuppressWarnings("hiding")
 		GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 1.0;
 		c.weighty = 1.0;
 		c.fill = GridBagConstraints.BOTH;
 		return c;
 	}
-	
+
 	public static void insertText(String before, String after){
-		if (editArea.getSelectedText() == null) {
+		if(editArea.getSelectedText() == null){
 			editArea.replaceSelection(before + after);
 			editArea.setCaretPosition(editArea.getCaretPosition() - after.length());
 		} else {
@@ -237,78 +238,81 @@ public class MainRightClickMenu extends JPopupMenu {
 		}
 		editArea.requestFocus();
 	}
-	
+
 	public static String unParse(String in){
 		String B = in;
 		for (int y = 0; y < CodeList.size(); y++) {
-			String A[] = B.split(CodeList.get(y).get(true));
+			String[] A = B.split(CodeList.get(y).get(true));
 			B = A[0];
-			for (int x = 1; x < A.length; x++) {
+			for(int x = 1; x < A.length; x++) {
 				B += CodeList.get(y).get(false);
-				B += (CodeList.get(y).get(false).endsWith(">")) ? A[x] : (CodeList.get(y)
-						.get(false).equals("<a href=\"") ? A[x].replaceFirst("\\]", "\">")
-								: A[x].replaceFirst("\\]", ">"));
+				B += CodeList.get(y).get(false).equals("<a href=\"")
+								? A[x].replaceFirst("\\]", "\">")
+								: (CodeList.get(y))
+										.get(false).endsWith(">") ? A[x]
+												: A[x].replaceFirst("\\]", ">");
 			}
 		}
 		return "<font face=\""+Main.font+"\">" + B + "</font>";
 	}
 }
-class PersonalMouseListener extends MouseAdapter {
+
+class PersonalMouseListener extends MouseAdapter{
 	@Override
 	public void mousePressed(MouseEvent e){
 		popup(e);
 	}
-	
+
 	@Override
 	public void mouseReleased(MouseEvent e){
 		popup(e);
 	}
-	
+
 	public static void popup(MouseEvent e){
-		if (e.isPopupTrigger()) {
-			if (e.isPopupTrigger()) {
-				MainRightClickMenu.pop.show(e.getComponent(), e.getX(), e.getY());
-				MainRightClickMenu.eBox = e;
-			}
+		if(e.isPopupTrigger()) {
+			MainRightClickMenu.pop.show(e.getComponent(), e.getX(), e.getY());
+			MainRightClickMenu.eBox = e;
 		}
 	}
 }
-class PersonalActionListener implements ActionListener {
-	
+
+class PersonalActionListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e){
 		MenuInterface.doAction(e);
 	}
 }
-class MenuInterface extends JMenuItem {
+
+class MenuInterface extends JMenuItem{
 	private static final long serialVersionUID = -3707695245298165419L;
-	
+
 	public MenuInterface(String string){
 		super(string);
 	}
-	
+
 	public static void doAction(ActionEvent e){
 		if (!MainRightClickMenu.editFrame.isVisible()) {
 			MainRightClickMenu.editFrame.setTitle(((MainTextPane) MainRightClickMenu.eBox
 					.getSource()).fieldName);
 			MainRightClickMenu.editArea
-			.setText(((MainTextPane) MainRightClickMenu.eBox.getSource()).origString);
+					.setText(((MainTextPane) MainRightClickMenu.eBox.getSource()).origString);
 			MainRightClickMenu.editFrame.setVisible(true);
 			MainRightClickMenu.editArea.requestFocus();
-			
+
 			Main.frame.setEnabled(false);
 		}
 	}
 }
-class EditButtonActionListener implements ActionListener {
+
+class EditButtonActionListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e){
 		MainRightClickMenu.editFrame.setVisible(false);
 		MainRightClickMenu.colorFrame.setVisible(false);
-		((MainTextPane) MainRightClickMenu.eBox.getSource()).origString =
-				MainRightClickMenu.editArea.getText();
-		((MainTextPane) MainRightClickMenu.eBox.getSource()).setText(MainRightClickMenu
-				.unParse(MainRightClickMenu.editArea.getText()));
+		((MainTextPane) MainRightClickMenu.eBox
+				.getSource()).origString = MainRightClickMenu.editArea.getText();
+		((MainTextPane) MainRightClickMenu.eBox.getSource())
+				.setText(MainRightClickMenu.unParse(MainRightClickMenu.editArea.getText()));
 		Main.frame.setEnabled(true);
 		Main.frame.requestFocus();
 		//This is used to allow the frame to "update" it's content before the layout updates
@@ -321,7 +325,7 @@ class EditButtonActionListener implements ActionListener {
 					//Doesn't really matter anyways
 				}
 				Main.initLayout();
-			};
+			}
 		}).start();
 	}
 }
